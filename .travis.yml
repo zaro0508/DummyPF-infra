@@ -76,3 +76,4 @@ script:
     ParameterKey=SynapseApiKey,ParameterValue=$SynapseApiKey
     ParameterKey=SynapseUser,ParameterValue=$SynapseUser
     ParameterKey=SysopsEmail,ParameterValue='Bridge IT <bridge-testing+sysops@sagebase.org>'
+    ParameterKey=AwsEbNotificationEndpoint,ParameterValue=$AwsEbNotificationEndpoint
