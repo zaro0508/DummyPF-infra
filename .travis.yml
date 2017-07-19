@@ -7,65 +7,65 @@ python: 3.4
 cache: pip
 
 before_install:
-- mkdir ~/.aws
-- echo -e "[default]\nregion=us-east-1" >> ~/.aws/config
-- echo -e "[default]\naws_access_key_id=$AwsKey\naws_secret_access_key=$AwsSecretKey" >> ~/.aws/credentials
+  - mkdir ~/.aws
+  - echo -e "[default]\nregion=us-east-1" >> ~/.aws/config
+  - echo -e "[default]\naws_access_key_id=$AwsKey\naws_secret_access_key=$AwsSecretKey" >> ~/.aws/credentials
 
 install:
-- pip install --upgrade awscli
+  - pip install --upgrade awscli
 
 script:
-- aws s3 cp . s3://org-sagebridge-deployment-sandbox-infra-develop --recursive --exclude "*" --include "eb*.yml"
-- aws cloudformation validate-template --template-url https://s3.amazonaws.com/org-sagebridge-deployment-sandbox-infra-develop/eb_app.yml
-- aws cloudformation validate-template --template-url https://s3.amazonaws.com/org-sagebridge-deployment-sandbox-infra-develop/eb_bridgepf.yml
-- aws cloudformation update-stack \
---stack-name Sandbox \
---capabilities CAPABILITY_NAMED_IAM \
---template-url https://s3.amazonaws.com/org-sagebridge-deployment-sandbox-infra-develop/eb_bridgepf.yml \
---parameters \
-ParameterKey=AWSEBEnvironmentName,ParameterValue=develop \
-ParameterKey=IAMUserPassword,ParameterValue=$IAMUserPassword \
-ParameterKey=SSLCertArn,ParameterValue=$SSLCertArn \
-ParameterKey=BridgeEnv,ParameterValue=dev \
-ParameterKey=BridgeUser,ParameterValue=heroku \
-ParameterKey=InstanceType,ParameterValue=t2.micro \
-ParameterKey=UploadBucket,ParameterValue=org-sagebridge-upload-sandbox-develop \
-ParameterKey=AttachmentBucket,ParameterValue=org-sagebridge-attachment-sandbox-develop \
-ParameterKey=UploadCmsCertBucket,ParameterValue=org-sagebridge-upload-cms-cert-sandbox-develop \
-ParameterKey=UploadCmsPrivBucket,ParameterValue=org-sagebridge-upload-cms-priv-sandbox-develop \
-ParameterKey=ConsentsBucket,ParameterValue=org-sagebridge-consents-sandbox-develop \
-ParameterKey=AppDeployBucket,ParameterValue=org-sagebridge-deployment-sandbox-develop \
-ParameterKey=AppDeployFile,ParameterValue=bridgepf-0.1-SNAPSHOT.zip \
-ParameterKey=DNSHostname,ParameterValue=dummy \
-ParameterKey=DNSDomain,ParameterValue=sagebridge.org \
-ParameterKey=AwsKey,ParameterValue=$AwsKey \
-ParameterKey=AwsSecretKey,ParameterValue=$AwsSecretKey \
-ParameterKey=AwsSecretKeyConsents,ParameterValue=$AwsSecretKeyConsents \
-ParameterKey=AwsKeyUpload,ParameterValue=$AwsKeyUpload \
-ParameterKey=AwsSecretKeyUpload,ParameterValue=$AwsSecretKeyUpload \
-ParameterKey=AwsKeyUploadCms,ParameterValue=$AwsKeyUploadCms \
-ParameterKey=AwsSecretKeyUploadCms,ParameterValue=$AwsSecretKeyUploadCms \
-ParameterKey=EnterpriseStormpathHref,ParameterValue=$EnterpriseStormpathHref \
-ParameterKey=EnterpriseStormpathId,ParameterValue=$EnterpriseStormpathId \
-ParameterKey=EnterpriseStormpathSecret,ParameterValue=$EnterpriseStormpathSecret \
-ParameterKey=HibernateConnectionPassword,ParameterValue=$HibernateConnectionPassword \
-ParameterKey=HibernateConnectionUrl,ParameterValue=$HibernateConnectionUrl \
-ParameterKey=HibernateConnectionUsername,ParameterValue=$HibernateConnectionUsername \
-ParameterKey=HibernateConnectionUsessl,ParameterValue=true \
-ParameterKey=RedisUrl,ParameterValue=$RedisUrl \
-ParameterKey=BridgeHealthcodeKey,ParameterValue=$BridgeHealthcodeKey \
-ParameterKey=BridgeHealthcodeRedisKey,ParameterValue=$BridgeHealthcodeRedisKey \
-ParameterKey=WebservicesUrl,ParameterValue=https://dummy.sagebridge.org \
-ParameterKey=HostPostfix,ParameterValue=-dummy.sagebridge.org \
-ParameterKey=JavaOpts,ParameterValue='-Dnewrelic.config.file=/var/app/current/newrelic/newrelic.yml -javaagent:/var/app/current/lib/com.newrelic.agent.java.newrelic-agent-3.32.0.jar' \
-ParameterKey=NewRelicAppName,ParameterValue=Sandbox-develop-AWS \
-ParameterKey=NewRelicLicenseKey,ParameterValue=$NewRelicLicenseKey \
-ParameterKey=NewRelicLog,ParameterValue=stdout \
-ParameterKey=EmailUnsubscribeToken,ParameterValue=$EmailUnsubscribeToken \
-ParameterKey=AuthCreateMysqlAccounts,ParameterValue=true \
-ParameterKey=AuthProvider,ParameterValue=mysql \
-ParameterKey=AwsSnsKey,ParameterValue=$AwsSnsKey \
-ParameterKey=AwsSnsSecretKey,ParameterValue=$AwsSnsSecretKey \
-ParameterKey=SynapseApiKey,ParameterValue=$SynapseApiKey \
-ParameterKey=SynapseUser,ParameterValue=$SynapseUser \
-ParameterKey=SysopsEmail,ParameterValue='Bridge IT <bridge-testing+sysops@sagebase.org>'
+  - aws s3 cp . s3://org-sagebridge-deployment-sandbox-infra-develop --recursive --exclude "*" --include "eb*.yml"
+  - aws cloudformation validate-template --template-url https://s3.amazonaws.com/org-sagebridge-deployment-sandbox-infra-develop/eb_app.yml
+  - aws cloudformation validate-template --template-url https://s3.amazonaws.com/org-sagebridge-deployment-sandbox-infra-develop/eb_bridgepf.yml
+  - aws cloudformation update-stack \
+    --stack-name Sandbox \
+    --capabilities CAPABILITY_NAMED_IAM \
+    --template-url https://s3.amazonaws.com/org-sagebridge-deployment-sandbox-infra-develop/eb_bridgepf.yml \
+    --parameters \
+    ParameterKey=AWSEBEnvironmentName,ParameterValue=develop \
+    ParameterKey=IAMUserPassword,ParameterValue=$IAMUserPassword \
+    ParameterKey=SSLCertArn,ParameterValue=$SSLCertArn \
+    ParameterKey=BridgeEnv,ParameterValue=dev \
+    ParameterKey=BridgeUser,ParameterValue=heroku \
+    ParameterKey=InstanceType,ParameterValue=t2.micro \
+    ParameterKey=UploadBucket,ParameterValue=org-sagebridge-upload-sandbox-develop \
+    ParameterKey=AttachmentBucket,ParameterValue=org-sagebridge-attachment-sandbox-develop \
+    ParameterKey=UploadCmsCertBucket,ParameterValue=org-sagebridge-upload-cms-cert-sandbox-develop \
+    ParameterKey=UploadCmsPrivBucket,ParameterValue=org-sagebridge-upload-cms-priv-sandbox-develop \
+    ParameterKey=ConsentsBucket,ParameterValue=org-sagebridge-consents-sandbox-develop \
+    ParameterKey=AppDeployBucket,ParameterValue=org-sagebridge-deployment-sandbox-develop \
+    ParameterKey=AppDeployFile,ParameterValue=bridgepf-0.1-SNAPSHOT.zip \
+    ParameterKey=DNSHostname,ParameterValue=dummy \
+    ParameterKey=DNSDomain,ParameterValue=sagebridge.org \
+    ParameterKey=AwsKey,ParameterValue=$AwsKey \
+    ParameterKey=AwsSecretKey,ParameterValue=$AwsSecretKey \
+    ParameterKey=AwsSecretKeyConsents,ParameterValue=$AwsSecretKeyConsents \
+    ParameterKey=AwsKeyUpload,ParameterValue=$AwsKeyUpload \
+    ParameterKey=AwsSecretKeyUpload,ParameterValue=$AwsSecretKeyUpload \
+    ParameterKey=AwsKeyUploadCms,ParameterValue=$AwsKeyUploadCms \
+    ParameterKey=AwsSecretKeyUploadCms,ParameterValue=$AwsSecretKeyUploadCms \
+    ParameterKey=EnterpriseStormpathHref,ParameterValue=$EnterpriseStormpathHref \
+    ParameterKey=EnterpriseStormpathId,ParameterValue=$EnterpriseStormpathId \
+    ParameterKey=EnterpriseStormpathSecret,ParameterValue=$EnterpriseStormpathSecret \
+    ParameterKey=HibernateConnectionPassword,ParameterValue=$HibernateConnectionPassword \
+    ParameterKey=HibernateConnectionUrl,ParameterValue=$HibernateConnectionUrl \
+    ParameterKey=HibernateConnectionUsername,ParameterValue=$HibernateConnectionUsername \
+    ParameterKey=HibernateConnectionUsessl,ParameterValue=true \
+    ParameterKey=RedisUrl,ParameterValue=$RedisUrl \
+    ParameterKey=BridgeHealthcodeKey,ParameterValue=$BridgeHealthcodeKey \
+    ParameterKey=BridgeHealthcodeRedisKey,ParameterValue=$BridgeHealthcodeRedisKey \
+    ParameterKey=WebservicesUrl,ParameterValue=https://dummy.sagebridge.org \
+    ParameterKey=HostPostfix,ParameterValue=-dummy.sagebridge.org \
+    ParameterKey=JavaOpts,ParameterValue='-Dnewrelic.config.file=/var/app/current/newrelic/newrelic.yml -javaagent:/var/app/current/lib/com.newrelic.agent.java.newrelic-agent-3.32.0.jar' \
+    ParameterKey=NewRelicAppName,ParameterValue=Sandbox-develop-AWS \
+    ParameterKey=NewRelicLicenseKey,ParameterValue=$NewRelicLicenseKey \
+    ParameterKey=NewRelicLog,ParameterValue=stdout \
+    ParameterKey=EmailUnsubscribeToken,ParameterValue=$EmailUnsubscribeToken \
+    ParameterKey=AuthCreateMysqlAccounts,ParameterValue=true \
+    ParameterKey=AuthProvider,ParameterValue=mysql \
+    ParameterKey=AwsSnsKey,ParameterValue=$AwsSnsKey \
+    ParameterKey=AwsSnsSecretKey,ParameterValue=$AwsSnsSecretKey \
+    ParameterKey=SynapseApiKey,ParameterValue=$SynapseApiKey \
+    ParameterKey=SynapseUser,ParameterValue=$SynapseUser \
+    ParameterKey=SysopsEmail,ParameterValue='Bridge IT <bridge-testing+sysops@sagebase.org>'
