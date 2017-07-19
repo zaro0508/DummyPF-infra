@@ -23,7 +23,7 @@ script:
     --capabilities CAPABILITY_NAMED_IAM
     --template-url https://s3.amazonaws.com/org-sagebridge-deployment-sandbox-infra-develop/eb_bridgepf.yml
     --parameters
-    ParameterKey=AWSEBEnvironmentName,ParameterValue=develop
+    ParameterKey=AWSEBEnvironmentName,ParameterValue=derp
     ParameterKey=IAMUserPassword,ParameterValue=$IAMUserPassword
     ParameterKey=SSLCertArn,ParameterValue=$SSLCertArn
     ParameterKey=BridgeEnv,ParameterValue=dev
