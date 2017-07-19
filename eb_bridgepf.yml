@@ -142,6 +142,10 @@ Parameters:
     Description: Email address for AWS EB notifications
     Default: param_place_holder
     NoEcho: true
+  AppHealthcheckUrl:
+    Type: String
+    Description: The AWS EB health check path
+    Default: 'HTTP:80/?study=api'
   AwsKey:
     Type: String
     Default: param_place_holder
@@ -475,10 +479,10 @@ Resources:
           Value: 'HTTP'
         - Namespace: 'aws:elasticbeanstalk:environment:process:default'
           OptionName: HealthCheckPath
-          Value: 'HTTP:80/?study=api'
+          Value: !Ref AppHealthcheckUrl
         - Namespace: 'aws:elasticbeanstalk:application'
           OptionName: Application Healthcheck URL
-          Value: 'HTTP:80/?study=api'
+          Value: !Ref AppHealthcheckUrl
         - Namespace: 'aws:elasticbeanstalk:cloudwatch:logs'
           OptionName: StreamLogs
           Value: 'true'
@@ -499,7 +503,7 @@ Resources:
           Value: 80
         - Namespace: 'aws:elb:healthcheck'
           OptionName: Target
-          Value: 'HTTP:80/?study=api'
+          Value: !Ref AppHealthcheckUrl
         - Namespace: 'aws:elb:listener:443'
           OptionName: ListenerProtocol
           Value: HTTPS
