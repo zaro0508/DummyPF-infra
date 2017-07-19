@@ -33,7 +33,7 @@ Parameters:
   InstanceType:
     Type: String
     Description: Instance type to use for Elastic Beanstalk Instances
-    Default: param_place_holder
+    Default: t2.nano
     AllowedValues:
       - t1.micro
       - t2.nano
