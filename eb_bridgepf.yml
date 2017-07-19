@@ -145,7 +145,7 @@ Parameters:
   AppHealthcheckUrl:
     Type: String
     Description: The AWS EB health check path
-    Default: 'HTTP:80/?study=api'
+    Default: param_place_holder
   AwsKey:
     Type: String
     Default: param_place_holder
