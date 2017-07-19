@@ -78,3 +78,7 @@ script:
     ParameterKey=SysopsEmail,ParameterValue='Bridge IT <bridge-testing+sysops@sagebase.org>'
     ParameterKey=AwsEbNotificationEndpoint,ParameterValue=$AwsEbNotificationEndpoint
     ParameterKey=AppHealthcheckUrl,ParameterValue='HTTP:80/?study=api'
+  - echo $?
+
+after_script:
+  - echo $?
