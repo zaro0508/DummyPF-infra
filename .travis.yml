@@ -15,6 +15,6 @@ install:
   - pip install --upgrade awscli
 
 script:
-  - aws s3 cp *.yml s3://org-sagebridge-deployment-sandbox-infra-develop
+  - aws s3 cp . s3://org-sagebridge-deployment-sandbox-infra-develop --recursive --exclude "*" --include "eb*.yml"
   - aws cloudformation validate-template --template-url https://s3.amazonaws.com/org-sagebridge-deployment-sandbox-infra-develop/eb_app.yml
   - aws cloudformation validate-template --template-url https://s3.amazonaws.com/org-sagebridge-deployment-sandbox-infra-develop/eb_bridgepf.yml
