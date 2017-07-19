@@ -6,6 +6,13 @@ language: python
 python: 3.4
 cache: pip
 
+env:
+  global:
+    - STACK_NAME=sandbox
+    - DNS_HOSTNAME=$STACK_NAME-$TRAVIS_BRANCH
+    - DNS_DOMAIN=sagebridge.org
+    - REPO_NAME=$(echo $TRAVIS_REPO_SLUG | cut -d'/' -f2)"
+
 before_install:
   - mkdir ~/.aws
   - echo -e "[default]\nregion=us-east-1" >> ~/.aws/config
@@ -19,11 +26,11 @@ script:
   - aws cloudformation validate-template --template-url https://s3.amazonaws.com/org-sagebridge-deployment-sandbox-infra-develop/eb_app.yml
   - aws cloudformation validate-template --template-url https://s3.amazonaws.com/org-sagebridge-deployment-sandbox-infra-develop/eb_bridgepf.yml
   - aws cloudformation update-stack
-    --stack-name Sandbox
+    --stack-name $STACK_NAME
     --capabilities CAPABILITY_NAMED_IAM
     --template-url https://s3.amazonaws.com/org-sagebridge-deployment-sandbox-infra-develop/eb_bridgepf.yml
     --parameters
-    ParameterKey=AWSEBEnvironmentName,ParameterValue=foo
+    ParameterKey=AWSEBEnvironmentName,ParameterValue=$TRAVIS_BRANCH
     ParameterKey=IAMUserPassword,ParameterValue=$IAMUserPassword
     ParameterKey=SSLCertArn,ParameterValue=$SSLCertArn
     ParameterKey=BridgeEnv,ParameterValue=dev
@@ -36,8 +43,8 @@ script:
     ParameterKey=ConsentsBucket,ParameterValue=org-sagebridge-consents-sandbox-develop
     ParameterKey=AppDeployBucket,ParameterValue=org-sagebridge-deployment-sandbox-develop
     ParameterKey=AppDeployFile,ParameterValue=bridgepf-0.1-SNAPSHOT.zip
-    ParameterKey=DNSHostname,ParameterValue=dummy
-    ParameterKey=DNSDomain,ParameterValue=sagebridge.org
+    ParameterKey=DNSHostname,ParameterValue=$DNS_HOSTNAME
+    ParameterKey=DNSDomain,ParameterValue=$DNS_DOMAIN
     ParameterKey=AwsKey,ParameterValue=$AwsKey
     ParameterKey=AwsSecretKey,ParameterValue=$AwsSecretKey
     ParameterKey=AwsSecretKeyConsents,ParameterValue=$AwsSecretKeyConsents
@@ -55,10 +62,10 @@ script:
     ParameterKey=RedisUrl,ParameterValue=$RedisUrl
     ParameterKey=BridgeHealthcodeKey,ParameterValue=$BridgeHealthcodeKey
     ParameterKey=BridgeHealthcodeRedisKey,ParameterValue=$BridgeHealthcodeRedisKey
-    ParameterKey=WebservicesUrl,ParameterValue=https://dummy.sagebridge.org
-    ParameterKey=HostPostfix,ParameterValue=-dummy.sagebridge.org
+    ParameterKey=WebservicesUrl,ParameterValue=https://$DNS_HOSTNAME.$DNS_DOMAIN
+    ParameterKey=HostPostfix,ParameterValue=-$DNS_HOSTNAME.$DNS_DOMAIN
     ParameterKey=JavaOpts,ParameterValue='-Dnewrelic.config.file=/var/app/current/newrelic/newrelic.yml -javaagent:/var/app/current/lib/com.newrelic.agent.java.newrelic-agent-3.32.0.jar'
-    ParameterKey=NewRelicAppName,ParameterValue=Sandbox-develop-AWS
+    ParameterKey=NewRelicAppName,ParameterValue=$DNS_HOSTNAME.$DNS_DOMAIN
     ParameterKey=NewRelicLicenseKey,ParameterValue=$NewRelicLicenseKey
     ParameterKey=NewRelicLog,ParameterValue=stdout
     ParameterKey=EmailUnsubscribeToken,ParameterValue=$EmailUnsubscribeToken
