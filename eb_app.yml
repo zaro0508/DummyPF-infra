@@ -1,0 +1,17 @@
+# This CF script is for creating a generic AWS elastic beanstalk application
+# usage:
+#   aws cloudformation create-stack --stack-name Sandbox \
+#     --on-failure DELETE --template-body file:///temp/eb_app.yml
+Outputs:
+  AWSEBApplication:
+    Description: EB Application to deploy into
+    Value: !Ref AWSEBApplication
+    Export:
+      Name: !Sub "${AWS::StackName}"
+AWSTemplateFormatVersion: 2010-09-09
+Resources:
+  AWSEBApplication:
+    Type: 'AWS::ElasticBeanstalk::Application'
+    Properties:
+      ApplicationName: !Ref 'AWS::StackName'
+Description: AWS Elastic Beanstalk Application
