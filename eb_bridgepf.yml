@@ -254,122 +254,112 @@ Resources:
     Type: 'AWS::S3::Bucket'
     Properties:
       BucketName: !Ref UploadBucket
-  AWSS3UploadBucketPolicy:
+  AWSS3AttachmentBucket:
+    Type: 'AWS::S3::Bucket'
+    Properties:
+      BucketName: !Ref AttachmentBucket
+  AWSS3UploadCmsCertBucket:
+    Type: 'AWS::S3::Bucket'
+    Properties:
+      BucketName: !Ref UploadCmsCertBucket
+  AWSS3UploadCmsPrivBucket:
+    Type: 'AWS::S3::Bucket'
+    Properties:
+      BucketName: !Ref UploadCmsPrivBucket
+  AWSS3ConsentsBucket:
+    Type: 'AWS::S3::Bucket'
+    Properties:
+      BucketName: !Ref ConsentsBucket
+  AWSS3BucketPolicy:
     Type: 'AWS::S3::BucketPolicy'
     Properties:
       PolicyDocument:
         Id: Give access to user
         Statement:
+          - Sid: AllowListing
+            Action:
+              - 's3:ListBucket'
+              - 's3:GetBucketLocation'
+            Effect: Allow
+            Resource:
+              - !Join
+                - ''
+                - - 'arn:aws:s3:::'
+                  - !Ref AppDeployBucket
+                  - /*
+              - !Join
+                - ''
+                - - 'arn:aws:s3:::'
+                  - !Ref AWSS3UploadBucket
+                  - /*
+              - !Join
+                - ''
+                - - 'arn:aws:s3:::'
+                  - !Ref AWSS3AttachmentBucket
+                  - /*
+              - !Join
+                - ''
+                - - 'arn:aws:s3:::'
+                  - !Ref AWSS3UploadCmsCertBucket
+                  - /*
+              - !Join
+                - ''
+                - - 'arn:aws:s3:::'
+                  - !Ref AWSS3UploadCmsPrivBucket
+                  - /*
+              - !Join
+                - ''
+                - - 'arn:aws:s3:::'
+                  - !Ref AWSS3ConsentsBucket
+                  - /*
+            Principal:
+              AWS: !GetAtt
+                - AWSIAMS3User
+                - Arn
           - Sid: AllAccess
             Action:
-              - 's3:*'
+              - 's3:PutObject'
+              - 's3:PutObjectAcl'
+              - 's3:GetObject'
+              - 's3:GetObjectAcl'
+              - 's3:DeleteObject'
             Effect: Allow
-            Resource: !Join
-              - ''
-              - - 'arn:aws:s3:::'
-                - !Ref AWSS3UploadBucket
-                - /*
+            Resource:
+              - !Join
+                - ''
+                - - 'arn:aws:s3:::'
+                  - !Ref AppDeployBucket
+                  - /*
+              - !Join
+                - ''
+                - - 'arn:aws:s3:::'
+                  - !Ref AWSS3UploadBucket
+                  - /*
+              - !Join
+                - ''
+                - - 'arn:aws:s3:::'
+                  - !Ref AWSS3AttachmentBucket
+                  - /*
+              - !Join
+                - ''
+                - - 'arn:aws:s3:::'
+                  - !Ref AWSS3UploadCmsCertBucket
+                  - /*
+              - !Join
+                - ''
+                - - 'arn:aws:s3:::'
+                  - !Ref AWSS3UploadCmsPrivBucket
+                  - /*
+              - !Join
+                - ''
+                - - 'arn:aws:s3:::'
+                  - !Ref AWSS3ConsentsBucket
+                  - /*
             Principal:
               AWS: !GetAtt
                 - AWSIAMS3User
                 - Arn
       Bucket: !Ref AWSS3UploadBucket
-  AWSS3AttachmentBucket:
-    Type: 'AWS::S3::Bucket'
-    Properties:
-      BucketName: !Ref AttachmentBucket
-  AWSS3AttachmentBucketPolicy:
-    Type: 'AWS::S3::BucketPolicy'
-    Properties:
-      PolicyDocument:
-        Id: Give access to user
-        Statement:
-          - Sid: AllAccess
-            Action:
-              - 's3:*'
-            Effect: Allow
-            Resource: !Join
-              - ''
-              - - 'arn:aws:s3:::'
-                - !Ref AWSS3AttachmentBucket
-                - /*
-            Principal:
-              AWS: !GetAtt
-                - AWSIAMS3User
-                - Arn
-      Bucket: !Ref AWSS3AttachmentBucket
-  AWSS3UploadCmsCertBucket:
-    Type: 'AWS::S3::Bucket'
-    Properties:
-      BucketName: !Ref UploadCmsCertBucket
-  AWSS3UploadCmsCertBucketPolicy:
-    Type: 'AWS::S3::BucketPolicy'
-    Properties:
-      PolicyDocument:
-        Id: Give access to user
-        Statement:
-          - Sid: AllAccess
-            Action:
-              - 's3:*'
-            Effect: Allow
-            Resource: !Join
-              - ''
-              - - 'arn:aws:s3:::'
-                - !Ref AWSS3UploadCmsCertBucket
-                - /*
-            Principal:
-              AWS: !GetAtt
-                - AWSIAMS3User
-                - Arn
-      Bucket: !Ref AWSS3UploadCmsCertBucket
-  AWSS3UploadCmsPrivBucket:
-    Type: 'AWS::S3::Bucket'
-    Properties:
-      BucketName: !Ref UploadCmsPrivBucket
-  AWSS3UploadCmsPrivBucketPolicy:
-    Type: 'AWS::S3::BucketPolicy'
-    Properties:
-      PolicyDocument:
-        Id: Give access to user
-        Statement:
-          - Sid: AllAccess
-            Action:
-              - 's3:*'
-            Effect: Allow
-            Resource: !Join
-              - ''
-              - - 'arn:aws:s3:::'
-                - !Ref AWSS3UploadCmsPrivBucket
-                - /*
-            Principal:
-              AWS: !GetAtt
-                - AWSIAMS3User
-                - Arn
-      Bucket: !Ref AWSS3UploadCmsPrivBucket
-  AWSS3ConsentsBucket:
-    Type: 'AWS::S3::Bucket'
-    Properties:
-      BucketName: !Ref ConsentsBucket
-  AWSS3ConsentsBucketPolicy:
-    Type: 'AWS::S3::BucketPolicy'
-    Properties:
-      PolicyDocument:
-        Id: Give access to user
-        Statement:
-          - Sid: AllAccess
-            Action:
-              - 's3:*'
-            Effect: Allow
-            Resource: !Join
-              - ''
-              - - 'arn:aws:s3:::'
-                - !Ref AWSS3ConsentsBucket
-                - /*
-            Principal:
-              AWS: !GetAtt
-                - AWSIAMS3User
-                - Arn
-      Bucket: !Ref AWSS3ConsentsBucket
   AWSIAMS3User:
     Type: 'AWS::IAM::User'
     Properties:
