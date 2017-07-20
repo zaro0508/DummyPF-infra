@@ -260,9 +260,26 @@ Resources:
       PolicyDocument:
         Id: Give access to user
         Statement:
-          - Sid: AllAccess
+          - Sid: ListAccess
             Action:
-              - 's3:*'
+              - 's3:ListBucket'
+              - 's3:GetBucketLocation'
+            Effect: Allow
+            Resource: !Join
+              - ''
+              - - 'arn:aws:s3:::'
+                - !Ref AWSS3UploadBucket
+            Principal:
+              AWS: !GetAtt
+                - AWSIAMS3User
+                - Arn
+          - Sid: ModAccess
+            Action:
+              - 's3:PutObject'
+              - 's3:PutObjectAcl'
+              - 's3:GetObject'
+              - 's3:GetObjectAcl'
+              - 's3:DeleteObject'
             Effect: Allow
             Resource: !Join
               - ''
