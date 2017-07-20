@@ -276,7 +276,7 @@ Resources:
       PolicyDocument:
         Id: Give access to user
         Statement:
-          - Sid: ListAccess
+          - Sid: AllowListing
             Action:
               - 's3:ListBucket'
               - 's3:GetBucketLocation'
@@ -286,31 +286,37 @@ Resources:
                 - ''
                 - - 'arn:aws:s3:::'
                   - !Ref AppDeployBucket
+                  - /*
               - !Join
                 - ''
                 - - 'arn:aws:s3:::'
                   - !Ref AWSS3UploadBucket
+                  - /*
               - !Join
                 - ''
                 - - 'arn:aws:s3:::'
                   - !Ref AWSS3AttachmentBucket
+                  - /*
               - !Join
                 - ''
                 - - 'arn:aws:s3:::'
                   - !Ref AWSS3UploadCmsCertBucket
+                  - /*
               - !Join
                 - ''
                 - - 'arn:aws:s3:::'
                   - !Ref AWSS3UploadCmsPrivBucket
+                  - /*
               - !Join
                 - ''
                 - - 'arn:aws:s3:::'
                   - !Ref AWSS3ConsentsBucket
+                  - /*
             Principal:
               AWS: !GetAtt
                 - AWSIAMS3User
                 - Arn
-          - Sid: ModAccess
+          - Sid: AllAccess
             Action:
               - 's3:PutObject'
               - 's3:PutObjectAcl'
