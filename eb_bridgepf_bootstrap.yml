@@ -1,0 +1,105 @@
+# This CF script is for creating the required AWS BridgePF environment resources.
+# usage:
+#   aws cloudformation create-stack --stack-name Sandbox \
+#     --template-url $S3_BUCKET_URL
+Outputs:
+  AppDeployBucket:
+    Value: !Ref AWSS3AppDeployBucket
+    Export:
+      Name:
+        'Fn::Sub': '${AWS::StackName}-AppDeployBucket'
+  AWSIAMUserAccessKeyId:
+    Value: !Ref AWSIAMUserAccessKey
+    Export:
+      Name:
+        'Fn::Sub': '${AWS::StackName}-UserAccessKeyId'
+  AWSIAMUserSecretAccessKeyId:
+    Value: !GetAtt AWSIAMUserAccessKey.SecretAccessKey
+    Export:
+      Name:
+        'Fn::Sub': '${AWS::StackName}-SecretAccessKeyId'
+AWSTemplateFormatVersion: 2010-09-09
+Description: Bootstrap resources for BridgePF Environment
+Parameters:
+  IAMUserPassword:
+    Type: String
+    NoEcho: true
+    MinLength: '3'
+    MaxLength: '50'
+    Default: param_place_holder
+  AppDeployBucket:
+    Type: String
+    Description: S3 bucket for deployment
+    Default: param_place_holder
+Resources:
+  AWSS3AppDeployBucket:
+    Type: 'AWS::S3::Bucket'
+    Properties:
+      BucketName: !Ref AppDeployBucket
+  AWSS3AppDeployBucketPolicy:
+    Type: 'AWS::S3::BucketPolicy'
+    Properties:
+      PolicyDocument:
+        Id: Give access to user
+        Statement:
+          - Sid: ListAccess
+            Action:
+              - 's3:ListBucket'
+              - 's3:GetBucketLocation'
+            Effect: Allow
+            Resource: !Join
+              - ''
+              - - 'arn:aws:s3:::'
+                - !Ref AWSS3AppDeployBucket
+            Principal:
+              AWS: !GetAtt
+                - AWSIAMUser
+                - Arn
+          - Sid: ModAccess
+            Action:
+              - 's3:PutObject'
+              - 's3:PutObjectAcl'
+              - 's3:GetObject'
+              - 's3:GetObjectAcl'
+              - 's3:DeleteObject'
+            Effect: Allow
+            Resource: !Join
+              - ''
+              - - 'arn:aws:s3:::'
+                - !Ref AWSS3AppDeployBucket
+                - /*
+            Principal:
+              AWS: !GetAtt
+                - AWSIAMUser
+                - Arn
+      Bucket: !Ref AWSS3AppDeployBucket
+  AWSIAMUserAccessKey:
+    Type: 'AWS::IAM::AccessKey'
+    Properties:
+      UserName: !Ref AWSIAMUser
+  AWSIAMUser:
+    Type: 'AWS::IAM::User'
+    Properties:
+      Groups:
+        - !Ref AWSIAMGroup
+      LoginProfile:
+        Password: !Ref IAMUserPassword
+      Policies:
+        - PolicyName: S3Access
+          PolicyDocument:
+            Statement:
+              - Effect: Allow
+                Action: 's3:ListAllMyBuckets'
+                Resource: '*'
+              - Effect: Allow
+                Action: 's3:*'
+                Resource: !Join
+                    - ''
+                    - - 'arn:aws:s3:::'
+                      - !Ref AWSS3AppDeployBucket
+                      - /*
+  AWSIAMGroup:
+    Type: 'AWS::IAM::Group'
+    Properties:
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AWSDeviceFarmFullAccess
