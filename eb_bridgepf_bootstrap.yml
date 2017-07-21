@@ -83,3 +83,4 @@ Resources:
     Properties:
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/AWSDeviceFarmFullAccess
+        - arn:aws:iam::aws:policy/AWSElasticBeanstalkFullAccess
