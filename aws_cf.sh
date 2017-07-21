@@ -2,20 +2,13 @@
 aws cloudformation update-stack \
 --stack-name $STACK_NAME \
 --capabilities CAPABILITY_NAMED_IAM \
---template-url https://s3.amazonaws.com/org-sagebridge-deployment-sandbox-infra-develop/eb_bridgepf.yml \
+--template-url https://s3.amazonaws.com/org-sagebridge-bridgepf-artifacts-sandbox-infra-$TRAVIS_BRANCH/cf_bridgepf.yml \
 --parameters \
-ParameterKey=AWSEBEnvironmentName,ParameterValue=$TRAVIS_BRANCH \
-ParameterKey=IAMUserPassword,ParameterValue=$IAMUserPassword \
 ParameterKey=SSLCertArn,ParameterValue=$SSLCertArn \
-ParameterKey=BridgeEnv,ParameterValue=dev \
+ParameterKey=BridgeEnv,ParameterValue=$BridgeEnv-develop \
 ParameterKey=BridgeUser,ParameterValue=heroku \
 ParameterKey=InstanceType,ParameterValue=t2.micro \
-ParameterKey=UploadBucket,ParameterValue=org-sagebridge-upload-sandbox-develop \
-ParameterKey=AttachmentBucket,ParameterValue=org-sagebridge-attachment-sandbox-develop \
-ParameterKey=UploadCmsCertBucket,ParameterValue=org-sagebridge-upload-cms-cert-sandbox-develop \
-ParameterKey=UploadCmsPrivBucket,ParameterValue=org-sagebridge-upload-cms-priv-sandbox-develop \
-ParameterKey=ConsentsBucket,ParameterValue=org-sagebridge-consents-sandbox-develop \
-ParameterKey=AppDeployBucket,ParameterValue=org-sagebridge-deployment-sandbox-develop \
+ParameterKey=AppDeployBucket,ParameterValue=org-sagebridge-bridgepf-artifacts-sandbox-infra-$TRAVIS_BRANCH \
 ParameterKey=AppDeployFile,ParameterValue=bridgepf-0.1-SNAPSHOT.zip \
 ParameterKey=DNSHostname,ParameterValue=$DNS_HOSTNAME \
 ParameterKey=DNSDomain,ParameterValue=$DNS_DOMAIN \

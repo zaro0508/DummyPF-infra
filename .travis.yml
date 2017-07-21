@@ -16,13 +16,13 @@ env:
 before_install:
   - mkdir ~/.aws
   - echo -e "[default]\nregion=us-east-1" >> ~/.aws/config
-  - echo -e "[default]\naws_access_key_id=$AwsKey\naws_secret_access_key=$AwsSecretKey" >> ~/.aws/credentials
+  - echo -e "[default]\naws_access_key_id=$sandbox-UserAccessKeyId-develop\naws_secret_access_key=$sandbox-SecretAccessKeyId-develop" >> ~/.aws/credentials
 
 install:
   - pip install --upgrade awscli
 
 script:
-  - aws s3 cp . s3://org-sagebridge-deployment-sandbox-infra-develop --recursive --exclude "*" --include "eb*.yml"
-  - aws cloudformation validate-template --template-url https://s3.amazonaws.com/org-sagebridge-deployment-sandbox-infra-develop/eb_app.yml
-  - aws cloudformation validate-template --template-url https://s3.amazonaws.com/org-sagebridge-deployment-sandbox-infra-develop/eb_bridgepf.yml
+  - aws s3 cp . s3://org-sagebridge-bridgepf-artifacts-sandbox-infra-$TRAVIS_BRANCH --recursive --exclude "*" --include "eb*.yml" --include "cf*.yml"
+  - aws cloudformation validate-template --template-url https://s3.amazonaws.com/org-sagebridge-bridgepf-artifacts-sandbox-infra-$TRAVIS_BRANCH/eb_bridgepf_boostrap.yml
+  - aws cloudformation validate-template --template-url https://s3.amazonaws.com/org-sagebridge-bridgepf-artifacts-sandbox-infra-$TRAVIS_BRANCH/cf_bridgepf.yml
   - ./deploy_infra.sh
