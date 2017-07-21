@@ -2,13 +2,13 @@
 aws cloudformation update-stack \
 --stack-name $STACK_NAME \
 --capabilities CAPABILITY_NAMED_IAM \
---template-url https://s3.amazonaws.com/org-sagebridge-bridgepf-artifacts-sandbox-infra-$TRAVIS_BRANCH/cf_bridgepf.yml \
+--template-body file://cf_bridgepf.yml \
 --parameters \
 ParameterKey=SSLCertArn,ParameterValue=$SSLCertArn \
 ParameterKey=BridgeEnv,ParameterValue=$BridgeEnv-develop \
 ParameterKey=BridgeUser,ParameterValue=heroku \
 ParameterKey=InstanceType,ParameterValue=t2.micro \
-ParameterKey=AppDeployBucket,ParameterValue=org-sagebridge-bridgepf-artifacts-sandbox-infra-$TRAVIS_BRANCH \
+ParameterKey=AppDeployBucket,ParameterValue=org-sagebridge-bridgepf-deployment-sandbox-develop \
 ParameterKey=AppDeployFile,ParameterValue=bridgepf-0.1-SNAPSHOT.zip \
 ParameterKey=DNSHostname,ParameterValue=$DNS_HOSTNAME \
 ParameterKey=DNSDomain,ParameterValue=$DNS_DOMAIN \
