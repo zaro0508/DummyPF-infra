@@ -1,7 +1,10 @@
 # This CF script is for creating the required AWS BridgePF environment resources.
 # usage:
-#   aws cloudformation create-stack --stack-name Sandbox \
-#     --template-url $S3_BUCKET_URL
+# aws --profile bridge.dev.zaro0508 --region us-east-1 cloudformation \
+#   create-stack --stack-name foo --capabilities CAPABILITY_NAMED_IAM \
+#   --template-body file:///Users/zaro0508/work-sage/sandbox-infra/eb_bridgepf_bootstrap.yml \
+#   --parameters ParameterKey=AppDeployBucket,ParameterValue=org-sagebase-deployment-foo-develop
+#
 Outputs:
   AppDeployBucket:
     Value: !Ref AWSS3AppDeployBucket
@@ -21,12 +24,6 @@ Outputs:
 AWSTemplateFormatVersion: 2010-09-09
 Description: Bootstrap resources for BridgePF Environment
 Parameters:
-  IAMUserPassword:
-    Type: String
-    NoEcho: true
-    MinLength: '3'
-    MaxLength: '50'
-    Default: param_place_holder
   AppDeployBucket:
     Type: String
     Description: S3 bucket for deployment
@@ -82,8 +79,6 @@ Resources:
     Properties:
       Groups:
         - !Ref AWSIAMGroup
-      LoginProfile:
-        Password: !Ref IAMUserPassword
       Policies:
         - PolicyName: S3Access
           PolicyDocument:
