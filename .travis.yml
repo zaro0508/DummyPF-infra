@@ -16,7 +16,7 @@ env:
 before_install:
   - mkdir ~/.aws
   - echo -e "[default]\nregion=us-east-1" >> ~/.aws/config
-  - echo -e "[default]\naws_access_key_id=$sandbox-UserAccessKeyId-develop\naws_secret_access_key=$sandbox-SecretAccessKeyId-develop" >> ~/.aws/credentials
+  - echo -e "[default]\naws_access_key_id=$AwsKey\naws_secret_access_key=$AwsSecretKey" >> ~/.aws/credentials
 
 install:
   - pip install --upgrade awscli
