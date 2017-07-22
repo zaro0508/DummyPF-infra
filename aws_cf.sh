@@ -5,7 +5,7 @@ aws cloudformation update-stack \
 --template-body file://cf_bridgepf.yml \
 --parameters \
 ParameterKey=SSLCertArn,ParameterValue=$SSLCertArn \
-ParameterKey=BridgeEnv,ParameterValue=$BridgeEnv-develop \
+ParameterKey=BridgeEnv,ParameterValue=dev \
 ParameterKey=BridgeUser,ParameterValue=heroku \
 ParameterKey=InstanceType,ParameterValue=t2.micro \
 ParameterKey=AppDeployBucket,ParameterValue=org-sagebridge-bridgepf-deployment-sandbox-develop \
