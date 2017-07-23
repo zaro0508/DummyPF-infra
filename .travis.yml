@@ -16,15 +16,21 @@ env:
 before_install:
   - mkdir ~/.aws
   - echo -e "[default]\nregion=us-east-1" >> ~/.aws/config
-  - echo -e "[default]\naws_access_key_id=$SandboxBoostrapUserAccessKeyId\naws_secret_access_key=$SandboxBoostrapUserSecretAccessKeyId" >> ~/.aws/credentials
+  - echo -e "[default]\naws_access_key_id=$SandboxBootstrapUserAccessKeyId\naws_secret_access_key=$SandboxBootstrapUserSecretAccessKeyId" >> ~/.aws/credentials
 
 install:
   - pip install --upgrade awscli
 
 script:
-  - aws s3 cp . s3://org-sagebridge-bridgepf-artifacts-sandbox-infra-develop --recursive --exclude "*" --include "eb*.yml" --include "cf*.yml"
-  - aws cloudformation validate-template --template-url https://s3.amazonaws.com/org-sagebridge-bridgepf-artifacts-sandbox-infra-develop/eb_bridgepf_boostrap.yml
-  - aws cloudformation validate-template --template-url https://s3.amazonaws.com/org-sagebridge-bridgepf-artifacts-sandbox-infra-develop/cf_bridgepf.yml
+# validate from local file
 #  - aws cloudformation validate-template --template-body file://eb_bridgepf_bootstrap.yml
 #  - aws cloudformation validate-template --template-body file://cf_bridgepf.yml
+
+# validate from s3 bucket for when template file size is greater than 50K
+# https://docs.aws.amazon.com/cli/latest/reference/cloudformation/create-stack.html
+  - aws s3 cp . s3://org-sagebridge-bridgepf-artifacts-sandbox-infra-develop --recursive --exclude "*" --include "eb*.yml" --include "cf*.yml"
+  - aws cloudformation validate-template --template-url https://s3.amazonaws.com/org-sagebridge-bridgepf-artifacts-sandbox-infra-develop/eb_bridgepf_bootstrap.yml
+  - aws cloudformation validate-template --template-url https://s3.amazonaws.com/org-sagebridge-bridgepf-artifacts-sandbox-infra-develop/cf_bridgepf.yml
+
+# update cloudformation stack
   - ./deploy_infra.sh
