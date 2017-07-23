@@ -2,14 +2,14 @@
 #
 # initial creation:
 # aws --profile bridge.dev.admin.user --region us-east-1 cloudformation \
-# create-stack --stack-name FooPF --capabilities CAPABILITY_NAMED_IAM \
+# create-stack --stack-name sandbox --capabilities CAPABILITY_NAMED_IAM \
 # --on-failure DELETE --template-body file:///Users/zaro0508/work-sage/sandbox-infra/cf_bridgepf.yml \
 # --parameters ParameterKey=AppDeployBucket,ParameterValue=org-sagebase-deployment-foo-develop \
 # ParameterKey=AppDeployFile,ParameterValue=bridgepf-0.1-SNAPSHOT.zip
 #
 # updates:
 # aws --profile bridge.dev.bootstrap.user --region us-east-1 cloudformation \
-# update-stack --stack-name FooPF --capabilities CAPABILITY_NAMED_IAM \
+# update-stack --stack-name sandbox --capabilities CAPABILITY_NAMED_IAM \
 # --template-body file:///Users/zaro0508/work-sage/sandbox-infra/cf_bridgepf.yml \
 # --parameters ParameterKey=AppDeployBucket,ParameterValue=org-sagebase-deployment-foo-develop \
 # ParameterKey=AppDeployFile,ParameterValue=bridgepf-0.1-SNAPSHOT.zip
