@@ -22,9 +22,9 @@ install:
   - pip install --upgrade awscli
 
 script:
-#  - aws s3 cp . s3://org-sagebridge-bridgepf-deployment-$STACK_NAME-$TRAVIS_BRANCH --recursive --exclude "*" --include "eb*.yml" --include "cf*.yml"
-#  - aws cloudformation validate-template --template-url https://s3.amazonaws.com/org-sagebridge-bridgepf-deployment-$STACK_NAME-$TRAVIS_BRANCH/eb_bridgepf_boostrap.yml
-#  - aws cloudformation validate-template --template-url https://s3.amazonaws.com/org-sagebridge-bridgepf-deployment-$STACK_NAME-$TRAVIS_BRANCH/cf_bridgepf.yml
-  - aws cloudformation validate-template --template-body file://eb_bridgepf_bootstrap.yml
-  - aws cloudformation validate-template --template-body file://cf_bridgepf.yml
+  - aws s3 cp . s3://org-sagebridge-bridgepf-artifacts-sandbox-infra-develop --recursive --exclude "*" --include "eb*.yml" --include "cf*.yml"
+  - aws cloudformation validate-template --template-url https://s3.amazonaws.com/org-sagebridge-bridgepf-artifacts-sandbox-infra-develop/eb_bridgepf_boostrap.yml
+  - aws cloudformation validate-template --template-url https://s3.amazonaws.com/org-sagebridge-bridgepf-artifacts-sandbox-infra-develop/cf_bridgepf.yml
+#  - aws cloudformation validate-template --template-body file://eb_bridgepf_bootstrap.yml
+#  - aws cloudformation validate-template --template-body file://cf_bridgepf.yml
   - ./deploy_infra.sh
