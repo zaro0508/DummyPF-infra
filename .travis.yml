@@ -22,14 +22,4 @@ install:
   - pip install --upgrade awscli
 
 script:
-# process local file
-#  - aws cloudformation validate-template --template-body file://cf_templates/eb_bridgepf_bootstrap.yml
-#  - aws cloudformation validate-template --template-body file://cf_templates/eb_bridgepf.yml
-
-# process files from s3 bucket, required when template files are greater than 50K
-# https://docs.aws.amazon.com/cli/latest/reference/cloudformation/create-stack.html
-  - aws s3 cp cf_templates s3://org-sagebridge-bridgepf-artifacts-sandbox-infra-develop/cf_templates --recursive
-  - aws cloudformation validate-template --template-url https://s3.amazonaws.com/org-sagebridge-bridgepf-artifacts-sandbox-infra-develop/cf_templates/eb_bridgepf_bootstrap.yml
-  - aws cloudformation validate-template --template-url https://s3.amazonaws.com/org-sagebridge-bridgepf-artifacts-sandbox-infra-develop/cf_templates/eb_bridgepf.yml
   - ./deploy_infra.sh
-
