@@ -6,9 +6,9 @@ aws cloudformation validate-template --template-body file://cf_templates/eb_brid
 
 # validate cf templates (from s3 bucket, required when template files are greater than 50K)
 # https://docs.aws.amazon.com/cli/latest/reference/cloudformation/create-stack.html
-#  - aws s3 cp cf_templates s3://org-sagebridge-bridgepf-artifacts-sandbox-infra-develop/cf_templates --recursive
-#  - aws cloudformation validate-template --template-url https://s3.amazonaws.com/org-sagebridge-bridgepf-artifacts-sandbox-infra-develop/cf_templates/eb_bridgepf_bootstrap.yml
-#  - aws cloudformation validate-template --template-url https://s3.amazonaws.com/org-sagebridge-bridgepf-artifacts-sandbox-infra-develop/cf_templates/eb_bridgepf.yml
+#  - aws s3 cp cf_templates s3://org-sagebridge-bridgepf-artifacts-dummppf-infra-develop/cf_templates --recursive
+#  - aws cloudformation validate-template --template-url https://s3.amazonaws.com/org-sagebridge-bridgepf-artifacts-dummypf-infra-develop/cf_templates/eb_bridgepf_bootstrap.yml
+#  - aws cloudformation validate-template --template-url https://s3.amazonaws.com/org-sagebridge-bridgepf-artifacts-dummypf-infra-develop/cf_templates/eb_bridgepf.yml
 
 # Handle message that shouldn't be an error, https://github.com/hashicorp/terraform/issues/5653 
 message=$(./update_cf_stack.sh 2>&1 1>/dev/null)

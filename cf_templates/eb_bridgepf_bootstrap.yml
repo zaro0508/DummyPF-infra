@@ -4,7 +4,7 @@
 # usage:
 #   aws --profile aws_admin --region us-east-1 cloudformation \
 #     create-stack --stack-name BridgePF --capabilities CAPABILITY_NAMED_IAM \
-#     --template-body file:///workspace/sandbox-infra/eb_bridgepf_bootstrap.yml \
+#     --template-body file:///workspace/dummypf-infra/eb_bridgepf_bootstrap.yml \
 #     --parameters ParameterKey=AppDeployBucket,ParameterValue=org-sagebase-deployment-foo-develop
 #
 Outputs:

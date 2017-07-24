@@ -1,5 +1,5 @@
-# sandbox-infra
-Infra for sandbox application
+# DummyPF-infra
+Infra for DummyPF application
 
 
 ## Creating a new stack
@@ -18,7 +18,7 @@ aws --profile aws-admin-user --region us-east-1 cloudformation create-stack \
 aws --profile foo-bootstapper-User --region us-east-1 cloudformation create-stack \
 --stack-name foo-develop \
 --capabilities CAPABILITY_NAMED_IAM \
---template-url https://s3.amazonaws.com/org-sagebridge-bridgepf-artifacts-sandbox-infra-develop/cf_templates/eb_bridgepf.yml \
+--template-url https://s3.amazonaws.com/org-sagebridge-bridgepf-artifacts-dummypf-infra-develop/cf_templates/eb_bridgepf.yml \
 --parameters \
 ParameterKey=SSLCertArn,ParameterValue=$SSLCertArn \
 ..
