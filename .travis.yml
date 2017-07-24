@@ -22,7 +22,6 @@ install:
   - pip install --upgrade awscli
 
 script:
- - set -ex
 # process local file
 #  - aws cloudformation validate-template --template-body file://cf_templates/eb_bridgepf_bootstrap.yml
 #  - aws cloudformation validate-template --template-body file://cf_templates/eb_bridgepf.yml
