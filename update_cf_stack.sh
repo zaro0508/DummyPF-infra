@@ -7,7 +7,7 @@ aws cloudformation update-stack \
 ParameterKey=SSLCertArn,ParameterValue=$SSLCertArn \
 ParameterKey=BridgeEnv,ParameterValue=dev \
 ParameterKey=BridgeUser,ParameterValue=heroku \
-ParameterKey=InstanceType,ParameterValue=t2.nano \
+ParameterKey=InstanceType,ParameterValue=t2.micro \
 ParameterKey=AppDeployBucket,ParameterValue=org-sagebridge-bridgepf-deployment-sandbox-develop \
 ParameterKey=AppDeployFile,ParameterValue=bridgepf-0.1-SNAPSHOT.zip \
 ParameterKey=DNSHostname,ParameterValue=$DNS_HOSTNAME \
