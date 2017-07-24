@@ -86,3 +86,5 @@ Resources:
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/AWSDeviceFarmFullAccess
         - arn:aws:iam::aws:policy/AWSElasticBeanstalkFullAccess
+        - arn:aws:iam::aws:policy/AmazonRoute53FullAccess
+        - arn:aws:iam::aws:policy/IAMFullAccess
