@@ -485,14 +485,14 @@ Resources:
     Type: 'AWS::ElasticBeanstalk::Application'
   AWSEBEnvironment:
     Type: 'AWS::ElasticBeanstalk::Environment'
-    EnvironmentName: !Join
-        - '-'
-        - - !Ref 'AWS::StackName'
-          - !Ref EnvironmentName
     Properties:
       ApplicationName: !Ref AWSEBApplication
       TemplateName: !Ref AWSEBConfigurationTemplate
       VersionLabel: !Ref AWSEBApplicationVersion
+      EnvironmentName: !Join
+        - '-'
+        - - !Ref 'AWS::StackName'
+          - !Ref EnvironmentName
       Tier:
         Name: WebServer
         Type: Standard
