@@ -27,9 +27,11 @@ ParameterKey=SSLCertArn,ParameterValue=$SSLCertArn \
 
 ```
 
-2. Deploy your app file to the stack.  This can be done by logging into AWS console[1] or using the AWS CLI[2].
+2. Deploy your app file to the stack.  This can be done by using either the AWS console[1] or using the AWS CLI[2][3].
+
 
 
 [1] https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/using-features.deploy-existing-version.html
-[2] https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/eb3-deploy.html
+[2] https://docs.aws.amazon.com/cli/latest/reference/elasticbeanstalk/create-application-version.html
+[3] https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/eb3-deploy.html
 
