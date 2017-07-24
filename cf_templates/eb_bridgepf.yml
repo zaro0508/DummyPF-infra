@@ -12,14 +12,14 @@
 #     create-stack --stack-name sandbox --capabilities CAPABILITY_NAMED_IAM \
 #     --on-failure DELETE --template-body file:///Users/zaro0508/work-sage/sandbox-infra/cf_bridgepf.yml \
 #     --parameters ParameterKey=AppDeployBucket,ParameterValue=org-sagebase-deployment-foo-develop \
-#     ParameterKey=AppDeployFile,ParameterValue=bridgepf-0.1-SNAPSHOT.zip  ...[all params neeeded for app]
+#     ...[all params neeeded for app]
 #
 # updates:
 #   aws --profile bridge.dev.bootstrap.user --region us-east-1 cloudformation \
 #     update-stack --stack-name sandbox --capabilities CAPABILITY_NAMED_IAM \
 #     --template-body file:///Users/zaro0508/work-sage/sandbox-infra/cf_bridgepf.yml \
 #     --parameters ParameterKey=AppDeployBucket,ParameterValue=org-sagebase-deployment-foo-develop \
-#     ParameterKey=AppDeployFile,ParameterValue=bridgepf-0.1-SNAPSHOT.zip ...[all params neeeded for app]
+#     ...[all params neeeded for app]
 #
 Description: AWS Elastic Beanstalk Application
 AWSTemplateFormatVersion: 2010-09-09
@@ -175,10 +175,6 @@ Parameters:
   AppDeployBucket:
     Type: String
     Description: S3 bucket for deployment
-    Default: param_place_holder
-  AppDeployFile:
-    Type: String
-    Description: Initial file to deploy to elastic beanstalk from s3 bucket
     Default: param_place_holder
   DNSHostname:
     Type: String
@@ -377,9 +373,6 @@ Resources:
           OptionName: APP_DEPLOY_BUCKET
           Value: !Ref AppDeployBucket
         - Namespace: 'aws:elasticbeanstalk:application:environment'
-          OptionName: APP_DEPLOY_FILE
-          Value: !Ref AppDeployFile
-        - Namespace: 'aws:elasticbeanstalk:application:environment'
           OptionName: ENVIRONMENT_NAME
           Value: !Ref EnvironmentName
         - Namespace: 'aws:elasticbeanstalk:application:environment'
@@ -488,7 +481,6 @@ Resources:
     Properties:
       ApplicationName: !Ref AWSEBApplication
       TemplateName: !Ref AWSEBConfigurationTemplate
-      VersionLabel: !Ref AWSEBApplicationVersion
       EnvironmentName: !Join
         - '-'
         - - !Ref 'AWS::StackName'
@@ -496,13 +488,6 @@ Resources:
       Tier:
         Name: WebServer
         Type: Standard
-  AWSEBApplicationVersion:
-    Type: 'AWS::ElasticBeanstalk::ApplicationVersion'
-    Properties:
-      ApplicationName: !Ref AWSEBApplication
-      SourceBundle:
-        S3Bucket: !Ref AppDeployBucket
-        S3Key: !Ref AppDeployFile
   AWSS3UploadBucket:
     Type: 'AWS::S3::Bucket'
   AWSS3AttachmentBucket:
