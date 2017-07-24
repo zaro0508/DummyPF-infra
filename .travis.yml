@@ -8,8 +8,8 @@ cache: pip
 
 env:
   global:
-    - STACK_NAME=sandbox
-    - DNS_HOSTNAME=$STACK_NAME-$TRAVIS_BRANCH
+    - STACK_NAME=sandbox-$TRAVIS_BRANCH
+    - DNS_HOSTNAME=$STACK_NAME
     - DNS_DOMAIN=sagebridge.org
     - REPO_NAME=$(echo $TRAVIS_REPO_SLUG | cut -d'/' -f2)"
 
