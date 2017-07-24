@@ -1,19 +1,26 @@
-# This CF script is for creating an AWS elastic beanstalk application
+# This CF script is for creating an AWS elastic beanstalk application.
+#
+# Depends-on: eb_bridgepf_boostrap.yml
+#
+# Usage:
+#   1. Run the boostrap script to setup required resources for the app.
+#   2. Create the app with `aws cloudformation --create-stack` command
+#   3. Update the stack with `aws cloudformation --update-stack` command
 #
 # initial creation:
-# aws --profile bridge.dev.admin.user --region us-east-1 cloudformation \
-# create-stack --stack-name sandbox --capabilities CAPABILITY_NAMED_IAM \
-# --on-failure DELETE --template-body file:///Users/zaro0508/work-sage/sandbox-infra/cf_bridgepf.yml \
-# --parameters ParameterKey=AppDeployBucket,ParameterValue=org-sagebase-deployment-foo-develop \
-# ParameterKey=AppDeployFile,ParameterValue=bridgepf-0.1-SNAPSHOT.zip
+#   aws --profile bridge.dev.admin.user --region us-east-1 cloudformation \
+#     create-stack --stack-name sandbox --capabilities CAPABILITY_NAMED_IAM \
+#     --on-failure DELETE --template-body file:///Users/zaro0508/work-sage/sandbox-infra/cf_bridgepf.yml \
+#     --parameters ParameterKey=AppDeployBucket,ParameterValue=org-sagebase-deployment-foo-develop \
+#     ParameterKey=AppDeployFile,ParameterValue=bridgepf-0.1-SNAPSHOT.zip  ...[all params neeeded for app]
 #
 # updates:
-# aws --profile bridge.dev.bootstrap.user --region us-east-1 cloudformation \
-# update-stack --stack-name sandbox --capabilities CAPABILITY_NAMED_IAM \
-# --template-body file:///Users/zaro0508/work-sage/sandbox-infra/cf_bridgepf.yml \
-# --parameters ParameterKey=AppDeployBucket,ParameterValue=org-sagebase-deployment-foo-develop \
-# ParameterKey=AppDeployFile,ParameterValue=bridgepf-0.1-SNAPSHOT.zip
-
+#   aws --profile bridge.dev.bootstrap.user --region us-east-1 cloudformation \
+#     update-stack --stack-name sandbox --capabilities CAPABILITY_NAMED_IAM \
+#     --template-body file:///Users/zaro0508/work-sage/sandbox-infra/cf_bridgepf.yml \
+#     --parameters ParameterKey=AppDeployBucket,ParameterValue=org-sagebase-deployment-foo-develop \
+#     ParameterKey=AppDeployFile,ParameterValue=bridgepf-0.1-SNAPSHOT.zip ...[all params neeeded for app]
+#
 Description: AWS Elastic Beanstalk Application
 AWSTemplateFormatVersion: 2010-09-09
 Outputs:
@@ -78,6 +85,9 @@ Mappings:
 Parameters:
   SSLCertArn:
     Description: SSL certificate for load balancer
+    Type: String
+    Default: param_place_holder
+  EnvironmentName:
     Type: String
     Default: param_place_holder
   BridgeEnv:
@@ -472,6 +482,10 @@ Resources:
     Type: 'AWS::ElasticBeanstalk::Application'
   AWSEBEnvironment:
     Type: 'AWS::ElasticBeanstalk::Environment'
+    EnvironmentName: !Join
+        - '-'
+        - - !Ref 'AWS::StackName'
+          - !Ref EnvironmentName
     Properties:
       ApplicationName: !Ref AWSEBApplication
       TemplateName: !Ref AWSEBConfigurationTemplate

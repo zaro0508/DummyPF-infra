@@ -1,9 +1,11 @@
-# This CF script is for creating the required AWS BridgePF environment resources.
+# This CF script is for creating BridgePF App dependent resources.
+# Dependent resources may include: s3 buckets, caches, rds, dynamo, etc..
+#
 # usage:
-# aws --profile kdurant --region us-east-1 cloudformation \
-#   create-stack --stack-name foo --capabilities CAPABILITY_NAMED_IAM \
-#   --template-body file:///workspace/sandbox-infra/eb_bridgepf_bootstrap.yml \
-#   --parameters ParameterKey=AppDeployBucket,ParameterValue=org-sagebase-deployment-foo-develop
+#   aws --profile aws_admin --region us-east-1 cloudformation \
+#     create-stack --stack-name BridgePF --capabilities CAPABILITY_NAMED_IAM \
+#     --template-body file:///workspace/sandbox-infra/eb_bridgepf_bootstrap.yml \
+#     --parameters ParameterKey=AppDeployBucket,ParameterValue=org-sagebase-deployment-foo-develop
 #
 Outputs:
   AppDeployBucket:

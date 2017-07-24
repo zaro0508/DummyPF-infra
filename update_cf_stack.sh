@@ -5,6 +5,7 @@ aws cloudformation update-stack \
 --template-url https://s3.amazonaws.com/org-sagebridge-bridgepf-artifacts-sandbox-infra-develop/cf_templates/eb_bridgepf.yml \
 --parameters \
 ParameterKey=SSLCertArn,ParameterValue=$SSLCertArn \
+ParameterKey=EnvironmentName,ParameterValue=$TRAVIS_BRANCH \
 ParameterKey=BridgeEnv,ParameterValue=dev \
 ParameterKey=BridgeUser,ParameterValue=heroku \
 ParameterKey=InstanceType,ParameterValue=t2.micro \
