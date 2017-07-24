@@ -380,6 +380,9 @@ Resources:
           OptionName: APP_DEPLOY_FILE
           Value: !Ref AppDeployFile
         - Namespace: 'aws:elasticbeanstalk:application:environment'
+          OptionName: ENVIRONMENT_NAME
+          Value: !Ref EnvironmentName
+        - Namespace: 'aws:elasticbeanstalk:application:environment'
           OptionName: BRIDGE_ENV
           Value: !Ref BridgeEnv
         - Namespace: 'aws:elasticbeanstalk:application:environment'
