@@ -87,9 +87,6 @@ Parameters:
     Description: SSL certificate for load balancer
     Type: String
     Default: param_place_holder
-  EnvironmentName:
-    Type: String
-    Default: param_place_holder
   BridgeEnv:
     Type: String
     Default: param_place_holder
@@ -373,9 +370,6 @@ Resources:
           OptionName: APP_DEPLOY_BUCKET
           Value: !Ref AppDeployBucket
         - Namespace: 'aws:elasticbeanstalk:application:environment'
-          OptionName: ENVIRONMENT_NAME
-          Value: !Ref EnvironmentName
-        - Namespace: 'aws:elasticbeanstalk:application:environment'
           OptionName: BRIDGE_ENV
           Value: !Ref BridgeEnv
         - Namespace: 'aws:elasticbeanstalk:application:environment'
@@ -484,7 +478,6 @@ Resources:
       EnvironmentName: !Join
         - '-'
         - - !Ref 'AWS::StackName'
-          - !Ref EnvironmentName
       Tier:
         Name: WebServer
         Type: Standard
