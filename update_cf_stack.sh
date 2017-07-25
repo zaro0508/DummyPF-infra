@@ -4,11 +4,11 @@ aws cloudformation update-stack \
 --capabilities CAPABILITY_NAMED_IAM \
 --template-body file://cf_templates/eb_bridgepf.yml \
 --parameters \
-ParameterKey=AppDeployBucket,ParameterValue=org-sagebridge-bridgepf-deployment-dummypf-develop
 ParameterKey=SSLCertArn,ParameterValue=$SSLCertArn \
 ParameterKey=BridgeEnv,ParameterValue=dev \
 ParameterKey=BridgeUser,ParameterValue=heroku \
 ParameterKey=InstanceType,ParameterValue=t2.micro \
+ParameterKey=AppDeployBucket,ParameterValue=org-sagebridge-bridgepf-deployment-dummypf-develop \
 ParameterKey=DNSHostname,ParameterValue=$DNS_HOSTNAME \
 ParameterKey=DNSDomain,ParameterValue=$DNS_DOMAIN \
 ParameterKey=AwsKey,ParameterValue=$AwsKey \
