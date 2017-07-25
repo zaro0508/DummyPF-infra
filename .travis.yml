@@ -8,7 +8,7 @@ cache: pip
 
 env:
   global:
-    - STACK_NAME=DummyPF-$TRAVIS_BRANCH
+    - STACK_NAME=dummypf-$TRAVIS_BRANCH
     - DNS_HOSTNAME=$STACK_NAME
     - DNS_DOMAIN=sagebridge.org
     - REPO_NAME=$(echo $TRAVIS_REPO_SLUG | cut -d'/' -f2)"
