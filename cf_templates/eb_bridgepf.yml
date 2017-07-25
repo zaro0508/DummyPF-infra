@@ -467,6 +467,11 @@ Resources:
           Value: !Ref SysopsEmail
   AWSEBApplication:
     Type: 'AWS::ElasticBeanstalk::Application'
+    Properties:
+      ApplicationName: !Join
+        - '-'
+        - - !Ref 'AWS::StackName'
+          - Application
   AWSEBEnvironment:
     Type: 'AWS::ElasticBeanstalk::Environment'
     Properties:
