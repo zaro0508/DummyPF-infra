@@ -2,7 +2,7 @@
 aws cloudformation update-stack \
 --stack-name $STACK_NAME \
 --capabilities CAPABILITY_NAMED_IAM \
---template-url https://s3.amazonaws.com/org-sagebridge-bridgepf-artifacts-dummypf-infra-develop/cf_templates/eb_bridgepf.yml \
+--template-body file://cf_templates/eb_bridgepf.yml \
 --parameters \
 ParameterKey=SSLCertArn,ParameterValue=$SSLCertArn \
 ParameterKey=BridgeEnv,ParameterValue=dev \
