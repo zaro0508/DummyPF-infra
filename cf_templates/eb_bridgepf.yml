@@ -659,6 +659,13 @@ Resources:
       Path: /
       Roles:
         - !Ref AWSIAMRole
+  AWSSNSTopic:
+    Type: "AWS::SNS::Topic"
+    Properties:
+      Subscription:
+        -
+          Endpoint: !Ref AwsEbNotificationEndpoint
+          Protocol: "email"
   AWSCWRequestErrorsMetricFilter:
     Type: "AWS::Logs::MetricFilter"
     Properties:
@@ -705,7 +712,8 @@ Resources:
     Type: "AWS::CloudWatch::Alarm"
     Properties:
       ActionsEnabled: true
-      AlarmActions: !Ref 'AWS::NotificationARNs'
+      AlarmActions:
+        - !Ref AWSSNSTopic
       ComparisonOperator: GreaterThanOrEqualToThreshold
       EvaluationPeriods: 1
       MetricName: WarningsCount
