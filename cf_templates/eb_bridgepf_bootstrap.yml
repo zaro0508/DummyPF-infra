@@ -4,15 +4,9 @@
 # usage:
 #   aws --profile aws_admin --region us-east-1 cloudformation \
 #     create-stack --stack-name BridgePF --capabilities CAPABILITY_NAMED_IAM \
-#     --template-body file:///workspace/dummypf-infra/eb_bridgepf_bootstrap.yml \
-#     --parameters ParameterKey=AppDeployBucket,ParameterValue=org-sagebase-deployment-foo-develop
+#     --template-body file:///workspace/dummypf-infra/eb_bridgepf_bootstrap.yml
 #
 Outputs:
-  AppDeployBucket:
-    Value: !Ref AWSS3AppDeployBucket
-    Export:
-      Name:
-        'Fn::Sub': '${AWS::StackName}-AppDeployBucket'
   AWSIAMUserAccessKeyId:
     Value: !Ref AWSIAMUserAccessKey
     Export:
@@ -25,16 +19,7 @@ Outputs:
         'Fn::Sub': '${AWS::StackName}-SecretAccessKeyId'
 AWSTemplateFormatVersion: 2010-09-09
 Description: Bootstrap resources for BridgePF Environment
-Parameters:
-  AppDeployBucket:
-    Type: String
-    Description: S3 bucket for deployment
-    Default: param_place_holder
 Resources:
-  AWSS3AppDeployBucket:
-    Type: 'AWS::S3::Bucket'
-    Properties:
-      BucketName: !Ref AppDeployBucket
   AWSS3BucketPolicy:
     Type: 'AWS::IAM::Policy'
     Properties:
@@ -55,8 +40,7 @@ Resources:
             Resource:
               - !Join
                 - ''
-                - - 'arn:aws:s3:::'
-                  - !Ref AWSS3AppDeployBucket
+                - - 'arn:aws:s3:::*'
           - Sid: ModAccess
             Action:
               - 's3:PutObject'
@@ -68,8 +52,7 @@ Resources:
             Resource:
               - !Join
                 - ''
-                - - 'arn:aws:s3:::'
-                  - !Ref AWSS3AppDeployBucket
+                - - 'arn:aws:s3:::*'
                   - /*
   AWSIAMUserAccessKey:
     Type: 'AWS::IAM::AccessKey'
