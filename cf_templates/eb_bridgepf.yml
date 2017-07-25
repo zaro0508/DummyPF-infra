@@ -659,5 +659,17 @@ Resources:
       Path: /
       Roles:
         - !Ref AWSIAMRole
-
-
+  RequestErrorsMetricFilter:
+    Type: "AWS::Logs::MetricFilter"
+    Properties:
+      LogGroupName: !Join
+        - '/'
+        - - /aws/elasticbeanstalk
+          - !Ref 'AWS::StackName'
+          - var/log/web-1.log
+      FilterPattern: 'ERROR - com.newrelic.agent.ForceRestartException - INFO - org.hibernate - "Error R14"'
+      MetricTransformations:
+        -
+          MetricValue: "1"
+          MetricNamespace: "WebServer/RequestErrors"
+          MetricName: "ErrorsCount"
