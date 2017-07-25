@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 # validate cf templates (local)
+echo "Validating cloudformation templates..."
 aws cloudformation validate-template --template-body file://cf_templates/eb_bridgepf_bootstrap.yml
 aws cloudformation validate-template --template-body file://cf_templates/eb_bridgepf.yml
 
