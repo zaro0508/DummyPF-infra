@@ -705,6 +705,10 @@ Resources:
     Type: "AWS::CloudWatch::Alarm"
     Properties:
       ActionsEnabled: true
+      AlarmActions:
+        Fn::Select:
+        - '0'
+        - Ref: AWS::NotificationARNs
       ComparisonOperator: GreaterThanOrEqualToThreshold
       EvaluationPeriods: 1
       MetricName: WarningsCount
