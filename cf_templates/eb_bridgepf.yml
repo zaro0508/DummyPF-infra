@@ -680,6 +680,19 @@ Resources:
           MetricValue: "1"
           MetricNamespace: "WebServer/Errors"
           MetricName: "ErrorsCount"
+  AWSCWRequestErrorsAlarm:
+    Type: "AWS::CloudWatch::Alarm"
+    Properties:
+      ActionsEnabled: true
+      AlarmActions:
+        - !Ref AWSSNSTopic
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      EvaluationPeriods: 1
+      MetricName: ErrorsCount
+      Namespace: WebServer/Errors
+      Period: 3600
+      Statistic: Sum
+      Threshold: 10
   AWSCWLostMessagesMetricFilter:
     Type: "AWS::Logs::MetricFilter"
     Properties:
@@ -692,8 +705,21 @@ Resources:
       MetricTransformations:
         -
           MetricValue: "1"
-          MetricNamespace: "WebServer/Messages"
+          MetricNamespace: "WebServer/LostMessages"
           MetricName: "LostMessagesCount"
+  AWSCWRequestLostMessagesAlarm:
+    Type: "AWS::CloudWatch::Alarm"
+    Properties:
+      ActionsEnabled: true
+      AlarmActions:
+        - !Ref AWSSNSTopic
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      EvaluationPeriods: 1
+      MetricName: LostMessagesCount
+      Namespace: WebServer/LostMessages
+      Period: 3600
+      Statistic: Sum
+      Threshold: 1
   AWSCWRequestWarningsMetricFilter:
     Type: "AWS::Logs::MetricFilter"
     Properties:
