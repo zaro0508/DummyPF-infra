@@ -11,8 +11,9 @@ aws --profile foo-bootstapper-User --region us-east-1 cloudformation create-stac
 --capabilities CAPABILITY_NAMED_IAM \
 --template-url https://s3.amazonaws.com/org-sagebridge-bridgepf-artifacts-dummypf-infra-develop/cf_templates/eb_bridgepf.yml \
 --parameters \
+---parameters
+ParameterKey=AppDeployBucket,ParameterValue=org-sagebridge-bridgepf-deployment-dummypf-develop \
 ParameterKey=InstanceType,ParameterValue=t2.micro \
-ParameterKey=SSLCertArn,ParameterValue=$SSLCertArn \
 ..
 .. Rest of the parameters from update_cf_stack.sh
 

@@ -11,6 +11,7 @@
 #   aws --profile bridge.dev.admin.user --region us-east-1 cloudformation \
 #     create-stack --stack-name dummypf-develop --capabilities CAPABILITY_NAMED_IAM \
 #     --on-failure DELETE --template-body file://cf_templates/cf_bridgepf.yml \
+#     --parameters ParameterKey=AppDeployBucket,ParameterValue=org-sagebridge-bridgepf-deployment-dummypf-develop \
 #     --parameters ParameterKey=InstanceType,ParameterValue=t2.micro \
 #     ...[all params neeeded for app]
 #
@@ -18,6 +19,7 @@
 #   aws --profile bridge.dev.bootstrap.user --region us-east-1 cloudformation \
 #     update-stack --stack-name dummypf-develop --capabilities CAPABILITY_NAMED_IAM \
 #     --template-body file://cf_templates/cf_bridgepf.yml \
+#     --parameters ParameterKey=AppDeployBucket,ParameterValue=org-sagebridge-bridgepf-deployment-dummypf-develop \
 #     --parameters ParameterKey=InstanceType,ParameterValue=t2.micro \
 #     ...[all params neeeded for app]
 #
@@ -87,6 +89,9 @@ Mappings:
     sa-east-1:
       ARN: '507241528517'
 Parameters:
+  AppDeployBucket:
+    Type: String
+    Default: param_place_holder
   SSLCertArn:
     Description: SSL certificate for load balancer
     Type: String
@@ -367,6 +372,9 @@ Resources:
           OptionName: SSLCertificateId
           Value: !Ref SSLCertArn
         - Namespace: 'aws:elasticbeanstalk:application:environment'
+          OptionName: APP_DEPLOY_BUCKET
+          Value: !Ref AppDeployBucket
+        - Namespace: 'aws:elasticbeanstalk:application:environment'
           OptionName: BRIDGE_ENV
           Value: !Ref BridgeEnv
         - Namespace: 'aws:elasticbeanstalk:application:environment'
@@ -485,6 +493,8 @@ Resources:
         Type: Standard
   AWSS3AppDeployBucket:
     Type: 'AWS::S3::Bucket'
+    Properties:
+      BucketName: !Ref AppDeployBucket
   AWSS3UploadBucket:
     Type: 'AWS::S3::Bucket'
   AWSS3AttachmentBucket:
