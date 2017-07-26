@@ -21,7 +21,7 @@ before_install:
   - echo "testing $Bla-$TRAVIS_BRANCH"
   - mkdir ~/.aws
   - echo -e "[default]\nregion=us-east-1" >> ~/.aws/config
-  - echo -e "[default]\naws_access_key_id=$AwsKey$TRAVIS_BRANCH\naws_secret_access_key=$AwsSecretKey" >> ~/.aws/credentials
+  - echo -e "[default]\naws_access_key_id=$HerokuAccessKeyId\naws_secret_access_key=$HerokuSecretKey" >> ~/.aws/credentials
 
 install:
   - pip install --upgrade awscli
