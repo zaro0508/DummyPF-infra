@@ -18,15 +18,15 @@ ParameterKey=AwsKeyUpload,ParameterValue=$AwsKeyUpload \
 ParameterKey=AwsSecretKeyUpload,ParameterValue=$AwsSecretKeyUpload \
 ParameterKey=AwsKeyUploadCms,ParameterValue=$AwsKeyUploadCms \
 ParameterKey=AwsSecretKeyUploadCms,ParameterValue=$AwsSecretKeyUploadCms \
-ParameterKey=EnterpriseStormpathHref,ParameterValue=$EnterpriseStormpathHref \
-ParameterKey=EnterpriseStormpathId,ParameterValue=$EnterpriseStormpathId \
+ParameterKey=EnterpriseStormpathHref,ParameterValue=$EnterpriseStormpathHref_develop \
+ParameterKey=EnterpriseStormpathId,ParameterValue=$EnterpriseStormpathId_develop \
 ParameterKey=EnterpriseStormpathSecret,ParameterValue=$EnterpriseStormpathSecret \
 ParameterKey=HibernateConnectionPassword,ParameterValue=$HibernateConnectionPassword \
-ParameterKey=HibernateConnectionUrl,ParameterValue=$HibernateConnectionUrl \
+ParameterKey=HibernateConnectionUrl,ParameterValue=$HibernateConnectionUrl_develop \
 ParameterKey=HibernateConnectionUsername,ParameterValue=$HibernateConnectionUsername \
 ParameterKey=HibernateConnectionUsessl,ParameterValue=true \
 ParameterKey=RedisUrl,ParameterValue=$RedisUrl \
-ParameterKey=BridgeHealthcodeKey,ParameterValue=$BridgeHealthcodeKey \
+ParameterKey=BridgeHealthcodeKey,ParameterValue=$BridgeHealthcodeKey_develop \
 ParameterKey=WebservicesUrl,ParameterValue=https://$DNS_HOSTNAME.$DNS_DOMAIN \
 ParameterKey=HostPostfix,ParameterValue=-$DNS_HOSTNAME.$DNS_DOMAIN \
 ParameterKey=JavaOpts,ParameterValue='-Dnewrelic.config.file=/var/app/current/newrelic/newrelic.yml -javaagent:/var/app/current/lib/com.newrelic.agent.java.newrelic-agent-3.32.0.jar' \
