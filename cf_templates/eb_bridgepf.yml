@@ -250,10 +250,6 @@ Parameters:
     Type: String
     Default: param_place_holder
     NoEcho: true
-  BridgeHealthcodeRedisKey:
-    Type: String
-    Default: param_place_holder
-    NoEcho: true
   WebservicesUrl:
     Type: String
     Default: param_place_holder
@@ -404,9 +400,6 @@ Resources:
         - Namespace: 'aws:elasticbeanstalk:application:environment'
           OptionName: BRIDGE_HEALTHCODE_KEY
           Value: !Ref BridgeHealthcodeKey
-        - Namespace: 'aws:elasticbeanstalk:application:environment'
-          OptionName: BRIDGE_HEALTHCODE_REDIS_KEY
-          Value: !Ref BridgeHealthcodeRedisKey
         - Namespace: 'aws:elasticbeanstalk:application:environment'
           OptionName: HOST_POSTFIX
           Value: !Ref HostPostfix

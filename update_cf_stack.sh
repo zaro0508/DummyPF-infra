@@ -27,7 +27,6 @@ ParameterKey=HibernateConnectionUsername,ParameterValue=$HibernateConnectionUser
 ParameterKey=HibernateConnectionUsessl,ParameterValue=true \
 ParameterKey=RedisUrl,ParameterValue=$RedisUrl \
 ParameterKey=BridgeHealthcodeKey,ParameterValue=$BridgeHealthcodeKey \
-ParameterKey=BridgeHealthcodeRedisKey,ParameterValue=$BridgeHealthcodeRedisKey \
 ParameterKey=WebservicesUrl,ParameterValue=https://$DNS_HOSTNAME.$DNS_DOMAIN \
 ParameterKey=HostPostfix,ParameterValue=-$DNS_HOSTNAME.$DNS_DOMAIN \
 ParameterKey=JavaOpts,ParameterValue='-Dnewrelic.config.file=/var/app/current/newrelic/newrelic.yml -javaagent:/var/app/current/lib/com.newrelic.agent.java.newrelic-agent-3.32.0.jar' \
