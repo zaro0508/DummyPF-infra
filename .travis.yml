@@ -8,17 +8,12 @@ cache: pip
 
 env:
   global:
-    - STACK_NAME=dummypf-$TRAVIS_BRANCH
+    - STACK_NAME=bridgepf-$TRAVIS_BRANCH
     - DNS_HOSTNAME=$STACK_NAME
     - DNS_DOMAIN=sagebridge.org
     - REPO_NAME=$(echo $TRAVIS_REPO_SLUG | cut -d'/' -f2)"
 
 before_install:
-  - echo "testing ${Bla}"
-  - echo "testing ${TRAVIS_BRANCH}"
-  - echo "testing ${Bla}${TRAVIS_BRANCH}"
-  - echo "testing ${Bla}_${TRAVIS_BRANCH}"
-  - echo "testing ${Bla}-${TRAVIS_BRANCH}"
   - mkdir ~/.aws
   - echo -e "[default]\nregion=us-east-1" >> ~/.aws/config
   - echo -e "[default]\naws_access_key_id=$AwsKey\naws_secret_access_key=$AwsSecretKey" >> ~/.aws/credentials
