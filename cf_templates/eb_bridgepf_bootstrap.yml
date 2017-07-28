@@ -1,0 +1,73 @@
+# This CF script is for creating BridgePF App dependent resources.
+# Dependent resources may include: s3 buckets, caches, rds, dynamo, etc..
+#
+# usage:
+#   aws --profile aws_admin --region us-east-1 cloudformation \
+#     create-stack --stack-name BridgePF --capabilities CAPABILITY_NAMED_IAM \
+#     --template-body file:///workspace/dummypf-infra/eb_bridgepf_bootstrap.yml
+#
+Outputs:
+  AWSIAMUserAccessKeyId:
+    Value: !Ref AWSIAMUserAccessKey
+    Export:
+      Name:
+        'Fn::Sub': '${AWS::StackName}-UserAccessKeyId'
+  AWSIAMUserSecretAccessKeyId:
+    Value: !GetAtt AWSIAMUserAccessKey.SecretAccessKey
+    Export:
+      Name:
+        'Fn::Sub': '${AWS::StackName}-SecretAccessKeyId'
+AWSTemplateFormatVersion: 2010-09-09
+Description: Bootstrap resources for BridgePF Environment
+Resources:
+  AWSS3BucketPolicy:
+    Type: 'AWS::IAM::Policy'
+    Properties:
+      PolicyName: !Join
+        - '-'
+        - - !Ref 'AWS::StackName'
+          - bucket-policy
+      Groups:
+        - !Ref AWSIAMGroup
+      PolicyDocument:
+        Id: Give access to user
+        Statement:
+          - Sid: ListAccess
+            Action:
+              - 's3:ListBucket'
+              - 's3:GetBucketLocation'
+            Effect: Allow
+            Resource:
+              - !Join
+                - ''
+                - - 'arn:aws:s3:::*'
+          - Sid: ModAccess
+            Action:
+              - 's3:PutObject'
+              - 's3:PutObjectAcl'
+              - 's3:GetObject'
+              - 's3:GetObjectAcl'
+              - 's3:DeleteObject'
+            Effect: Allow
+            Resource:
+              - !Join
+                - ''
+                - - 'arn:aws:s3:::*'
+                  - /*
+  AWSIAMUserAccessKey:
+    Type: 'AWS::IAM::AccessKey'
+    Properties:
+      UserName: !Ref AWSIAMUser
+  AWSIAMUser:
+    Type: 'AWS::IAM::User'
+    Properties:
+      Groups:
+        - !Ref AWSIAMGroup
+  AWSIAMGroup:
+    Type: 'AWS::IAM::Group'
+    Properties:
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AWSDeviceFarmFullAccess
+        - arn:aws:iam::aws:policy/AWSElasticBeanstalkFullAccess
+        - arn:aws:iam::aws:policy/AmazonRoute53FullAccess
+        - arn:aws:iam::aws:policy/IAMFullAccess
