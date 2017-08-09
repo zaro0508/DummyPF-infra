@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
-REPO_NAME=$(echo $TRAVIS_REPO_SLUG | cut -d'/' -f2)
-STACK_NAME="${REPO_NAME,,}"-$TRAVIS_BRANCH
+STACK_NAME=bridgepf-$TRAVIS_BRANCH
 DNS_HOSTNAME=$STACK_NAME
 DNS_DOMAIN=sagebridge.org
 
@@ -15,10 +14,10 @@ ParameterKey=AppHealthcheckUrl,ParameterValue='HTTP:80/?study=api'
 ParameterKey=AuthCreateMysqlAccounts,ParameterValue=true \
 ParameterKey=AuthProvider,ParameterValue=mysql \
 ParameterKey=AwsEbNotificationEndpoint,ParameterValue=khai.do@sagebase.org \
-ParameterKey=AwsKey,ParameterValue=$AwsKey_develop \
+ParameterKey=AwsKey,ParameterValue=$AwsKey \
 ParameterKey=AwsKeyUpload,ParameterValue=$AwsKeyUpload_develop \
 ParameterKey=AwsKeyUploadCms,ParameterValue=$AwsKeyUploadCms_develop \
-ParameterKey=AwsSecretKey,ParameterValue=$AwsSecretKey_develop \
+ParameterKey=AwsSecretKey,ParameterValue=$AwsSecretKey \
 ParameterKey=AwsSecretKeyConsents,ParameterValue=$AwsSecretKeyConsents_develop \
 ParameterKey=AwsSecretKeyUpload,ParameterValue=$AwsSecretKeyUpload_develop \
 ParameterKey=AwsSecretKeyUploadCms,ParameterValue=$AwsSecretKeyUploadCms \
