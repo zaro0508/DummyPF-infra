@@ -11,7 +11,6 @@ env:
     - STACK_NAME=bridgepf-$TRAVIS_BRANCH
     - DNS_HOSTNAME=$STACK_NAME
     - DNS_DOMAIN=sagebridge.org
-    - REPO_NAME=$(echo $TRAVIS_REPO_SLUG | cut -d'/' -f2)"
 
 before_install:
   - mkdir ~/.aws
