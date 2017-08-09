@@ -10,7 +10,7 @@ aws --profile aws_admin --region us-east-1 cloudformation create-stack \
   --stack-name foo-develop \
   --capabilities CAPABILITY_NAMED_IAM \
   --template-body cf_templates/eb_bridgepf.yml \
-  --parameters ParameterKey=AppDeployBucket,ParameterValue=org-sagebridge-bridgepf-deployment-dummypf-develop \
+  --parameters ParameterKey=AppDeployBucket,ParameterValue=org-sagebridge-bridgepf-deployment-foo-develop \
   ParameterKey=InstanceType,ParameterValue=t2.micro \
   ..
   .. [Rest of the parameters from update_cf_stack.sh]

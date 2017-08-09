@@ -1,26 +1,24 @@
 # This CF script is for creating an AWS elastic beanstalk application.
 #
-# Depends-on: eb_bridgepf_boostrap.yml
-#
 # Usage:
 #   1. Run the boostrap script to setup required resources for the app.
 #   2. Create the app with `aws cloudformation --create-stack` command
 #   3. Update the stack with `aws cloudformation --update-stack` command
 #
 # initial creation:
-#   aws --profile bridge.dev.admin.user --region us-east-1 cloudformation \
-#     create-stack --stack-name dummypf-develop --capabilities CAPABILITY_NAMED_IAM \
+#   aws --profile aws.admin.user --region us-east-1 cloudformation \
+#     create-stack --stack-name foo-develop --capabilities CAPABILITY_NAMED_IAM \
 #     --on-failure DELETE --template-body file://cf_templates/cf_bridgepf.yml \
-#     --parameters ParameterKey=AppDeployBucket,ParameterValue=org-sagebridge-bridgepf-deployment-dummypf-develop \
-#     --parameters ParameterKey=InstanceType,ParameterValue=t2.micro \
+#     --parameters ParameterKey=AppDeployBucket,ParameterValue=org-sagebridge-bridgepf-deployment-foo-develop \
+#     --parameters ParameterKey=EC2InstanceType,ParameterValue=t2.micro \
 #     ...[all params neeeded for app]
 #
 # updates:
-#   aws --profile bridge.dev.bootstrap.user --region us-east-1 cloudformation \
-#     update-stack --stack-name dummypf-develop --capabilities CAPABILITY_NAMED_IAM \
+#   aws --profile aws.bootstrap.user --region us-east-1 cloudformation \
+#     update-stack --stack-name foo-develop --capabilities CAPABILITY_NAMED_IAM \
 #     --template-body file://cf_templates/cf_bridgepf.yml \
-#     --parameters ParameterKey=AppDeployBucket,ParameterValue=org-sagebridge-bridgepf-deployment-dummypf-develop \
-#     --parameters ParameterKey=InstanceType,ParameterValue=t2.micro \
+#     --parameters ParameterKey=AppDeployBucket,ParameterValue=org-sagebridge-bridgepf-deployment-foo-develop \
+#     --parameters ParameterKey=EC2InstanceType,ParameterValue=t2.micro \
 #     ...[all params neeeded for app]
 #
 Description: AWS Elastic Beanstalk Application
@@ -34,6 +32,24 @@ Outputs:
     Value: !Ref AWSEBEnvironment
     Export:
       Name: !Sub '${AWS::StackName}-Environment'
+  AWSEBEnvironmentUrl:
+    Value: !Join
+      - ''
+      - - 'http://'
+        - !GetAtt
+          - AWSEBEnvironment
+          - EndpointURL
+    Export:
+      Name: !Sub '${AWS::StackName}-EnvironmentUrl'
+  AWSECacheEndpoint:
+    Value: !Join
+      - ''
+      - - 'redis://'
+        - !GetAtt
+          - AWSECCacheCluster
+          - RedisEndpoint.Address
+    Export:
+      Name: !Sub '${AWS::StackName}-ElastiCacheEndpoint'
   AWSIAMUserAccessKeyId:
     Value: !Ref AWSIAMUserAccessKey
     Export:
@@ -102,10 +118,10 @@ Parameters:
   BridgeUser:
     Type: String
     Default: param_place_holder
-  InstanceType:
+  EC2InstanceType:
     Type: String
     Description: Instance type to use for Elastic Beanstalk Instances
-    Default: t2.nano
+    Default: t2.micro
     AllowedValues:
       - t1.micro
       - t2.nano
@@ -178,6 +194,26 @@ Parameters:
       - d2.8xlarge
       - f1.2xlarge
       - f1.16xlarge
+  ElastiCacheInstanceType:
+    Type: String
+    Description: Instance type to use for Elastic Cache cluster
+    Default: cache.t2.micro
+    AllowedValues:
+      - cache.t2.micro
+      - cache.t2.small
+      - cache.t2.medium
+      - cache.m3.medium
+      - cache.m3.large
+      - cache.m3.xlarge
+      - cache.m3.2xlarge
+      - cache.r3.large
+      - cache.r3.xlarge
+      - cache.r3.2xlarge
+      - cache.r3.4xlarge
+      - cache.r3.8xlarge
+  ElastiCacheUrl:
+    Type: String
+    Default: param_place_holder
   DNSHostname:
     Type: String
     Description: DNS Hostname for deployment
@@ -309,7 +345,7 @@ Resources:
           Value: !Ref AWSIAMInstanceProfile
         - Namespace: 'aws:autoscaling:launchconfiguration'
           OptionName: InstanceType
-          Value: !Ref InstanceType
+          Value: !Ref EC2InstanceType
         - Namespace: 'aws:autoscaling:updatepolicy:rollingupdate'
           OptionName: MaxBatchSize
           Value: 1
@@ -451,6 +487,9 @@ Resources:
         - Namespace: 'aws:elasticbeanstalk:application:environment'
           OptionName: REDIS_URL
           Value: !Ref RedisUrl
+        - Namespace: 'aws:elasticbeanstalk:application:environment'
+          OptionName: ELASTICACHE_URL
+          Value: !Ref ElastiCacheUrl
         - Namespace: 'aws:elasticbeanstalk:application:environment'
           OptionName: SNS_KEY
           Value: !Ref AwsSnsKey
@@ -659,8 +698,18 @@ Resources:
         -
           Endpoint: !Ref AwsEbNotificationEndpoint
           Protocol: "email"
+  AWSLogsLogGroup:
+    Type: "AWS::Logs::LogGroup"
+    Properties:
+      LogGroupName: !Join
+        - '/'
+        - - /aws/elasticbeanstalk
+          - !Ref 'AWS::StackName'
+          - var/log/web-1.log
+      RetentionInDays: 7
   AWSCWRequestErrorMetricFilter:
     Type: "AWS::Logs::MetricFilter"
+    DependsOn: AWSLogsLogGroup
     Properties:
       LogGroupName: !Join
         - '/'
@@ -688,6 +737,7 @@ Resources:
       Threshold: 10
   AWSCWLostMessageMetricFilter:
     Type: "AWS::Logs::MetricFilter"
+    DependsOn: AWSLogsLogGroup
     Properties:
       LogGroupName: !Join
         - '/'
@@ -715,6 +765,7 @@ Resources:
       Threshold: 1
   AWSCWRequestWarningMetricFilter:
     Type: "AWS::Logs::MetricFilter"
+    DependsOn: AWSLogsLogGroup
     Properties:
       LogGroupName: !Join
         - '/'
@@ -742,6 +793,7 @@ Resources:
       Threshold: 100
   AWSCWThroughputExceptionMetricFilter:
     Type: "AWS::Logs::MetricFilter"
+    DependsOn: AWSLogsLogGroup
     Properties:
       LogGroupName: !Join
         - '/'
@@ -769,6 +821,7 @@ Resources:
       Threshold: 1
   AWSCW400MetricFilter:
     Type: "AWS::Logs::MetricFilter"
+    DependsOn: AWSLogsLogGroup
     Properties:
       LogGroupName: !Join
         - '/'
@@ -796,6 +849,7 @@ Resources:
       Threshold: 30
   AWSCW403MetricFilter:
     Type: "AWS::Logs::MetricFilter"
+    DependsOn: AWSLogsLogGroup
     Properties:
       LogGroupName: !Join
         - '/'
@@ -823,6 +877,7 @@ Resources:
       Threshold: 10
   AWSCW409MetricFilter:
     Type: "AWS::Logs::MetricFilter"
+    DependsOn: AWSLogsLogGroup
     Properties:
       LogGroupName: !Join
         - '/'
@@ -850,6 +905,7 @@ Resources:
       Threshold: 10
   AWSCW412MetricFilter:
     Type: "AWS::Logs::MetricFilter"
+    DependsOn: AWSLogsLogGroup
     Properties:
       LogGroupName: !Join
         - '/'
@@ -875,3 +931,62 @@ Resources:
       Period: 3600
       Statistic: Sum
       Threshold: 30
+  AWSLBSecurityGroup:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      GroupDescription: Load Balancer Security Group
+      VpcId: vpc-9c70bbf9
+      SecurityGroupIngress:
+        - CidrIp: 0.0.0.0/0
+          FromPort: '443'
+          ToPort: '443'
+          IpProtocol: tcp
+        - CidrIp: 0.0.0.0/0
+          FromPort: '80'
+          ToPort: '80'
+          IpProtocol: tcp
+      SecurityGroupEgress:
+        - CidrIp: 0.0.0.0/0
+          FromPort: '80'
+          ToPort: '80'
+          IpProtocol: tcp
+  AWSEC2SecurityGroup:
+    Type: 'AWS::EC2::SecurityGroup'
+    DependsOn: AWSLBSecurityGroup
+    Properties:
+      GroupName: !Join
+        - '-'
+        - - !Ref 'AWS::StackName'
+          - AWSEC2SecurityGroup
+      GroupDescription: EC2 Security Group
+      VpcId: vpc-9c70bbf9
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: '80'
+          ToPort: '80'
+          SourceSecurityGroupId: !Ref AWSLBSecurityGroup
+  AWSECacheSecurityGroup:
+    Type: 'AWS::ElastiCache::SecurityGroup'
+    Properties:
+      Description: ElastiCache Security Group
+  AWSECacheSecurityGroupIngress:
+    Type: 'AWS::ElastiCache::SecurityGroupIngress'
+    DependsOn:
+      - AWSECacheSecurityGroup
+      - AWSLBSecurityGroup
+    Properties:
+      CacheSecurityGroupName: !Ref AWSECacheSecurityGroup
+      EC2SecurityGroupName: !Join
+        - '-'
+        - - !Ref 'AWS::StackName'
+          - AWSEC2SecurityGroup
+      EC2SecurityGroupOwnerId: !Ref 'AWS::AccountId'
+  AWSECCacheCluster:
+    Type: 'AWS::ElastiCache::CacheCluster'
+    DependsOn: AWSECacheSecurityGroup
+    Properties:
+      Engine: redis
+      CacheNodeType: !Ref ElastiCacheInstanceType
+      NumCacheNodes: '1'
+      CacheSecurityGroupNames:
+        - !Ref AWSECacheSecurityGroup
