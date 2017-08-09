@@ -6,12 +6,6 @@ language: python
 python: 3.4
 cache: pip
 
-env:
-  global:
-    - STACK_NAME=bridgepf-$TRAVIS_BRANCH
-    - DNS_HOSTNAME=$STACK_NAME
-    - DNS_DOMAIN=sagebridge.org
-
 before_install:
   - mkdir ~/.aws
   - echo -e "[default]\nregion=us-east-1" >> ~/.aws/config
