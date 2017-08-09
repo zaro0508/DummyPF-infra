@@ -1,15 +1,4 @@
 #!/usr/bin/env bash
-
-# Set env vars
-STACK_NAME=bridgepf-$TRAVIS_BRANCH
-DNS_HOSTNAME=$STACK_NAME
-DNS_DOMAIN=sagebridge.org
-
-echo $STACK_NAME
-echo $DNS_HOSTNAME
-echo $DNS_DOMAIN
-
-# update aws application
 aws cloudformation update-stack \
 --stack-name $STACK_NAME \
 --capabilities CAPABILITY_NAMED_IAM \
