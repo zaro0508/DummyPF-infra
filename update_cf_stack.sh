@@ -9,7 +9,7 @@ aws cloudformation update-stack \
 --template-body file://cf_templates/eb_bridgepf.yml \
 --parameters \
 ParameterKey=AppDeployBucket,ParameterValue=$AppDeployBucket_$TRAVIS_BRANCH \
-ParameterKey=AppHealthcheckUrl,ParameterValue='HTTP:80/?study=api'
+ParameterKey=AppHealthcheckUrl,ParameterValue='HTTP:80/?study=api' \
 ParameterKey=AuthCreateMysqlAccounts,ParameterValue=true \
 ParameterKey=AuthProvider,ParameterValue=mysql \
 ParameterKey=AwsEbNotificationEndpoint,ParameterValue=khai.do@sagebase.org \
@@ -47,4 +47,5 @@ ParameterKey=SSLCertArn,ParameterValue=$SSLCertArn_$TRAVIS_BRANCH \
 ParameterKey=SynapseApiKey,ParameterValue=$SynapseApiKey_$TRAVIS_BRANCH \
 ParameterKey=SynapseUser,ParameterValue=$SynapseUser_$TRAVIS_BRANCH \
 ParameterKey=SysopsEmail,ParameterValue=$SysopsEmail_$TRAVIS_BRANCH \
-ParameterKey=WebservicesUrl,ParameterValue=https://$DNS_HOSTNAME.$DNS_DOMAIN \
+ParameterKey=WebservicesUrl,ParameterValue=https://$DNS_HOSTNAME.$DNS_DOMAIN
+
