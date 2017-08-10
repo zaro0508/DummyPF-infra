@@ -29,6 +29,8 @@ echo $DNS_HOSTNAME
 echo $DNS_DOMAIN
 echo $TRAVIS_BRANCH
 echo $SysopsEmail
+echo $AwsKeyUpload
+echo $AppDeployBucket
 
 # deploy
 aws cloudformation update-stack \
