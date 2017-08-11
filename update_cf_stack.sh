@@ -22,8 +22,6 @@ eval export "SynapseApiKey=\$SynapseApiKey_$TRAVIS_BRANCH"
 eval export "SynapseUser=\$SynapseUser_$TRAVIS_BRANCH"
 eval export "SysopsEmail=\$SysopsEmail_$TRAVIS_BRANCH"
 
-echo $SysopsEmail
-
 # eploy with evaluated vars
 aws cloudformation update-stack \
 --stack-name $STACK_NAME \
