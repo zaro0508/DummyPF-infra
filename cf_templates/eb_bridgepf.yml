@@ -260,16 +260,6 @@ Parameters:
     Type: String
     Default: param_place_holder
     NoEcho: true
-  EnterpriseStormpathHref:
-    Type: String
-    Default: param_place_holder
-  EnterpriseStormpathId:
-    Type: String
-    Default: param_place_holder
-  EnterpriseStormpathSecret:
-    Type: String
-    Default: param_place_holder
-    NoEcho: true
   HibernateConnectionPassword:
     Type: String
     Default: param_place_holder
@@ -473,15 +463,6 @@ Resources:
         - Namespace: 'aws:elasticbeanstalk:application:environment'
           OptionName: AUTH_PROVIDER
           Value: !Ref AuthProvider
-        - Namespace: 'aws:elasticbeanstalk:application:environment'
-          OptionName: ENTERPRISE_STORMPATH_APPLICATION_HREF
-          Value: !Ref EnterpriseStormpathHref
-        - Namespace: 'aws:elasticbeanstalk:application:environment'
-          OptionName: ENTERPRISE_STORMPATH_ID
-          Value: !Ref EnterpriseStormpathId
-        - Namespace: 'aws:elasticbeanstalk:application:environment'
-          OptionName: ENTERPRISE_STORMPATH_SECRET
-          Value: !Ref EnterpriseStormpathSecret
         - Namespace: 'aws:elasticbeanstalk:application:environment'
           OptionName: HIBERNATE_CONNECTION_PASSWORD
           Value: !Ref HibernateConnectionPassword

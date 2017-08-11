@@ -13,9 +13,6 @@ eval export "BridgeEnv=\$BridgeEnv_$TRAVIS_BRANCH"
 eval export "BridgeHealthcodeKey=\$BridgeHealthcodeKey_$TRAVIS_BRANCH"
 eval export "ElastiCacheUrl=\$ElastiCacheUrl_$TRAVIS_BRANCH"
 eval export "EmailUnsubscribeToken=\$EmailUnsubscribeToken_$TRAVIS_BRANCH"
-eval export "EnterpriseStormpathHref=\$EnterpriseStormpathHref_$TRAVIS_BRANCH"
-eval export "EnterpriseStormpathId=\$EnterpriseStormpathId_$TRAVIS_BRANCH"
-eval export "EnterpriseStormpathSecret=\$EnterpriseStormpathSecret_$TRAVIS_BRANCH"
 eval export "HibernateConnectionPassword=\$HibernateConnectionPassword_$TRAVIS_BRANCH"
 eval export "HibernateConnectionUrl=\$HibernateConnectionUrl_$TRAVIS_BRANCH"
 eval export "HibernateConnectionUsername=\$HibernateConnectionUsername_$TRAVIS_BRANCH"
@@ -61,9 +58,6 @@ ParameterKey=EC2InstanceType,ParameterValue=t2.micro \
 ParameterKey=ElastiCacheUrl,ParameterValue=$ElastiCacheUrl \
 ParameterKey=ElastiCacheInstanceType,ParameterValue=cache.t2.micro \
 ParameterKey=EmailUnsubscribeToken,ParameterValue=$EmailUnsubscribeToken \
-ParameterKey=EnterpriseStormpathHref,ParameterValue=$EnterpriseStormpathHref \
-ParameterKey=EnterpriseStormpathId,ParameterValue=$EnterpriseStormpathId \
-ParameterKey=EnterpriseStormpathSecret,ParameterValue=$EnterpriseStormpathSecret \
 ParameterKey=HibernateConnectionPassword,ParameterValue=$HibernateConnectionPassword \
 ParameterKey=HibernateConnectionUrl,ParameterValue=$HibernateConnectionUrl \
 ParameterKey=HibernateConnectionUsername,ParameterValue=$HibernateConnectionUsername \
