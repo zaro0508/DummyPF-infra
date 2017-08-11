@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# evaluate vars
+# double interpolate vars from travis
 eval export "AppDeployBucket=\$AppDeployBucket_$TRAVIS_BRANCH"
 eval export "AwsKeyUpload=\$AwsKeyUpload_$TRAVIS_BRANCH"
 eval export "AwsKeyUploadCms=\$AwsKeyUploadCms_$TRAVIS_BRANCH"
@@ -22,14 +22,7 @@ eval export "SynapseApiKey=\$SynapseApiKey_$TRAVIS_BRANCH"
 eval export "SynapseUser=\$SynapseUser_$TRAVIS_BRANCH"
 eval export "SysopsEmail=\$SysopsEmail_$TRAVIS_BRANCH"
 
-echo $STACK_NAME
-echo $DNS_HOSTNAME
-echo $DNS_DOMAIN
-echo $TRAVIS_BRANCH
-echo $SysopsEmail
-echo $AppDeployBucket
-
-# deploy
+# eploy with evaluated vars
 aws cloudformation update-stack \
 --stack-name $STACK_NAME \
 --capabilities CAPABILITY_NAMED_IAM \

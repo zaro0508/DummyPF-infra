@@ -356,6 +356,9 @@ Resources:
         - Namespace: 'aws:autoscaling:updatepolicy:rollingupdate'
           OptionName: RollingUpdateType
           Value: 'Health'
+        - Namespace: 'aws:elasticbeanstalk:application'
+          OptionName: Application Healthcheck URL
+          Value: !Ref AppHealthcheckUrl
         - Namespace: 'aws:elasticbeanstalk:cloudwatch:logs'
           OptionName: StreamLogs
           Value: 'true'
@@ -402,9 +405,6 @@ Resources:
           OptionName: SSLCertificateId
           Value: !Ref SSLCertArn
         # Application environment options
-        - Namespace: 'aws:elasticbeanstalk:application'
-          OptionName: Application Healthcheck URL
-          Value: !Ref AppHealthcheckUrl
         - Namespace: 'aws:elasticbeanstalk:application:environment'
           OptionName: APP_DEPLOY_BUCKET
           Value: !Ref AppDeployBucket
