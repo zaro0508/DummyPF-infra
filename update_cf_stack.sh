@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
 
-# double interpolate vars from travis
+# evaluate vars
 eval export "AppDeployBucket=\$AppDeployBucket_$TRAVIS_BRANCH"
-eval export "AttachmentBucket=\$AttachmentBucket_$TRAVIS_BRANCH"
 eval export "AwsKeyUpload=\$AwsKeyUpload_$TRAVIS_BRANCH"
 eval export "AwsKeyUploadCms=\$AwsKeyUploadCms_$TRAVIS_BRANCH"
 eval export "AwsSecretKeyConsents=\$AwsSecretKeyConsents_$TRAVIS_BRANCH"
@@ -12,7 +11,6 @@ eval export "AwsSnsKey=\$AwsSnsKey_$TRAVIS_BRANCH"
 eval export "AwsSnsSecretKey=\$AwsSnsSecretKey_$TRAVIS_BRANCH"
 eval export "BridgeEnv=\$BridgeEnv_$TRAVIS_BRANCH"
 eval export "BridgeHealthcodeKey=\$BridgeHealthcodeKey_$TRAVIS_BRANCH"
-eval export "ConsentsBucket=\$ConsentsBucket_$TRAVIS_BRANCH"
 eval export "ElastiCacheUrl=\$ElastiCacheUrl_$TRAVIS_BRANCH"
 eval export "EmailUnsubscribeToken=\$EmailUnsubscribeToken_$TRAVIS_BRANCH"
 eval export "HibernateConnectionPassword=\$HibernateConnectionPassword_$TRAVIS_BRANCH"
@@ -23,18 +21,21 @@ eval export "SSLCertArn=\$SSLCertArn_$TRAVIS_BRANCH"
 eval export "SynapseApiKey=\$SynapseApiKey_$TRAVIS_BRANCH"
 eval export "SynapseUser=\$SynapseUser_$TRAVIS_BRANCH"
 eval export "SysopsEmail=\$SysopsEmail_$TRAVIS_BRANCH"
-eval export "UploadBucket=\$UploadBucket_$TRAVIS_BRANCH"
-eval export "UploadCmsCertBucket=\$UploadCmsCertBucket_$TRAVIS_BRANCH"
-eval export "UploadCmsPrivBucket=\$UploadCmsPrivBucket_$TRAVIS_BRANCH"
 
-# deploy with evaluated vars
+echo $STACK_NAME
+echo $DNS_HOSTNAME
+echo $DNS_DOMAIN
+echo $TRAVIS_BRANCH
+echo $SysopsEmail
+echo $AppDeployBucket
+
+# deploy
 aws cloudformation update-stack \
 --stack-name $STACK_NAME \
 --capabilities CAPABILITY_NAMED_IAM \
 --template-body file://cf_templates/eb_bridgepf.yml \
 --parameters \
 ParameterKey=AppDeployBucket,ParameterValue=$AppDeployBucket \
-ParameterKey=AttachmentBucket,ParameterValue=$AttachmentBucket \
 ParameterKey=AppHealthcheckUrl,ParameterValue='HTTP:80/?study=api' \
 ParameterKey=AuthCreateMysqlAccounts,ParameterValue=true \
 ParameterKey=AuthProvider,ParameterValue=mysql \
@@ -51,7 +52,6 @@ ParameterKey=AwsSnsSecretKey,ParameterValue=$AwsSnsSecretKey \
 ParameterKey=BridgeEnv,ParameterValue=$BridgeEnv \
 ParameterKey=BridgeHealthcodeKey,ParameterValue=$BridgeHealthcodeKey \
 ParameterKey=BridgeUser,ParameterValue=heroku \
-ParameterKey=ConsentsBucket,ParameterValue=$ConsentsBucket \
 ParameterKey=DNSHostname,ParameterValue=$DNS_HOSTNAME \
 ParameterKey=DNSDomain,ParameterValue=$DNS_DOMAIN \
 ParameterKey=EC2InstanceType,ParameterValue=t2.micro \
@@ -72,7 +72,4 @@ ParameterKey=SSLCertArn,ParameterValue=$SSLCertArn \
 ParameterKey=SynapseApiKey,ParameterValue=$SynapseApiKey \
 ParameterKey=SynapseUser,ParameterValue=$SynapseUser \
 ParameterKey=SysopsEmail,ParameterValue='Bridge IT <bridge-testing+sysops@sagebase.org>' \
-ParameterKey=UploadBucket,ParameterValue=$UploadBucket \
-ParameterKey=UploadCmsCertBucket,ParameterValue=$UploadCmsCertBucket \
-ParameterKey=UploadCmsPrivBucket,ParameterValue=$UploadCmsPrivBucket \
 ParameterKey=WebservicesUrl,ParameterValue=https://$DNS_HOSTNAME.$DNS_DOMAIN

@@ -116,9 +116,6 @@ Parameters:
     Type: String
     Description: The AWS EB health check path
     Default: param_place_holder
-  AttachmentBucket:
-    Type: String
-    Default: param_place_holder
   AuthCreateMysqlAccounts:
     Type: String
     Default: param_place_holder
@@ -170,9 +167,6 @@ Parameters:
     Default: param_place_holder
     NoEcho: true
   BridgeUser:
-    Type: String
-    Default: param_place_holder
-  ConsentsBucket:
     Type: String
     Default: param_place_holder
   DNSDomain:
@@ -327,15 +321,6 @@ Parameters:
   SysopsEmail:
     Type: String
     Default: param_place_holder
-  UploadBucket:
-    Type: String
-    Default: param_place_holder
-  UploadCmsCertBucket:
-    Type: String
-    Default: param_place_holder
-  UploadCmsPrivBucket:
-    Type: String
-    Default: param_place_holder
   WebservicesUrl:
     Type: String
     Default: param_place_holder
@@ -371,9 +356,6 @@ Resources:
         - Namespace: 'aws:autoscaling:updatepolicy:rollingupdate'
           OptionName: RollingUpdateType
           Value: 'Health'
-        - Namespace: 'aws:elasticbeanstalk:application'
-          OptionName: Application Healthcheck URL
-          Value: !Ref AppHealthcheckUrl
         - Namespace: 'aws:elasticbeanstalk:cloudwatch:logs'
           OptionName: StreamLogs
           Value: 'true'
@@ -420,12 +402,12 @@ Resources:
           OptionName: SSLCertificateId
           Value: !Ref SSLCertArn
         # Application environment options
+        - Namespace: 'aws:elasticbeanstalk:application'
+          OptionName: Application Healthcheck URL
+          Value: !Ref AppHealthcheckUrl
         - Namespace: 'aws:elasticbeanstalk:application:environment'
           OptionName: APP_DEPLOY_BUCKET
           Value: !Ref AppDeployBucket
-        - Namespace: 'aws:elasticbeanstalk:application:environment'
-          OptionName: ATTACHMENT_BUCKET
-          Value: !Ref AttachmentBucket
         - Namespace: 'aws:elasticbeanstalk:application:environment'
           OptionName: AUTH_CREATE_MYSQL_ACCOUNTS
           Value: !Ref AuthCreateMysqlAccounts
@@ -462,9 +444,6 @@ Resources:
         - Namespace: 'aws:elasticbeanstalk:application:environment'
           OptionName: BRIDGE_USER
           Value: !Ref BridgeUser
-        - Namespace: 'aws:elasticbeanstalk:application:environment'
-          OptionName: CONSENTS_BUCKET
-          Value: !Ref ConsentsBucket
         - Namespace: 'aws:elasticbeanstalk:application:environment'
           OptionName: EMAIL_UNSUBSCRIBE_TOKEN
           Value: !Ref EmailUnsubscribeToken
@@ -517,15 +496,6 @@ Resources:
           OptionName: SYSOPS_EMAIL
           Value: !Ref SysopsEmail
         - Namespace: 'aws:elasticbeanstalk:application:environment'
-          OptionName: UPLOAD_BUCKET
-          Value: !Ref UploadBucket
-        - Namespace: 'aws:elasticbeanstalk:application:environment'
-          OptionName: UPLOAD_CMS_CERT_BUCKET
-          Value: !Ref UploadCmsCertBucket
-        - Namespace: 'aws:elasticbeanstalk:application:environment'
-          OptionName: UPLOAD_CMS_PRIV_BUCKET
-          Value: !Ref UploadCmsPrivBucket
-        - Namespace: 'aws:elasticbeanstalk:application:environment'
           OptionName: WEBSERVICES_URL
           Value: !Ref WebservicesUrl
   AWSEBApplication:
@@ -553,24 +523,14 @@ Resources:
       BucketName: !Ref AppDeployBucket
   AWSS3UploadBucket:
     Type: 'AWS::S3::Bucket'
-    Properties:
-      BucketName: !Ref UploadBucket
   AWSS3AttachmentBucket:
     Type: 'AWS::S3::Bucket'
-    Properties:
-      BucketName: !Ref AttachmentBucket
   AWSS3UploadCmsCertBucket:
     Type: 'AWS::S3::Bucket'
-    Properties:
-      BucketName: !Ref UploadCmsCertBucket
   AWSS3UploadCmsPrivBucket:
     Type: 'AWS::S3::Bucket'
-    Properties:
-      BucketName: !Ref UploadCmsPrivBucket
   AWSS3ConsentsBucket:
     Type: 'AWS::S3::Bucket'
-    Properties:
-      BucketName: !Ref ConsentsBucket
   AWSS3BucketPolicy:
     Type: 'AWS::IAM::Policy'
     Properties:
