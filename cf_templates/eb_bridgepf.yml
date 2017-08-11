@@ -41,15 +41,17 @@ Outputs:
           - EndpointURL
     Export:
       Name: !Sub '${AWS::StackName}-EnvironmentUrl'
-  AWSECacheEndpoint:
+  AWSECacheUrl:
     Value: !Join
       - ''
       - - 'redis://'
         - !GetAtt
           - AWSECCacheCluster
           - RedisEndpoint.Address
+          - :
+          - RedisEndpoint.Port
     Export:
-      Name: !Sub '${AWS::StackName}-ElastiCacheEndpoint'
+      Name: !Sub '${AWS::StackName}-ElastiCacheUrl'
   AWSIAMUserAccessKeyId:
     Value: !Ref AWSIAMUserAccessKey
     Export:
