@@ -11,6 +11,7 @@ eval export "AwsSnsKey=\$AwsSnsKey_$TRAVIS_BRANCH"
 eval export "AwsSnsSecretKey=\$AwsSnsSecretKey_$TRAVIS_BRANCH"
 eval export "BridgeEnv=\$BridgeEnv_$TRAVIS_BRANCH"
 eval export "BridgeHealthcodeKey=\$BridgeHealthcodeKey_$TRAVIS_BRANCH"
+eval export "ElastiCacheUrl=\$ElastiCacheUrl_$TRAVIS_BRANCH"
 eval export "EmailUnsubscribeToken=\$EmailUnsubscribeToken_$TRAVIS_BRANCH"
 eval export "EnterpriseStormpathHref=\$EnterpriseStormpathHref_$TRAVIS_BRANCH"
 eval export "EnterpriseStormpathId=\$EnterpriseStormpathId_$TRAVIS_BRANCH"
@@ -57,6 +58,7 @@ ParameterKey=BridgeUser,ParameterValue=heroku \
 ParameterKey=DNSHostname,ParameterValue=$DNS_HOSTNAME \
 ParameterKey=DNSDomain,ParameterValue=$DNS_DOMAIN \
 ParameterKey=EC2InstanceType,ParameterValue=t2.micro \
+ParameterKey=ElastiCacheUrl,ParameterValue=$ElastiCacheUrl \
 ParameterKey=ElastiCacheInstanceType,ParameterValue=cache.t2.micro \
 ParameterKey=EmailUnsubscribeToken,ParameterValue=$EmailUnsubscribeToken \
 ParameterKey=EnterpriseStormpathHref,ParameterValue=$EnterpriseStormpathHref \
