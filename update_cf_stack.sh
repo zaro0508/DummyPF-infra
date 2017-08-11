@@ -22,6 +22,8 @@ eval export "SynapseApiKey=\$SynapseApiKey_$TRAVIS_BRANCH"
 eval export "SynapseUser=\$SynapseUser_$TRAVIS_BRANCH"
 eval export "SysopsEmail=\$SysopsEmail_$TRAVIS_BRANCH"
 
+echo $SysopsEmail
+
 # eploy with evaluated vars
 aws cloudformation update-stack \
 --stack-name $STACK_NAME \
@@ -64,5 +66,5 @@ ParameterKey=SnsSecretKey,ParameterValue=$SnsSecretKey \
 ParameterKey=SSLCertArn,ParameterValue=$SSLCertArn \
 ParameterKey=SynapseApiKey,ParameterValue=$SynapseApiKey \
 ParameterKey=SynapseUser,ParameterValue=$SynapseUser \
-ParameterKey=SysopsEmail,ParameterValue='Bridge IT <bridge-testing+sysops@sagebase.org>' \
+ParameterKey=SysopsEmail,ParameterValue=$SysopsEmail \
 ParameterKey=WebservicesUrl,ParameterValue=https://$DNS_HOSTNAME.$DNS_DOMAIN
