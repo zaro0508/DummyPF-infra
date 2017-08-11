@@ -42,5 +42,5 @@ ParameterKey=RedisUrl,ParameterValue=$RedisUrl_develop \
 ParameterKey=SSLCertArn,ParameterValue=$SSLCertArn_develop \
 ParameterKey=SynapseApiKey,ParameterValue=$SynapseApiKey_develop \
 ParameterKey=SynapseUser,ParameterValue=$SynapseUser_develop \
-ParameterKey=SysopsEmail,ParameterValue=$SysopsEmail_develop \
+ParameterKey=SysopsEmail,ParameterValue='Bridge IT <bridge-testing+sysops@sagebase.org>' \
 ParameterKey=WebservicesUrl,ParameterValue=https://$DNS_HOSTNAME.$DNS_DOMAIN
