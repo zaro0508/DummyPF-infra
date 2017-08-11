@@ -7,8 +7,6 @@ eval export "AwsKeyUploadCms=\$AwsKeyUploadCms_$TRAVIS_BRANCH"
 eval export "AwsSecretKeyConsents=\$AwsSecretKeyConsents_$TRAVIS_BRANCH"
 eval export "AwsSecretKeyUpload=\$AwsSecretKeyUpload_$TRAVIS_BRANCH"
 eval export "AwsSecretKeyUploadCms=\$AwsSecretKeyUploadCms_$TRAVIS_BRANCH"
-eval export "AwsSnsKey=\$AwsSnsKey_$TRAVIS_BRANCH"
-eval export "AwsSnsSecretKey=\$AwsSnsSecretKey_$TRAVIS_BRANCH"
 eval export "BridgeEnv=\$BridgeEnv_$TRAVIS_BRANCH"
 eval export "BridgeHealthcodeKey=\$BridgeHealthcodeKey_$TRAVIS_BRANCH"
 eval export "ElastiCacheUrl=\$ElastiCacheUrl_$TRAVIS_BRANCH"
@@ -17,6 +15,8 @@ eval export "HibernateConnectionPassword=\$HibernateConnectionPassword_$TRAVIS_B
 eval export "HibernateConnectionUrl=\$HibernateConnectionUrl_$TRAVIS_BRANCH"
 eval export "HibernateConnectionUsername=\$HibernateConnectionUsername_$TRAVIS_BRANCH"
 eval export "RedisUrl=\$RedisUrl_$TRAVIS_BRANCH"
+eval export "SnsKey=\$SnsKey_$TRAVIS_BRANCH"
+eval export "SnsSecretKey=\$SnsSecretKey_$TRAVIS_BRANCH"
 eval export "SSLCertArn=\$SSLCertArn_$TRAVIS_BRANCH"
 eval export "SynapseApiKey=\$SynapseApiKey_$TRAVIS_BRANCH"
 eval export "SynapseUser=\$SynapseUser_$TRAVIS_BRANCH"
@@ -40,8 +40,6 @@ ParameterKey=AwsSecretKey,ParameterValue=$AwsSecretKey \
 ParameterKey=AwsSecretKeyConsents,ParameterValue=$AwsSecretKeyConsents \
 ParameterKey=AwsSecretKeyUpload,ParameterValue=$AwsSecretKeyUpload \
 ParameterKey=AwsSecretKeyUploadCms,ParameterValue=$AwsSecretKeyUploadCms \
-ParameterKey=AwsSnsKey,ParameterValue=$AwsSnsKey \
-ParameterKey=AwsSnsSecretKey,ParameterValue=$AwsSnsSecretKey \
 ParameterKey=BridgeEnv,ParameterValue=$BridgeEnv \
 ParameterKey=BridgeHealthcodeKey,ParameterValue=$BridgeHealthcodeKey \
 ParameterKey=BridgeUser,ParameterValue=heroku \
@@ -61,6 +59,8 @@ ParameterKey=NewRelicAppName,ParameterValue=$DNS_HOSTNAME \
 ParameterKey=NewRelicLicenseKey,ParameterValue=$NewRelicLicenseKey \
 ParameterKey=NewRelicLog,ParameterValue=stdout \
 ParameterKey=RedisUrl,ParameterValue=$RedisUrl \
+ParameterKey=SnsKey,ParameterValue=$SnsKey \
+ParameterKey=SnsSecretKey,ParameterValue=$SnsSecretKey \
 ParameterKey=SSLCertArn,ParameterValue=$SSLCertArn \
 ParameterKey=SynapseApiKey,ParameterValue=$SynapseApiKey \
 ParameterKey=SynapseUser,ParameterValue=$SynapseUser \

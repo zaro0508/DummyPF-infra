@@ -122,13 +122,6 @@ Parameters:
   AuthProvider:
     Type: String
     Default: param_place_holder
-  AwsSnsKey:
-    Type: String
-    Default: param_place_holder
-  AwsSnsSecretKey:
-    Type: String
-    NoEcho: true
-    Default: param_place_holder
   AwsEbNotificationEndpoint:
     Type: String
     Description: Email address for AWS EB notifications
@@ -308,6 +301,13 @@ Parameters:
   RedisUrl:
     Type: String
     Default: param_place_holder
+  SnsKey:
+    Type: String
+    Default: param_place_holder
+  SnsSecretKey:
+    Type: String
+    NoEcho: true
+    Default: param_place_holder
   SSLCertArn:
     Description: SSL certificate for load balancer
     Type: String
@@ -482,10 +482,10 @@ Resources:
           Value: !Ref RedisUrl
         - Namespace: 'aws:elasticbeanstalk:application:environment'
           OptionName: SNS_KEY
-          Value: !Ref AwsSnsKey
+          Value: !Ref SnsKey
         - Namespace: 'aws:elasticbeanstalk:application:environment'
           OptionName: SNS_SECRET_KEY
-          Value: !Ref AwsSnsSecretKey
+          Value: !Ref SnsSecretKey
         - Namespace: 'aws:elasticbeanstalk:application:environment'
           OptionName: SYNAPSE_API_KEY
           Value: !Ref SynapseApiKey
