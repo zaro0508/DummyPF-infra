@@ -48,7 +48,9 @@ Outputs:
         - !GetAtt
           - AWSECCacheCluster
           - RedisEndpoint.Address
-          - :
+        - ':'
+        - !GetAtt
+          - AWSECCacheCluster
           - RedisEndpoint.Port
     Export:
       Name: !Sub '${AWS::StackName}-ElastiCacheUrl'
