@@ -66,5 +66,5 @@ ParameterKey=SnsSecretKey,ParameterValue=$SnsSecretKey \
 ParameterKey=SSLCertArn,ParameterValue=$SSLCertArn \
 ParameterKey=SynapseApiKey,ParameterValue=$SynapseApiKey \
 ParameterKey=SynapseUser,ParameterValue=$SynapseUser \
-ParameterKey=SysopsEmail,ParameterValue=$SysopsEmail \
+ParameterKey=SysopsEmail,ParameterValue="$SysopsEmail" \
 ParameterKey=WebservicesUrl,ParameterValue=https://$DNS_HOSTNAME.$DNS_DOMAIN
