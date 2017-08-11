@@ -32,7 +32,7 @@ ParameterKey=AppDeployBucket,ParameterValue=$AppDeployBucket \
 ParameterKey=AppHealthcheckUrl,ParameterValue='HTTP:80/?study=api' \
 ParameterKey=AuthCreateMysqlAccounts,ParameterValue=true \
 ParameterKey=AuthProvider,ParameterValue=mysql \
-ParameterKey=AwsEbNotificationEndpoint,ParameterValue=khai.do@sagebase.org \
+ParameterKey=AwsEbNotificationEndpoint,ParameterValue=$AwsEbNotificationEndpoint \
 ParameterKey=AwsKey,ParameterValue=$AwsKey \
 ParameterKey=AwsKeyUpload,ParameterValue=$AwsKeyUpload \
 ParameterKey=AwsKeyUploadCms,ParameterValue=$AwsKeyUploadCms \
