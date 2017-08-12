@@ -699,11 +699,20 @@ Resources:
         - '/'
         - - /aws/elasticbeanstalk
           - !Ref 'AWS::StackName'
+          - var/log/temp-1.log
+      RetentionInDays: 7
+  AWSLogsLogGroupWeb:
+    Type: "AWS::Logs::LogGroup"
+    Properties:
+      LogGroupName: !Join
+        - '/'
+        - - /aws/elasticbeanstalk
+          - !Ref 'AWS::StackName'
           - var/log/web-1.log
       RetentionInDays: 7
   AWSCWRequestErrorMetricFilter:
     Type: "AWS::Logs::MetricFilter"
-    DependsOn: AWSLogsLogGroup
+    DependsOn: AWSLogsLogGroupWeb
     Properties:
       LogGroupName: !Join
         - '/'
@@ -731,7 +740,7 @@ Resources:
       Threshold: 10
   AWSCWLostMessageMetricFilter:
     Type: "AWS::Logs::MetricFilter"
-    DependsOn: AWSLogsLogGroup
+    DependsOn: AWSLogsLogGroupWeb
     Properties:
       LogGroupName: !Join
         - '/'
@@ -759,7 +768,7 @@ Resources:
       Threshold: 1
   AWSCWRequestWarningMetricFilter:
     Type: "AWS::Logs::MetricFilter"
-    DependsOn: AWSLogsLogGroup
+    DependsOn: AWSLogsLogGroupWeb
     Properties:
       LogGroupName: !Join
         - '/'
@@ -787,7 +796,7 @@ Resources:
       Threshold: 100
   AWSCWThroughputExceptionMetricFilter:
     Type: "AWS::Logs::MetricFilter"
-    DependsOn: AWSLogsLogGroup
+    DependsOn: AWSLogsLogGroupWeb
     Properties:
       LogGroupName: !Join
         - '/'
@@ -815,7 +824,7 @@ Resources:
       Threshold: 1
   AWSCW400MetricFilter:
     Type: "AWS::Logs::MetricFilter"
-    DependsOn: AWSLogsLogGroup
+    DependsOn: AWSLogsLogGroupWeb
     Properties:
       LogGroupName: !Join
         - '/'
@@ -843,7 +852,7 @@ Resources:
       Threshold: 30
   AWSCW403MetricFilter:
     Type: "AWS::Logs::MetricFilter"
-    DependsOn: AWSLogsLogGroup
+    DependsOn: AWSLogsLogGroupWeb
     Properties:
       LogGroupName: !Join
         - '/'
@@ -871,7 +880,7 @@ Resources:
       Threshold: 10
   AWSCW409MetricFilter:
     Type: "AWS::Logs::MetricFilter"
-    DependsOn: AWSLogsLogGroup
+    DependsOn: AWSLogsLogGroupWeb
     Properties:
       LogGroupName: !Join
         - '/'
@@ -899,7 +908,7 @@ Resources:
       Threshold: 10
   AWSCW412MetricFilter:
     Type: "AWS::Logs::MetricFilter"
-    DependsOn: AWSLogsLogGroup
+    DependsOn: AWSLogsLogGroupWeb
     Properties:
       LogGroupName: !Join
         - '/'
