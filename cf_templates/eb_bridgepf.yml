@@ -692,7 +692,7 @@ Resources:
         -
           Endpoint: !Ref AwsEbNotificationEndpoint
           Protocol: "email"
-  AWSLogsLogGroupWeb:
+  AWSLogsLogGroup:
     Type: "AWS::Logs::LogGroup"
     Properties:
       LogGroupName: !Join
@@ -703,7 +703,7 @@ Resources:
       RetentionInDays: 7
   AWSCWRequestErrorMetricFilter:
     Type: "AWS::Logs::MetricFilter"
-    DependsOn: AWSLogsLogGroupWeb
+    DependsOn: AWSLogsLogGroup
     Properties:
       LogGroupName: !Join
         - '/'
@@ -731,7 +731,7 @@ Resources:
       Threshold: 10
   AWSCWLostMessageMetricFilter:
     Type: "AWS::Logs::MetricFilter"
-    DependsOn: AWSLogsLogGroupWeb
+    DependsOn: AWSLogsLogGroup
     Properties:
       LogGroupName: !Join
         - '/'
@@ -759,7 +759,7 @@ Resources:
       Threshold: 1
   AWSCWRequestWarningMetricFilter:
     Type: "AWS::Logs::MetricFilter"
-    DependsOn: AWSLogsLogGroupWeb
+    DependsOn: AWSLogsLogGroup
     Properties:
       LogGroupName: !Join
         - '/'
@@ -787,7 +787,7 @@ Resources:
       Threshold: 100
   AWSCWThroughputExceptionMetricFilter:
     Type: "AWS::Logs::MetricFilter"
-    DependsOn: AWSLogsLogGroupWeb
+    DependsOn: AWSLogsLogGroup
     Properties:
       LogGroupName: !Join
         - '/'
@@ -815,7 +815,7 @@ Resources:
       Threshold: 1
   AWSCW400MetricFilter:
     Type: "AWS::Logs::MetricFilter"
-    DependsOn: AWSLogsLogGroupWeb
+    DependsOn: AWSLogsLogGroup
     Properties:
       LogGroupName: !Join
         - '/'
@@ -843,7 +843,7 @@ Resources:
       Threshold: 30
   AWSCW403MetricFilter:
     Type: "AWS::Logs::MetricFilter"
-    DependsOn: AWSLogsLogGroupWeb
+    DependsOn: AWSLogsLogGroup
     Properties:
       LogGroupName: !Join
         - '/'
@@ -871,7 +871,7 @@ Resources:
       Threshold: 10
   AWSCW409MetricFilter:
     Type: "AWS::Logs::MetricFilter"
-    DependsOn: AWSLogsLogGroupWeb
+    DependsOn: AWSLogsLogGroup
     Properties:
       LogGroupName: !Join
         - '/'
@@ -899,7 +899,7 @@ Resources:
       Threshold: 10
   AWSCW412MetricFilter:
     Type: "AWS::Logs::MetricFilter"
-    DependsOn: AWSLogsLogGroupWeb
+    DependsOn: AWSLogsLogGroup
     Properties:
       LogGroupName: !Join
         - '/'
