@@ -701,6 +701,15 @@ Resources:
           - !Ref 'AWS::StackName'
           - var/log/web-1.log
       RetentionInDays: 7
+  AWSLogsLogGroupWebError:
+    Type: "AWS::Logs::LogGroup"
+    Properties:
+      LogGroupName: !Join
+        - '/'
+        - - /aws/elasticbeanstalk
+          - !Ref 'AWS::StackName'
+          - var/log/web-1.error.log
+      RetentionInDays: 7
   AWSCWRequestErrorMetricFilter:
     Type: "AWS::Logs::MetricFilter"
     DependsOn: AWSLogsLogGroup
