@@ -122,6 +122,12 @@ Parameters:
   AuthProvider:
     Type: String
     Default: param_place_holder
+  AwsAutoScalingMaxSize:
+    Type: String
+    Default: param_place_holder
+  AwsAutoScalingMinSize:
+    Type: String
+    Default: param_place_holder
   AwsEbNotificationEndpoint:
     Type: String
     Description: Email address for AWS EB notifications
@@ -332,6 +338,12 @@ Resources:
       SolutionStackName: 64bit Amazon Linux 2017.03 v2.5.2 running Java 8
       OptionSettings:
         # EB environment options
+        - Namespace: 'aws:autoscaling:asg'
+          OptionName: MaxSize
+          Value: !Ref AwsAutoScalingMaxSize
+        - Namespace: 'aws:autoscaling:asg'
+          OptionName: MinSize
+          Value: !Ref AwsAutoScalingMinSize
         - Namespace: 'aws:autoscaling:launchconfiguration'
           OptionName: IamInstanceProfile
           Value: !Ref AWSIAMInstanceProfile
@@ -344,12 +356,6 @@ Resources:
             - '-'
             - - !Ref 'AWS::StackName'
               - AWSEC2SecurityGroup
-        - Namespace: 'aws:autoscaling:updatepolicy:rollingupdate'
-          OptionName: MaxBatchSize
-          Value: 1
-        - Namespace: 'aws:autoscaling:updatepolicy:rollingupdate'
-          OptionName: MinInstancesInService
-          Value: 1
         - Namespace: 'aws:autoscaling:updatepolicy:rollingupdate'
           OptionName: RollingUpdateEnabled
           Value: true

@@ -2,6 +2,8 @@
 
 # double interpolate vars from travis
 eval export "AppDeployBucket=\$AppDeployBucket_$TRAVIS_BRANCH"
+eval export "AwsAutoScalingMaxSize=\$AwsAutoScalingMaxSize_$TRAVIS_BRANCH"
+eval export "AwsAutoScalingMinSize=\$AwsAutoScalingMinSize_$TRAVIS_BRANCH"
 eval export "AwsKeyUpload=\$AwsKeyUpload_$TRAVIS_BRANCH"
 eval export "AwsKeyUploadCms=\$AwsKeyUploadCms_$TRAVIS_BRANCH"
 eval export "AwsSecretKeyConsents=\$AwsSecretKeyConsents_$TRAVIS_BRANCH"
@@ -32,6 +34,8 @@ ParameterKey=AppDeployBucket,ParameterValue=$AppDeployBucket \
 ParameterKey=AppHealthcheckUrl,ParameterValue='HTTP:80/?study=api' \
 ParameterKey=AuthCreateMysqlAccounts,ParameterValue=true \
 ParameterKey=AuthProvider,ParameterValue=mysql \
+ParameterKey=AwsAutoScalingMaxSize,ParameterValue=$AwsAutoScalingMaxSize \
+ParameterKey=AwsAutoScalingMinSize,ParameterValue=$AwsAutoScalingMinSize \
 ParameterKey=AwsEbNotificationEndpoint,ParameterValue=$AwsEbNotificationEndpoint \
 ParameterKey=AwsKey,ParameterValue=$AwsKey \
 ParameterKey=AwsKeyUpload,ParameterValue=$AwsKeyUpload \
