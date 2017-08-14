@@ -16,7 +16,7 @@ eval export "EmailUnsubscribeToken=\$EmailUnsubscribeToken_$TRAVIS_BRANCH"
 eval export "HibernateConnectionPassword=\$HibernateConnectionPassword_$TRAVIS_BRANCH"
 eval export "HibernateConnectionUrl=\$HibernateConnectionUrl_$TRAVIS_BRANCH"
 eval export "HibernateConnectionUsername=\$HibernateConnectionUsername_$TRAVIS_BRANCH"
-eval export "RedisUrl=\$RedisUrl_$TRAVIS_BRANCH"
+eval export "RedisCloudUrl=\$RedisCloudUrl_$TRAVIS_BRANCH"
 eval export "SnsKey=\$SnsKey_$TRAVIS_BRANCH"
 eval export "SnsSecretKey=\$SnsSecretKey_$TRAVIS_BRANCH"
 eval export "SSLCertArn=\$SSLCertArn_$TRAVIS_BRANCH"
@@ -62,7 +62,7 @@ ParameterKey=JavaOpts,ParameterValue='-Dnewrelic.config.file=/var/app/current/ne
 ParameterKey=NewRelicAppName,ParameterValue=$DNS_HOSTNAME \
 ParameterKey=NewRelicLicenseKey,ParameterValue=$NewRelicLicenseKey \
 ParameterKey=NewRelicLog,ParameterValue=stdout \
-ParameterKey=RedisUrl,ParameterValue=$RedisUrl \
+ParameterKey=RedisCloudUrl,ParameterValue=$RedisCloudUrl \
 ParameterKey=SnsKey,ParameterValue=$SnsKey \
 ParameterKey=SnsSecretKey,ParameterValue=$SnsSecretKey \
 ParameterKey=SSLCertArn,ParameterValue=$SSLCertArn \

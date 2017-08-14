@@ -304,7 +304,7 @@ Parameters:
   NewRelicLog:
     Type: String
     Default: param_place_holder
-  RedisUrl:
+  RedisCloudUrl:
     Type: String
     Default: param_place_holder
   SnsKey:
@@ -484,8 +484,8 @@ Resources:
           OptionName: NEW_RELIC_LOG
           Value: !Ref NewRelicLog
         - Namespace: 'aws:elasticbeanstalk:application:environment'
-          OptionName: REDIS_URL
-          Value: !Ref RedisUrl
+          OptionName: REDISCLOUD_URL
+          Value: !Ref RedisCloudUrl
         - Namespace: 'aws:elasticbeanstalk:application:environment'
           OptionName: SNS_KEY
           Value: !Ref SnsKey
