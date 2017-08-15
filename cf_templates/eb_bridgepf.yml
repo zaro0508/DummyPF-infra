@@ -66,6 +66,15 @@ Outputs:
     Value: !GetAtt AWSIAMUserAccessKey.SecretAccessKey
     Export:
       Name: !Sub '${AWS::StackName}-SecretAccessKeyId'
+  AWSR53RecordSet:
+    Value: !Join
+      - ''
+      - - 'https://'
+        - !Ref DNSHostname
+        - .
+        - !Ref DNSDomain
+    Export:
+      Name: !Sub '${AWS::StackName}-AWSR53RecordSet'
   AWSS3AttachmentBucket:
     Value: !Ref AWSS3AttachmentBucket
     Export:
