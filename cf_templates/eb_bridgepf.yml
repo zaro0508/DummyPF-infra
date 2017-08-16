@@ -66,15 +66,6 @@ Outputs:
     Value: !GetAtt AWSIAMUserAccessKey.SecretAccessKey
     Export:
       Name: !Sub '${AWS::StackName}-SecretAccessKeyId'
-  AWSR53RecordSet:
-    Value: !Join
-      - ''
-      - - 'https://'
-        - !Ref DNSHostname
-        - .
-        - !Ref DNSDomain
-    Export:
-      Name: !Sub '${AWS::StackName}-AWSR53RecordSet'
   AWSS3AttachmentBucket:
     Value: !Ref AWSS3AttachmentBucket
     Export:
@@ -95,6 +86,15 @@ Outputs:
     Value: !Ref AWSS3UploadCmsPrivBucket
     Export:
       Name: !Sub '${AWS::StackName}-UploadCmsPrivBucket'
+  BridgePFUrl:
+    Value: !Join
+      - ''
+      - - 'https://'
+        - !Ref DNSHostname
+        - .
+        - !Ref DNSDomain
+    Export:
+      Name: !Sub '${AWS::StackName}-BridgePFUrl'
 Mappings:
   AWSLoadbalancerAccount:
     us-east-1:
