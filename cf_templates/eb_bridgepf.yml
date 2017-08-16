@@ -128,6 +128,10 @@ Parameters:
   AwsAutoScalingMinSize:
     Type: String
     Default: param_place_holder
+  AwsDefaultVpcId:
+    Description: The AWS account's default VPC id
+    Type: String
+    Default: param_place_holder
   AwsEbNotificationEndpoint:
     Type: String
     Description: Email address for AWS EB notifications
@@ -944,7 +948,7 @@ Resources:
     Type: 'AWS::EC2::SecurityGroup'
     Properties:
       GroupDescription: Load Balancer Security Group
-      VpcId: vpc-9c70bbf9
+      VpcId: !Ref AwsDefaultVpcId
       SecurityGroupIngress:
         - CidrIp: 0.0.0.0/0
           FromPort: '443'
@@ -968,7 +972,7 @@ Resources:
         - - !Ref 'AWS::StackName'
           - AWSEC2SecurityGroup
       GroupDescription: EC2 Security Group
-      VpcId: vpc-9c70bbf9
+      VpcId: !Ref AwsDefaultVpcId
       SecurityGroupIngress:
         - IpProtocol: tcp
           FromPort: '80'

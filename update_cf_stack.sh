@@ -36,6 +36,7 @@ ParameterKey=AuthCreateMysqlAccounts,ParameterValue=true \
 ParameterKey=AuthProvider,ParameterValue=mysql \
 ParameterKey=AwsAutoScalingMaxSize,ParameterValue=$AwsAutoScalingMaxSize \
 ParameterKey=AwsAutoScalingMinSize,ParameterValue=$AwsAutoScalingMinSize \
+ParameterKey=AwsDefaultVpcId,ParameterValue=$AwsDefaultVpcId \
 ParameterKey=AwsEbNotificationEndpoint,ParameterValue=$AwsEbNotificationEndpoint \
 ParameterKey=AwsKey,ParameterValue=$AwsKey \
 ParameterKey=AwsKeyUpload,ParameterValue=$AwsKeyUpload \
