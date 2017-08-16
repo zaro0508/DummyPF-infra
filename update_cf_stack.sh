@@ -9,6 +9,7 @@ eval export "AwsKeyUploadCms=\$AwsKeyUploadCms_$TRAVIS_BRANCH"
 eval export "AwsSecretKeyConsents=\$AwsSecretKeyConsents_$TRAVIS_BRANCH"
 eval export "AwsSecretKeyUpload=\$AwsSecretKeyUpload_$TRAVIS_BRANCH"
 eval export "AwsSecretKeyUploadCms=\$AwsSecretKeyUploadCms_$TRAVIS_BRANCH"
+eval export "AwsVpcSubnetPrefix=\$AwsVpcSubnetPrefix_$TRAVIS_BRANCH"
 eval export "BridgeEnv=\$BridgeEnv_$TRAVIS_BRANCH"
 eval export "BridgeHealthcodeKey=\$BridgeHealthcodeKey_$TRAVIS_BRANCH"
 eval export "ElastiCacheUrl=\$ElastiCacheUrl_$TRAVIS_BRANCH"
@@ -36,6 +37,7 @@ ParameterKey=AuthCreateMysqlAccounts,ParameterValue=true \
 ParameterKey=AuthProvider,ParameterValue=mysql \
 ParameterKey=AwsAutoScalingMaxSize,ParameterValue=$AwsAutoScalingMaxSize \
 ParameterKey=AwsAutoScalingMinSize,ParameterValue=$AwsAutoScalingMinSize \
+ParameterKey=AwsDefaultVpcId,ParameterValue=$AwsDefaultVpcId \
 ParameterKey=AwsEbNotificationEndpoint,ParameterValue=$AwsEbNotificationEndpoint \
 ParameterKey=AwsKey,ParameterValue=$AwsKey \
 ParameterKey=AwsKeyUpload,ParameterValue=$AwsKeyUpload \
@@ -44,6 +46,7 @@ ParameterKey=AwsSecretKey,ParameterValue=$AwsSecretKey \
 ParameterKey=AwsSecretKeyConsents,ParameterValue=$AwsSecretKeyConsents \
 ParameterKey=AwsSecretKeyUpload,ParameterValue=$AwsSecretKeyUpload \
 ParameterKey=AwsSecretKeyUploadCms,ParameterValue=$AwsSecretKeyUploadCms \
+ParameterKey=AwsVpcSubnetPrefix,ParameterValue=$AwsVpcSubnetPrefix \
 ParameterKey=BridgeEnv,ParameterValue=$BridgeEnv \
 ParameterKey=BridgeHealthcodeKey,ParameterValue=$BridgeHealthcodeKey \
 ParameterKey=BridgeUser,ParameterValue=heroku \
