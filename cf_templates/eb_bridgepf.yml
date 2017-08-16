@@ -24,6 +24,15 @@
 Description: AWS Elastic Beanstalk Application
 AWSTemplateFormatVersion: 2010-09-09
 Outputs:
+  AppPublicEndpoint:
+    Value: !Join
+      - ''
+      - - 'https://'
+        - !Ref DNSHostname
+        - .
+        - !Ref DNSDomain
+    Export:
+      Name: !Sub '${AWS::StackName}-AppPublicEndpoint'
   AWSS3AppDeployBucket:
     Value: !Ref AWSS3AppDeployBucket
     Export:
@@ -86,15 +95,6 @@ Outputs:
     Value: !Ref AWSS3UploadCmsPrivBucket
     Export:
       Name: !Sub '${AWS::StackName}-UploadCmsPrivBucket'
-  BridgePFUrl:
-    Value: !Join
-      - ''
-      - - 'https://'
-        - !Ref DNSHostname
-        - .
-        - !Ref DNSDomain
-    Export:
-      Name: !Sub '${AWS::StackName}-BridgePFUrl'
 Mappings:
   AWSLoadbalancerAccount:
     us-east-1:
