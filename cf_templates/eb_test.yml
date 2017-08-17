@@ -1,0 +1,16 @@
+Description: Test app
+AWSTemplateFormatVersion: 2010-09-09
+Parameters:
+  AwsEbNotificationEndpoint:
+    Type: String
+    Description: Email address for AWS EB notifications
+    Default: param_place_holder
+    NoEcho: true
+Resources:
+  AWSSNSTopic:
+    Type: "AWS::SNS::Topic"
+    Properties:
+      Subscription:
+        -
+          Endpoint: !Ref AwsEbNotificationEndpoint
+          Protocol: "email"

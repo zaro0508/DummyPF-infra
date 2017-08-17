@@ -1,31 +1,33 @@
 # This CF script is for creating an AWS elastic beanstalk application.
 #
-# Depends-on: eb_bridgepf_boostrap.yml
-#
 # Usage:
 #   1. Run the boostrap script to setup required resources for the app.
 #   2. Create the app with `aws cloudformation --create-stack` command
 #   3. Update the stack with `aws cloudformation --update-stack` command
 #
 # initial creation:
-#   aws --profile bridge.dev.admin.user --region us-east-1 cloudformation \
-#     create-stack --stack-name dummypf-develop --capabilities CAPABILITY_NAMED_IAM \
+#   aws --profile aws.admin.user --region us-east-1 cloudformation \
+#     create-stack --stack-name foo-develop --capabilities CAPABILITY_NAMED_IAM \
 #     --on-failure DELETE --template-body file://cf_templates/cf_bridgepf.yml \
-#     --parameters ParameterKey=AppDeployBucket,ParameterValue=org-sagebridge-bridgepf-deployment-dummypf-develop \
-#     --parameters ParameterKey=InstanceType,ParameterValue=t2.micro \
+#     --parameters ParameterKey=AppDeployBucket,ParameterValue=org-sagebridge-bridgepf-deployment-foo-develop \
+#     --parameters ParameterKey=EC2InstanceType,ParameterValue=t2.micro \
 #     ...[all params neeeded for app]
 #
 # updates:
-#   aws --profile bridge.dev.bootstrap.user --region us-east-1 cloudformation \
-#     update-stack --stack-name dummypf-develop --capabilities CAPABILITY_NAMED_IAM \
+#   aws --profile aws.bootstrap.user --region us-east-1 cloudformation \
+#     update-stack --stack-name foo-develop --capabilities CAPABILITY_NAMED_IAM \
 #     --template-body file://cf_templates/cf_bridgepf.yml \
-#     --parameters ParameterKey=AppDeployBucket,ParameterValue=org-sagebridge-bridgepf-deployment-dummypf-develop \
-#     --parameters ParameterKey=InstanceType,ParameterValue=t2.micro \
+#     --parameters ParameterKey=AppDeployBucket,ParameterValue=org-sagebridge-bridgepf-deployment-foo-develop \
+#     --parameters ParameterKey=EC2InstanceType,ParameterValue=t2.micro \
 #     ...[all params neeeded for app]
 #
 Description: AWS Elastic Beanstalk Application
 AWSTemplateFormatVersion: 2010-09-09
 Outputs:
+  AWSS3AppDeployBucket:
+    Value: !Ref AWSS3AppDeployBucket
+    Export:
+      Name: !Sub '${AWS::StackName}-AppDeployBucket'
   AWSEBApplication:
     Value: !Ref AWSEBApplication
     Export:
@@ -34,6 +36,28 @@ Outputs:
     Value: !Ref AWSEBEnvironment
     Export:
       Name: !Sub '${AWS::StackName}-Environment'
+  AWSEBEnvironmentUrl:
+    Value: !Join
+      - ''
+      - - 'http://'
+        - !GetAtt
+          - AWSEBEnvironment
+          - EndpointURL
+    Export:
+      Name: !Sub '${AWS::StackName}-EnvironmentUrl'
+  AWSECacheUrl:
+    Value: !Join
+      - ''
+      - - 'redis://'
+        - !GetAtt
+          - AWSECCacheCluster
+          - RedisEndpoint.Address
+        - ':'
+        - !GetAtt
+          - AWSECCacheCluster
+          - RedisEndpoint.Port
+    Export:
+      Name: !Sub '${AWS::StackName}-ElastiCacheUrl'
   AWSIAMUserAccessKeyId:
     Value: !Ref AWSIAMUserAccessKey
     Export:
@@ -42,18 +66,18 @@ Outputs:
     Value: !GetAtt AWSIAMUserAccessKey.SecretAccessKey
     Export:
       Name: !Sub '${AWS::StackName}-SecretAccessKeyId'
-  AWSS3AppDeployBucket:
-    Value: !Ref AWSS3AppDeployBucket
-    Export:
-      Name: !Sub '${AWS::StackName}-AppDeployBucket'
-  AWSS3UploadBucket:
-    Value: !Ref AWSS3UploadBucket
-    Export:
-      Name: !Sub '${AWS::StackName}-UploadBucket'
   AWSS3AttachmentBucket:
     Value: !Ref AWSS3AttachmentBucket
     Export:
       Name: !Sub '${AWS::StackName}-AttachmentBucket'
+  AWSS3ConsentsBucket:
+    Value: !Ref AWSS3ConsentsBucket
+    Export:
+      Name: !Sub '${AWS::StackName}-ConsentsBucket'
+  AWSS3UploadBucket:
+    Value: !Ref AWSS3UploadBucket
+    Export:
+      Name: !Sub '${AWS::StackName}-UploadBucket'
   AWSS3UploadCmsCertBucket:
     Value: !Ref AWSS3UploadCmsCertBucket
     Export:
@@ -62,10 +86,6 @@ Outputs:
     Value: !Ref AWSS3UploadCmsPrivBucket
     Export:
       Name: !Sub '${AWS::StackName}-UploadCmsPrivBucket'
-  AWSS3ConsentsBucket:
-    Value: !Ref AWSS3ConsentsBucket
-    Export:
-      Name: !Sub '${AWS::StackName}-ConsentsBucket'
 Mappings:
   AWSLoadbalancerAccount:
     us-east-1:
@@ -92,20 +112,74 @@ Parameters:
   AppDeployBucket:
     Type: String
     Default: param_place_holder
-  SSLCertArn:
-    Description: SSL certificate for load balancer
+  AppHealthcheckUrl:
+    Type: String
+    Description: The AWS EB health check path
+    Default: param_place_holder
+  AuthCreateMysqlAccounts:
     Type: String
     Default: param_place_holder
+  AuthProvider:
+    Type: String
+    Default: param_place_holder
+  AwsAutoScalingMaxSize:
+    Type: String
+    Default: param_place_holder
+  AwsAutoScalingMinSize:
+    Type: String
+    Default: param_place_holder
+  AwsEbNotificationEndpoint:
+    Type: String
+    Description: Email address for AWS EB notifications
+    Default: param_place_holder
+    NoEcho: true
+  AwsKey:
+    Type: String
+    Default: param_place_holder
+  AwsKeyUpload:
+    Type: String
+    Default: param_place_holder
+  AwsKeyUploadCms:
+    Type: String
+    Default: param_place_holder
+  AwsSecretKey:
+    Type: String
+    Default: param_place_holder
+    NoEcho: true
+  AwsSecretKeyConsents:
+    Type: String
+    Default: param_place_holder
+    NoEcho: true
+  AwsSecretKeyUpload:
+    Type: String
+    Default: param_place_holder
+    NoEcho: true
+  AwsSecretKeyUploadCms:
+    Type: String
+    Default: param_place_holder
+    NoEcho: true
   BridgeEnv:
     Type: String
     Default: param_place_holder
+  BridgeHealthcodeKey:
+    Type: String
+    Default: param_place_holder
+    NoEcho: true
   BridgeUser:
     Type: String
     Default: param_place_holder
-  InstanceType:
+  DNSDomain:
+    Type: String
+    Description: DNS Domain name for deployment
+    Default: param_place_holder
+  DNSHostname:
+    Type: String
+    Description: DNS Hostname for deployment
+    Default: param_place_holder
+  EC2InstanceType:
     Type: String
     Description: Instance type to use for Elastic Beanstalk Instances
-    Default: t2.nano
+    Default: t2.micro
     AllowedValues:
       - t1.micro
       - t2.nano
@@ -178,58 +252,29 @@ Parameters:
       - d2.8xlarge
       - f1.2xlarge
       - f1.16xlarge
-  DNSHostname:
-    Type: String
-    Description: DNS Hostname for deployment
-    Default: param_place_holder
-  DNSDomain:
-    Type: String
-    Description: DNS Domain name for deployment
-    Default: param_place_holder
-  AwsEbNotificationEndpoint:
-    Type: String
-    Description: Email address for AWS EB notifications
-    Default: param_place_holder
-    NoEcho: true
-  AppHealthcheckUrl:
-    Type: String
-    Description: The AWS EB health check path
-    Default: param_place_holder
-  AwsKey:
+  EmailUnsubscribeToken:
     Type: String
     Default: param_place_holder
-  AwsSecretKey:
+  ElastiCacheInstanceType:
+    Type: String
+    Description: Instance type to use for Elastic Cache cluster
+    Default: cache.t2.micro
+    AllowedValues:
+      - cache.t2.micro
+      - cache.t2.small
+      - cache.t2.medium
+      - cache.m3.medium
+      - cache.m3.large
+      - cache.m3.xlarge
+      - cache.m3.2xlarge
+      - cache.r3.large
+      - cache.r3.xlarge
+      - cache.r3.2xlarge
+      - cache.r3.4xlarge
+      - cache.r3.8xlarge
+  ElastiCacheUrl:
     Type: String
     Default: param_place_holder
-    NoEcho: true
-  AwsSecretKeyConsents:
-    Type: String
-    Default: param_place_holder
-    NoEcho: true
-  AwsKeyUpload:
-    Type: String
-    Default: param_place_holder
-  AwsSecretKeyUpload:
-    Type: String
-    Default: param_place_holder
-    NoEcho: true
-  AwsKeyUploadCms:
-    Type: String
-    Default: param_place_holder
-  AwsSecretKeyUploadCms:
-    Type: String
-    Default: param_place_holder
-    NoEcho: true
-  EnterpriseStormpathHref:
-    Type: String
-    Default: param_place_holder
-  EnterpriseStormpathId:
-    Type: String
-    Default: param_place_holder
-  EnterpriseStormpathSecret:
-    Type: String
-    Default: param_place_holder
-    NoEcho: true
   HibernateConnectionPassword:
     Type: String
     Default: param_place_holder
@@ -241,16 +286,6 @@ Parameters:
     Type: String
     Default: param_place_holder
   HibernateConnectionUsessl:
-    Type: String
-    Default: param_place_holder
-  RedisUrl:
-    Type: String
-    Default: param_place_holder
-  BridgeHealthcodeKey:
-    Type: String
-    Default: param_place_holder
-    NoEcho: true
-  WebservicesUrl:
     Type: String
     Default: param_place_holder
   HostPostfix:
@@ -269,21 +304,19 @@ Parameters:
   NewRelicLog:
     Type: String
     Default: param_place_holder
-  EmailUnsubscribeToken:
+  RedisCloudUrl:
     Type: String
     Default: param_place_holder
-  AuthCreateMysqlAccounts:
+  SnsKey:
     Type: String
     Default: param_place_holder
-  AuthProvider:
-    Type: String
-    Default: param_place_holder
-  AwsSnsKey:
-    Type: String
-    Default: param_place_holder
-  AwsSnsSecretKey:
+  SnsSecretKey:
     Type: String
     NoEcho: true
+    Default: param_place_holder
+  SSLCertArn:
+    Description: SSL certificate for load balancer
+    Type: String
     Default: param_place_holder
   SynapseApiKey:
     Type: String
@@ -294,6 +327,9 @@ Parameters:
   SysopsEmail:
     Type: String
     Default: param_place_holder
+  WebservicesUrl:
+    Type: String
+    Default: param_place_holder
 Resources:
   AWSEBConfigurationTemplate:
     Type: 'AWS::ElasticBeanstalk::ConfigurationTemplate'
@@ -301,36 +337,31 @@ Resources:
       ApplicationName: !Ref AWSEBApplication
       SolutionStackName: 64bit Amazon Linux 2017.03 v2.5.2 running Java 8
       OptionSettings:
-        - Namespace: 'aws:elasticbeanstalk:environment'
-          OptionName: ServiceRole
-          Value: !Ref AWSIAMServiceRole
+        # EB environment options
+        - Namespace: 'aws:autoscaling:asg'
+          OptionName: MaxSize
+          Value: !Ref AwsAutoScalingMaxSize
+        - Namespace: 'aws:autoscaling:asg'
+          OptionName: MinSize
+          Value: !Ref AwsAutoScalingMinSize
         - Namespace: 'aws:autoscaling:launchconfiguration'
           OptionName: IamInstanceProfile
           Value: !Ref AWSIAMInstanceProfile
         - Namespace: 'aws:autoscaling:launchconfiguration'
           OptionName: InstanceType
-          Value: !Ref InstanceType
-        - Namespace: 'aws:autoscaling:updatepolicy:rollingupdate'
-          OptionName: MaxBatchSize
-          Value: 1
-        - Namespace: 'aws:autoscaling:updatepolicy:rollingupdate'
-          OptionName: MinInstancesInService
-          Value: 1
+          Value: !Ref EC2InstanceType
+        - Namespace: 'aws:autoscaling:launchconfiguration'
+          OptionName: SecurityGroups
+          Value: !Join
+            - '-'
+            - - !Ref 'AWS::StackName'
+              - AWSEC2SecurityGroup
         - Namespace: 'aws:autoscaling:updatepolicy:rollingupdate'
           OptionName: RollingUpdateEnabled
           Value: true
         - Namespace: 'aws:autoscaling:updatepolicy:rollingupdate'
           OptionName: RollingUpdateType
           Value: 'Health'
-        - Namespace: 'aws:elasticbeanstalk:command'
-          OptionName: DeploymentPolicy
-          Value: 'RollingWithAdditionalBatch'
-        - Namespace: 'aws:elasticbeanstalk:environment:process:default'
-          OptionName: Protocol
-          Value: 'HTTP'
-        - Namespace: 'aws:elasticbeanstalk:environment:process:default'
-          OptionName: HealthCheckPath
-          Value: !Ref AppHealthcheckUrl
         - Namespace: 'aws:elasticbeanstalk:application'
           OptionName: Application Healthcheck URL
           Value: !Ref AppHealthcheckUrl
@@ -343,6 +374,18 @@ Resources:
         - Namespace: 'aws:elasticbeanstalk:cloudwatch:logs'
           OptionName: RetentionInDays
           Value: '7'
+        - Namespace: 'aws:elasticbeanstalk:command'
+          OptionName: DeploymentPolicy
+          Value: 'RollingWithAdditionalBatch'
+        - Namespace: 'aws:elasticbeanstalk:environment'
+          OptionName: ServiceRole
+          Value: !Ref AWSIAMServiceRole
+        - Namespace: 'aws:elasticbeanstalk:environment:process:default'
+          OptionName: Protocol
+          Value: 'HTTP'
+        - Namespace: 'aws:elasticbeanstalk:environment:process:default'
+          OptionName: HealthCheckPath
+          Value: !Ref AppHealthcheckUrl
         - Namespace: 'aws:elasticbeanstalk:sns:topics'
           OptionName: Notification Endpoint
           Value: !Ref AwsEbNotificationEndpoint
@@ -367,18 +410,25 @@ Resources:
         - Namespace: 'aws:elb:listener:443'
           OptionName: SSLCertificateId
           Value: !Ref SSLCertArn
+        # Application environment options
         - Namespace: 'aws:elasticbeanstalk:application:environment'
           OptionName: APP_DEPLOY_BUCKET
           Value: !Ref AppDeployBucket
         - Namespace: 'aws:elasticbeanstalk:application:environment'
-          OptionName: BRIDGE_ENV
-          Value: !Ref BridgeEnv
+          OptionName: AUTH_CREATE_MYSQL_ACCOUNTS
+          Value: !Ref AuthCreateMysqlAccounts
         - Namespace: 'aws:elasticbeanstalk:application:environment'
-          OptionName: BRIDGE_USER
-          Value: !Ref BridgeUser
+          OptionName: AUTH_PROVIDER
+          Value: !Ref AuthProvider
         - Namespace: 'aws:elasticbeanstalk:application:environment'
           OptionName: AWS_KEY
           Value: !Ref AwsKey
+        - Namespace: 'aws:elasticbeanstalk:application:environment'
+          OptionName: AWS_KEY_UPLOAD
+          Value: !Ref AwsKeyUpload
+        - Namespace: 'aws:elasticbeanstalk:application:environment'
+          OptionName: AWS_KEY_UPLOAD_CMS
+          Value: !Ref AwsKeyUploadCms
         - Namespace: 'aws:elasticbeanstalk:application:environment'
           OptionName: AWS_SECRET_KEY
           Value: !Ref AwsSecretKey
@@ -386,20 +436,38 @@ Resources:
           OptionName: AWS_SECRET_KEY_CONSENTS
           Value: !Ref AwsSecretKeyConsents
         - Namespace: 'aws:elasticbeanstalk:application:environment'
-          OptionName: AWS_KEY_UPLOAD
-          Value: !Ref AwsKeyUpload
-        - Namespace: 'aws:elasticbeanstalk:application:environment'
           OptionName: AWS_SECRET_KEY_UPLOAD
           Value: !Ref AwsSecretKeyUpload
-        - Namespace: 'aws:elasticbeanstalk:application:environment'
-          OptionName: AWS_KEY_UPLOAD_CMS
-          Value: !Ref AwsKeyUploadCms
         - Namespace: 'aws:elasticbeanstalk:application:environment'
           OptionName: AWS_SECRET_KEY_UPLOAD_CMS
           Value: !Ref AwsSecretKeyUploadCms
         - Namespace: 'aws:elasticbeanstalk:application:environment'
+          OptionName: BRIDGE_ENV
+          Value: !Ref BridgeEnv
+        - Namespace: 'aws:elasticbeanstalk:application:environment'
           OptionName: BRIDGE_HEALTHCODE_KEY
           Value: !Ref BridgeHealthcodeKey
+        - Namespace: 'aws:elasticbeanstalk:application:environment'
+          OptionName: BRIDGE_USER
+          Value: !Ref BridgeUser
+        - Namespace: 'aws:elasticbeanstalk:application:environment'
+          OptionName: EMAIL_UNSUBSCRIBE_TOKEN
+          Value: !Ref EmailUnsubscribeToken
+        - Namespace: 'aws:elasticbeanstalk:application:environment'
+          OptionName: ELASTICACHE_URL
+          Value: !Ref ElastiCacheUrl
+        - Namespace: 'aws:elasticbeanstalk:application:environment'
+          OptionName: HIBERNATE_CONNECTION_PASSWORD
+          Value: !Ref HibernateConnectionPassword
+        - Namespace: 'aws:elasticbeanstalk:application:environment'
+          OptionName: HIBERNATE_CONNECTION_URL
+          Value: !Ref HibernateConnectionUrl
+        - Namespace: 'aws:elasticbeanstalk:application:environment'
+          OptionName: HIBERNATE_CONNECTION_USERNAME
+          Value: !Ref HibernateConnectionUsername
+        - Namespace: 'aws:elasticbeanstalk:application:environment'
+          OptionName: HIBERNATE_CONNECTION_USESSL
+          Value: !Ref HibernateConnectionUsessl
         - Namespace: 'aws:elasticbeanstalk:application:environment'
           OptionName: HOST_POSTFIX
           Value: !Ref HostPostfix
@@ -416,47 +484,14 @@ Resources:
           OptionName: NEW_RELIC_LOG
           Value: !Ref NewRelicLog
         - Namespace: 'aws:elasticbeanstalk:application:environment'
-          OptionName: WEBSERVICES_URL
-          Value: !Ref WebservicesUrl
-        - Namespace: 'aws:elasticbeanstalk:application:environment'
-          OptionName: EMAIL_UNSUBSCRIBE_TOKEN
-          Value: !Ref EmailUnsubscribeToken
-        - Namespace: 'aws:elasticbeanstalk:application:environment'
-          OptionName: AUTH_CREATE_MYSQL_ACCOUNTS
-          Value: !Ref AuthCreateMysqlAccounts
-        - Namespace: 'aws:elasticbeanstalk:application:environment'
-          OptionName: AUTH_PROVIDER
-          Value: !Ref AuthProvider
-        - Namespace: 'aws:elasticbeanstalk:application:environment'
-          OptionName: ENTERPRISE_STORMPATH_APPLICATION_HREF
-          Value: !Ref EnterpriseStormpathHref
-        - Namespace: 'aws:elasticbeanstalk:application:environment'
-          OptionName: ENTERPRISE_STORMPATH_ID
-          Value: !Ref EnterpriseStormpathId
-        - Namespace: 'aws:elasticbeanstalk:application:environment'
-          OptionName: ENTERPRISE_STORMPATH_SECRET
-          Value: !Ref EnterpriseStormpathSecret
-        - Namespace: 'aws:elasticbeanstalk:application:environment'
-          OptionName: HIBERNATE_CONNECTION_PASSWORD
-          Value: !Ref HibernateConnectionPassword
-        - Namespace: 'aws:elasticbeanstalk:application:environment'
-          OptionName: HIBERNATE_CONNECTION_URL
-          Value: !Ref HibernateConnectionUrl
-        - Namespace: 'aws:elasticbeanstalk:application:environment'
-          OptionName: HIBERNATE_CONNECTION_USERNAME
-          Value: !Ref HibernateConnectionUsername
-        - Namespace: 'aws:elasticbeanstalk:application:environment'
-          OptionName: HIBERNATE_CONNECTION_USESSL
-          Value: !Ref HibernateConnectionUsessl
-        - Namespace: 'aws:elasticbeanstalk:application:environment'
-          OptionName: REDIS_URL
-          Value: !Ref RedisUrl
+          OptionName: REDISCLOUD_URL
+          Value: !Ref RedisCloudUrl
         - Namespace: 'aws:elasticbeanstalk:application:environment'
           OptionName: SNS_KEY
-          Value: !Ref AwsSnsKey
+          Value: !Ref SnsKey
         - Namespace: 'aws:elasticbeanstalk:application:environment'
           OptionName: SNS_SECRET_KEY
-          Value: !Ref AwsSnsSecretKey
+          Value: !Ref SnsSecretKey
         - Namespace: 'aws:elasticbeanstalk:application:environment'
           OptionName: SYNAPSE_API_KEY
           Value: !Ref SynapseApiKey
@@ -466,6 +501,9 @@ Resources:
         - Namespace: 'aws:elasticbeanstalk:application:environment'
           OptionName: SYSOPS_EMAIL
           Value: !Ref SysopsEmail
+        - Namespace: 'aws:elasticbeanstalk:application:environment'
+          OptionName: WEBSERVICES_URL
+          Value: !Ref WebservicesUrl
   AWSEBApplication:
     Type: 'AWS::ElasticBeanstalk::Application'
     Properties:
@@ -484,6 +522,7 @@ Resources:
       Tier:
         Name: WebServer
         Type: Standard
+
   AWSS3AppDeployBucket:
     Type: 'AWS::S3::Bucket'
     Properties:
@@ -659,8 +698,27 @@ Resources:
         -
           Endpoint: !Ref AwsEbNotificationEndpoint
           Protocol: "email"
+  AWSLogsLogGroup:
+    Type: "AWS::Logs::LogGroup"
+    Properties:
+      LogGroupName: !Join
+        - '/'
+        - - /aws/elasticbeanstalk
+          - !Ref 'AWS::StackName'
+          - var/log/web-1.log
+      RetentionInDays: 7
+  AWSLogsLogGroupWebError:
+    Type: "AWS::Logs::LogGroup"
+    Properties:
+      LogGroupName: !Join
+        - '/'
+        - - /aws/elasticbeanstalk
+          - !Ref 'AWS::StackName'
+          - var/log/web-1.error.log
+      RetentionInDays: 7
   AWSCWRequestErrorMetricFilter:
     Type: "AWS::Logs::MetricFilter"
+    DependsOn: AWSLogsLogGroup
     Properties:
       LogGroupName: !Join
         - '/'
@@ -688,6 +746,7 @@ Resources:
       Threshold: 10
   AWSCWLostMessageMetricFilter:
     Type: "AWS::Logs::MetricFilter"
+    DependsOn: AWSLogsLogGroup
     Properties:
       LogGroupName: !Join
         - '/'
@@ -715,6 +774,7 @@ Resources:
       Threshold: 1
   AWSCWRequestWarningMetricFilter:
     Type: "AWS::Logs::MetricFilter"
+    DependsOn: AWSLogsLogGroup
     Properties:
       LogGroupName: !Join
         - '/'
@@ -742,6 +802,7 @@ Resources:
       Threshold: 100
   AWSCWThroughputExceptionMetricFilter:
     Type: "AWS::Logs::MetricFilter"
+    DependsOn: AWSLogsLogGroup
     Properties:
       LogGroupName: !Join
         - '/'
@@ -769,6 +830,7 @@ Resources:
       Threshold: 1
   AWSCW400MetricFilter:
     Type: "AWS::Logs::MetricFilter"
+    DependsOn: AWSLogsLogGroup
     Properties:
       LogGroupName: !Join
         - '/'
@@ -796,6 +858,7 @@ Resources:
       Threshold: 30
   AWSCW403MetricFilter:
     Type: "AWS::Logs::MetricFilter"
+    DependsOn: AWSLogsLogGroup
     Properties:
       LogGroupName: !Join
         - '/'
@@ -823,6 +886,7 @@ Resources:
       Threshold: 10
   AWSCW409MetricFilter:
     Type: "AWS::Logs::MetricFilter"
+    DependsOn: AWSLogsLogGroup
     Properties:
       LogGroupName: !Join
         - '/'
@@ -850,6 +914,7 @@ Resources:
       Threshold: 10
   AWSCW412MetricFilter:
     Type: "AWS::Logs::MetricFilter"
+    DependsOn: AWSLogsLogGroup
     Properties:
       LogGroupName: !Join
         - '/'
@@ -875,3 +940,62 @@ Resources:
       Period: 3600
       Statistic: Sum
       Threshold: 30
+  AWSLBSecurityGroup:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      GroupDescription: Load Balancer Security Group
+      VpcId: vpc-f389e98a
+      SecurityGroupIngress:
+        - CidrIp: 0.0.0.0/0
+          FromPort: '443'
+          ToPort: '443'
+          IpProtocol: tcp
+        - CidrIp: 0.0.0.0/0
+          FromPort: '80'
+          ToPort: '80'
+          IpProtocol: tcp
+      SecurityGroupEgress:
+        - CidrIp: 0.0.0.0/0
+          FromPort: '80'
+          ToPort: '80'
+          IpProtocol: tcp
+  AWSEC2SecurityGroup:
+    Type: 'AWS::EC2::SecurityGroup'
+    DependsOn: AWSLBSecurityGroup
+    Properties:
+      GroupName: !Join
+        - '-'
+        - - !Ref 'AWS::StackName'
+          - AWSEC2SecurityGroup
+      GroupDescription: EC2 Security Group
+      VpcId: vpc-f389e98a
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: '80'
+          ToPort: '80'
+          SourceSecurityGroupId: !Ref AWSLBSecurityGroup
+  AWSECacheSecurityGroup:
+    Type: 'AWS::ElastiCache::SecurityGroup'
+    Properties:
+      Description: ElastiCache Security Group
+  AWSECacheSecurityGroupIngress:
+    Type: 'AWS::ElastiCache::SecurityGroupIngress'
+    DependsOn:
+      - AWSECacheSecurityGroup
+      - AWSLBSecurityGroup
+    Properties:
+      CacheSecurityGroupName: !Ref AWSECacheSecurityGroup
+      EC2SecurityGroupName: !Join
+        - '-'
+        - - !Ref 'AWS::StackName'
+          - AWSEC2SecurityGroup
+      EC2SecurityGroupOwnerId: !Ref 'AWS::AccountId'
+  AWSECCacheCluster:
+    Type: 'AWS::ElastiCache::CacheCluster'
+    DependsOn: AWSECacheSecurityGroup
+    Properties:
+      Engine: redis
+      CacheNodeType: !Ref ElastiCacheInstanceType
+      NumCacheNodes: '1'
+      CacheSecurityGroupNames:
+        - !Ref AWSECacheSecurityGroup
