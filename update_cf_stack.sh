@@ -11,6 +11,7 @@ eval export "AwsSecretKeyUpload=\$AwsSecretKeyUpload_$TRAVIS_BRANCH"
 eval export "AwsSecretKeyUploadCms=\$AwsSecretKeyUploadCms_$TRAVIS_BRANCH"
 eval export "BridgeEnv=\$BridgeEnv_$TRAVIS_BRANCH"
 eval export "BridgeHealthcodeKey=\$BridgeHealthcodeKey_$TRAVIS_BRANCH"
+eval export "BridgeHealthcodeRedisKey=\$BridgeHealthcodeRedisKey_$TRAVIS_BRANCH"
 eval export "ElastiCacheUrl=\$ElastiCacheUrl_$TRAVIS_BRANCH"
 eval export "EmailUnsubscribeToken=\$EmailUnsubscribeToken_$TRAVIS_BRANCH"
 eval export "HibernateConnectionPassword=\$HibernateConnectionPassword_$TRAVIS_BRANCH"
@@ -46,6 +47,7 @@ ParameterKey=AwsSecretKeyUpload,ParameterValue=$AwsSecretKeyUpload \
 ParameterKey=AwsSecretKeyUploadCms,ParameterValue=$AwsSecretKeyUploadCms \
 ParameterKey=BridgeEnv,ParameterValue=$BridgeEnv \
 ParameterKey=BridgeHealthcodeKey,ParameterValue=$BridgeHealthcodeKey \
+ParameterKey=BridgeHealthcodeRedisKey,ParameterValue=$BridgeHealthcodeRedisKey \
 ParameterKey=BridgeUser,ParameterValue=heroku \
 ParameterKey=DNSHostname,ParameterValue=$DNS_HOSTNAME \
 ParameterKey=DNSDomain,ParameterValue=$DNS_DOMAIN \
