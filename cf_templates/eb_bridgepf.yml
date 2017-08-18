@@ -737,7 +737,10 @@ Resources:
         -
           MetricValue: "1"
           MetricNamespace: "LogMetrics/Errors"
-          MetricName: "ErrorCount"
+          MetricName: !Join
+            - '-'
+            - - !Ref 'AWS::StackName'
+              - RequestErrorCount
   AWSCWRequestErrorAlarm:
     Type: "AWS::CloudWatch::Alarm"
     Properties:
@@ -746,7 +749,10 @@ Resources:
         - !Ref AWSSNSTopic
       ComparisonOperator: GreaterThanOrEqualToThreshold
       EvaluationPeriods: 1
-      MetricName: ErrorCount
+      MetricName: !Join
+        - '-'
+        - - !Ref 'AWS::StackName'
+          - RequestErrorCount
       Namespace: LogMetrics/Errors
       Period: 3600
       Statistic: Sum
@@ -765,7 +771,10 @@ Resources:
         -
           MetricValue: "1"
           MetricNamespace: "LogMetrics/LostMessages"
-          MetricName: "LostMessageCount"
+          MetricName: !Join
+            - '-'
+            - - !Ref 'AWS::StackName'
+              - LostMessageCount
   AWSCWRequestLostMessageAlarm:
     Type: "AWS::CloudWatch::Alarm"
     Properties:
@@ -774,7 +783,10 @@ Resources:
         - !Ref AWSSNSTopic
       ComparisonOperator: GreaterThanOrEqualToThreshold
       EvaluationPeriods: 1
-      MetricName: LostMessageCount
+      MetricName: !Join
+        - '-'
+        - - !Ref 'AWS::StackName'
+          - LostMessageCount
       Namespace: LogMetrics/LostMessages
       Period: 3600
       Statistic: Sum
@@ -793,7 +805,10 @@ Resources:
         -
           MetricValue: "1"
           MetricNamespace: "LogMetrics/Warnings"
-          MetricName: "WarningCount"
+          MetricName: !Join
+            - '-'
+            - - !Ref 'AWS::StackName'
+              - RequestWarningCount
   AWSCWRequestWarningAlarm:
     Type: "AWS::CloudWatch::Alarm"
     Properties:
@@ -802,7 +817,10 @@ Resources:
         - !Ref AWSSNSTopic
       ComparisonOperator: GreaterThanOrEqualToThreshold
       EvaluationPeriods: 1
-      MetricName: WarningCount
+      MetricName: !Join
+        - '-'
+        - - !Ref 'AWS::StackName'
+          - RequestWarningCount
       Namespace: LogMetrics/Warnings
       Period: 3600
       Statistic: Sum
@@ -821,7 +839,10 @@ Resources:
         -
           MetricValue: "1"
           MetricNamespace: "LogMetrics/Exceptions"
-          MetricName: "ThroughputExceededExceptionCount"
+          MetricName: !Join
+            - '-'
+            - - !Ref 'AWS::StackName'
+              - ThroughputExceededExceptionCount
   AWSCWThroughputExceptionAlarm:
     Type: "AWS::CloudWatch::Alarm"
     Properties:
@@ -830,7 +851,10 @@ Resources:
         - !Ref AWSSNSTopic
       ComparisonOperator: GreaterThanOrEqualToThreshold
       EvaluationPeriods: 1
-      MetricName: ThroughputExceededExceptionCount
+      MetricName: !Join
+        - '-'
+        - - !Ref 'AWS::StackName'
+          - ThroughputExceededExceptionCount
       Namespace: LogMetrics/Exceptions
       Period: 3600
       Statistic: Sum
@@ -849,7 +873,10 @@ Resources:
         -
           MetricValue: "1"
           MetricNamespace: "LogMetrics/400s"
-          MetricName: "400Count"
+          MetricName: !Join
+            - '-'
+            - - !Ref 'AWS::StackName'
+              - 400Count
   AWSCW400Alarm:
     Type: "AWS::CloudWatch::Alarm"
     Properties:
@@ -858,7 +885,10 @@ Resources:
         - !Ref AWSSNSTopic
       ComparisonOperator: GreaterThanOrEqualToThreshold
       EvaluationPeriods: 1
-      MetricName: 400Count
+      MetricName: !Join
+        - '-'
+        - - !Ref 'AWS::StackName'
+          - 400Count
       Namespace: LogMetrics/400s
       Period: 3600
       Statistic: Sum
@@ -877,7 +907,10 @@ Resources:
         -
           MetricValue: "1"
           MetricNamespace: "LogMetrics/403s"
-          MetricName: "403Count"
+          MetricName: !Join
+            - '-'
+            - - !Ref 'AWS::StackName'
+              - 403Count
   AWSCW403Alarm:
     Type: "AWS::CloudWatch::Alarm"
     Properties:
@@ -886,7 +919,10 @@ Resources:
         - !Ref AWSSNSTopic
       ComparisonOperator: GreaterThanOrEqualToThreshold
       EvaluationPeriods: 1
-      MetricName: 403Count
+      MetricName: !Join
+        - '-'
+        - - !Ref 'AWS::StackName'
+          - 403Count
       Namespace: LogMetrics/403s
       Period: 3600
       Statistic: Sum
@@ -905,7 +941,10 @@ Resources:
         -
           MetricValue: "1"
           MetricNamespace: "LogMetrics/409s"
-          MetricName: "409Count"
+          MetricName: !Join
+            - '-'
+            - - !Ref 'AWS::StackName'
+              - 409Count
   AWSCW409Alarm:
     Type: "AWS::CloudWatch::Alarm"
     Properties:
@@ -914,7 +953,10 @@ Resources:
         - !Ref AWSSNSTopic
       ComparisonOperator: GreaterThanOrEqualToThreshold
       EvaluationPeriods: 1
-      MetricName: 409Count
+      MetricName: !Join
+        - '-'
+        - - !Ref 'AWS::StackName'
+          - 409Count
       Namespace: LogMetrics/409s
       Period: 3600
       Statistic: Sum
@@ -933,7 +975,10 @@ Resources:
         -
           MetricValue: "1"
           MetricNamespace: "LogMetrics/412s"
-          MetricName: "412Count"
+          MetricName: !Join
+            - '-'
+            - - !Ref 'AWS::StackName'
+              - 412Count
   AWSCW412Alarm:
     Type: "AWS::CloudWatch::Alarm"
     Properties:
@@ -942,7 +987,10 @@ Resources:
         - !Ref AWSSNSTopic
       ComparisonOperator: GreaterThanOrEqualToThreshold
       EvaluationPeriods: 1
-      MetricName: 412Count
+      MetricName: !Join
+        - '-'
+        - - !Ref 'AWS::StackName'
+          - 412Count
       Namespace: LogMetrics/412s
       Period: 3600
       Statistic: Sum
