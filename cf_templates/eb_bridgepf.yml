@@ -392,6 +392,9 @@ Resources:
         - Namespace: 'aws:elasticbeanstalk:hostmanager'
           OptionName: LogPublicationControl
           Value: true
+        - Namespace: 'aws:elasticbeanstalk:xray'
+          OptionName: XRayEnabled
+          Value: false
         - Namespace: 'aws:elb:loadbalancer'
           OptionName: LoadBalancerHTTPPort
           Value: 80
