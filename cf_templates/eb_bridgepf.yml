@@ -24,6 +24,15 @@
 Description: AWS Elastic Beanstalk Application
 AWSTemplateFormatVersion: 2010-09-09
 Outputs:
+  AppPublicEndpoint:
+    Value: !Join
+      - ''
+      - - 'https://'
+        - !Ref DNSHostname
+        - .
+        - !Ref DNSDomain
+    Export:
+      Name: !Sub '${AWS::StackName}-AppPublicEndpoint'
   AWSS3AppDeployBucket:
     Value: !Ref AWSS3AppDeployBucket
     Export:
