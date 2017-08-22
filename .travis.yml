@@ -12,10 +12,6 @@ env:
     - DNS_HOSTNAME=$STACK_NAME
     - DNS_DOMAIN=sagebridge.org
 
-before_install:
-  - sudo apt-get update -y
-  - sudo apt-get install -y wget unzip build-essential libssl-dev
-
 install:
 # install git-crypt
   - pushd /tmp
