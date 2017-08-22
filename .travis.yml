@@ -13,12 +13,28 @@ env:
     - DNS_DOMAIN=sagebridge.org
 
 before_install:
+  - sudo apt-get update -y
+  - sudo apt-get install -y wget unzip build-essential libssl-dev
+
+install:
+# install git-crypt
+  - pushd /tmp
+  - wget https://github.com/AGWA/git-crypt/archive/master.zip -O git-crypt.zip
+  - unzip git-crypt.zip
+  - cd git-crypt-master
+  - make
+  - popd
+# get env vars
+  - openssl aes-256-cbc -K $encrypted_ff3a2f371f92_key -iv $encrypted_ff3a2f371f92_iv -in crypt-key.enc -out crypt-key -d
+  - /tmp/git-crypt-master/git-crypt unlock ./crypt-key
+  - rm -rf crypt-key
+  - source aws_env_vars
+  - /tmp/git-crypt-master/git-crypt lock
+# install aws cli
+  - pip install --upgrade awscli
+# configure aws cli
   - mkdir ~/.aws
   - echo -e "[default]\nregion=us-east-1" > ~/.aws/config
   - echo -e "[default]\naws_access_key_id=$AwsKey\naws_secret_access_key=$AwsSecretKey" > ~/.aws/credentials
-
-install:
-  - pip install --upgrade awscli
-
 script:
   - ./deploy_infra.sh
