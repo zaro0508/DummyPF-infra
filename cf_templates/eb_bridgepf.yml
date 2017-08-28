@@ -741,7 +741,15 @@ Resources:
         - - /aws/elasticbeanstalk
           - !Ref 'AWS::StackName'
           - var/log/web-1.log
-      FilterPattern: 'ERROR - com.newrelic.agent.ForceRestartException - INFO - org.hibernate - "Error R14"'
+      FilterPattern: 'ERROR
+                      - com.newrelic.agent.ForceRestartException
+                      - DEBUG
+                      - INFO
+                      - WARN
+                      - "StatusLogger No log4j2 configuration file found"
+                      - "StrictValidationHandler.handleErrors"
+                      - "Strict upload validation error"
+                      - org.hibernate'
       MetricTransformations:
         -
           MetricValue: "1"
@@ -809,7 +817,8 @@ Resources:
         - - /aws/elasticbeanstalk
           - !Ref 'AWS::StackName'
           - var/log/web-1.log
-      FilterPattern: 'WARN - "Establishing SSL"'
+      FilterPattern: 'WARN
+                      - "Establishing SSL connection"'
       MetricTransformations:
         -
           MetricValue: "1"
@@ -877,7 +886,7 @@ Resources:
         - - /aws/elasticbeanstalk
           - !Ref 'AWS::StackName'
           - var/log/web-1.log
-      FilterPattern: '"{ $.status = 400 }" - "favicon.ico" - "robots.txt" - "apple-touch-icon"'
+      FilterPattern: '{ $.status = 400 }'
       MetricTransformations:
         -
           MetricValue: "1"
@@ -911,7 +920,7 @@ Resources:
         - - /aws/elasticbeanstalk
           - !Ref 'AWS::StackName'
           - var/log/web-1.log
-      FilterPattern: '"{ $.status = 403 }" - "favicon.ico" - "robots.txt" - "apple-touch-icon"'
+      FilterPattern: '{ $.status = 403 }'
       MetricTransformations:
         -
           MetricValue: "1"
@@ -945,7 +954,7 @@ Resources:
         - - /aws/elasticbeanstalk
           - !Ref 'AWS::StackName'
           - var/log/web-1.log
-      FilterPattern: '"{ $.status = 409 }" - "favicon.ico" - "robots.txt" - "apple-touch-icon"'
+      FilterPattern: '{ $.status = 409 }'
       MetricTransformations:
         -
           MetricValue: "1"
@@ -979,7 +988,7 @@ Resources:
         - - /aws/elasticbeanstalk
           - !Ref 'AWS::StackName'
           - var/log/web-1.log
-      FilterPattern: '"{ $.status = 412 }" - "favicon.ico" - "robots.txt" - "apple-touch-icon"'
+      FilterPattern: '{ $.status = 412 }'
       MetricTransformations:
         -
           MetricValue: "1"
