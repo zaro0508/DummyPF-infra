@@ -774,6 +774,36 @@ Resources:
       Period: 3600
       Statistic: Sum
       Threshold: 10
+  AWSCWWebErrorMetricFilter:
+    Type: "AWS::Logs::MetricFilter"
+    DependsOn: AWSLogsLogGroupWebError
+    Properties:
+      LogGroupName: !Ref AWSLogsLogGroupWebError
+      FilterPattern: 'Error'
+      MetricTransformations:
+        -
+          MetricValue: "1"
+          MetricNamespace: "LogMetrics/Errors"
+          MetricName: !Join
+            - '-'
+            - - !Ref 'AWS::StackName'
+              - WebErrorCount
+  AWSCWWebErrorAlarm:
+    Type: "AWS::CloudWatch::Alarm"
+    Properties:
+      ActionsEnabled: true
+      AlarmActions:
+        - !Ref AWSSNSTopic
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      EvaluationPeriods: 1
+      MetricName: !Join
+        - '-'
+        - - !Ref 'AWS::StackName'
+          - WebErrorCount
+      Namespace: LogMetrics/Errors
+      Period: 3600
+      Statistic: Sum
+      Threshold: 1
   AWSCWLostMessageMetricFilter:
     Type: "AWS::Logs::MetricFilter"
     DependsOn: AWSLogsLogGroup
