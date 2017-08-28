@@ -1,0 +1,21 @@
+{
+   "firstName": "mytestuser", 
+   "lastName": "", 
+   "externalId": "mytestuser@sagebase.org", 
+   "id": "6N0vuRNTPxyfUedIt4Uwao", 
+   "notifyByEmail": true, 
+   "attributes": {}, 
+   "sharingScope": "no_sharing", 
+   "createdOn": "2017-08-25T15:53:18.650Z", 
+   "status": "enabled", 
+   "roles": [ 
+     "developer" 
+   ], 
+   "dataGroups": [], 
+   "languages": ["en"], 
+   "study": "api", 
+   "email": "mytestuser@sagebase.org", 
+   "password": "password", 
+   "consent": false,
+   "type": "Study"
+ }
