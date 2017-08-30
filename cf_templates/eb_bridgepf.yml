@@ -141,6 +141,9 @@ Parameters:
     Description: The AWS account's default VPC id
     Type: String
     Default: param_place_holder
+  AwsEbHealthReportingSystem:
+    Type: String
+    Default: param_place_holder
   AwsEbNotificationEndpoint:
     Type: String
     Description: Email address for AWS EB notifications
@@ -399,6 +402,9 @@ Resources:
         - Namespace: 'aws:elasticbeanstalk:environment:process:default'
           OptionName: HealthCheckPath
           Value: !Ref AppHealthcheckUrl
+        - Namespace: 'aws:elasticbeanstalk:healthreporting:system'
+          OptionName: SystemType
+          Value: !Ref AwsEbHealthReportingSystem
         - Namespace: 'aws:elasticbeanstalk:sns:topics'
           OptionName: Notification Endpoint
           Value: !Ref AwsEbNotificationEndpoint
