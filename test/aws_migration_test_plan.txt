@@ -4,10 +4,10 @@ This is the set of items we plan to verify before switching BridgePF from heroku
 Tests: https://github.com/Sage-Bionetworks/BridgeIntegrationTests
 Expected result: all tests should pass
 
-2. Run tests to verify that aws alarms are triggering and sending notifications to bridgeops@sagebridge.org.
+2. Run tests to verify that aws alarms are triggering and sending notifications to bridgeops@sagebase.org.
 Running the BridgePF integration tests will probably verify a few of the alarms as well.
 Tests: https://github.com/Sage-Bionetworks/BridgePF-infra/tree/develop/test/alarms
-Expected result: notifications is sent to bridgeops@sagebridge.org
+Expected result: notifications is sent to bridgeops@sagebase.org
 
 3. Run a load test against BridgePF that will trigger aws autoscaling to scale up and down EC2 instances.
 
@@ -27,6 +27,6 @@ Test: stop load test
 Expected result: AWS removes an EC2 instance
 
 
-4. Configure new relic to send alerts to bridgeops@sagebridge.org and verify that alerts are being sent out.
+4. Configure new relic to send alerts to bridgeops@sagebase.org and verify that alerts are being sent out.
 Test: create a simple alert on new relic and trigger it.
-Expected result: notification is sent to bridgeops@sagebridge.org
+Expected result: notification is sent to bridgeops@sagebase.org
