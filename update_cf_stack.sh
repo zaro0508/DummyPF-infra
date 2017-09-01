@@ -51,7 +51,7 @@ ParameterKey=BridgeHealthcodeRedisKey,ParameterValue=$BridgeHealthcodeRedisKey \
 ParameterKey=BridgeUser,ParameterValue=heroku \
 ParameterKey=DNSHostname,ParameterValue=$DNS_HOSTNAME \
 ParameterKey=DNSDomain,ParameterValue=$DNS_DOMAIN \
-ParameterKey=EC2InstanceType,ParameterValue=t2.micro \
+ParameterKey=EC2InstanceType,ParameterValue=t2.small \
 ParameterKey=ElastiCacheUrl,ParameterValue=$ElastiCacheUrl \
 ParameterKey=ElastiCacheInstanceType,ParameterValue=cache.t2.micro \
 ParameterKey=EmailUnsubscribeToken,ParameterValue=$EmailUnsubscribeToken \
