@@ -2,10 +2,12 @@
 
 # double interpolate vars from travis
 eval export "AppDeployBucket=\$AppDeployBucket_$TRAVIS_BRANCH"
+eval export "AwsAutoScalingGroupName=\$AwsAutoScalingGroupName_$TRAVIS_BRANCH"
 eval export "AwsAutoScalingMaxSize=\$AwsAutoScalingMaxSize_$TRAVIS_BRANCH"
 eval export "AwsAutoScalingMinSize=\$AwsAutoScalingMinSize_$TRAVIS_BRANCH"
 eval export "AwsKeyUpload=\$AwsKeyUpload_$TRAVIS_BRANCH"
 eval export "AwsKeyUploadCms=\$AwsKeyUploadCms_$TRAVIS_BRANCH"
+eval export "AwsLoadBalancerName=\$AwsLoadBalancerName_$TRAVIS_BRANCH"
 eval export "AwsSecretKeyConsents=\$AwsSecretKeyConsents_$TRAVIS_BRANCH"
 eval export "AwsSecretKeyUpload=\$AwsSecretKeyUpload_$TRAVIS_BRANCH"
 eval export "AwsSecretKeyUploadCms=\$AwsSecretKeyUploadCms_$TRAVIS_BRANCH"
@@ -24,7 +26,7 @@ eval export "SynapseApiKey=\$SynapseApiKey_$TRAVIS_BRANCH"
 eval export "SynapseUser=\$SynapseUser_$TRAVIS_BRANCH"
 eval export "SysopsEmail=\$SysopsEmail_$TRAVIS_BRANCH"
 
-# eploy with evaluated vars
+# deploy with evaluated vars
 aws cloudformation update-stack \
 --stack-name $STACK_NAME \
 --capabilities CAPABILITY_NAMED_IAM \
@@ -34,6 +36,7 @@ ParameterKey=AppDeployBucket,ParameterValue=$AppDeployBucket \
 ParameterKey=AppHealthcheckUrl,ParameterValue='HTTP:80/?study=api' \
 ParameterKey=AuthCreateMysqlAccounts,ParameterValue=true \
 ParameterKey=AuthProvider,ParameterValue=mysql \
+ParameterKey=AwsAutoScalingGroupName,ParameterValue=$AwsAutoScalingGroupName \
 ParameterKey=AwsAutoScalingMaxSize,ParameterValue=$AwsAutoScalingMaxSize \
 ParameterKey=AwsAutoScalingMinSize,ParameterValue=$AwsAutoScalingMinSize \
 ParameterKey=AwsDefaultVpcId,ParameterValue=$AwsDefaultVpcId \
@@ -42,6 +45,7 @@ ParameterKey=AwsEbNotificationEndpoint,ParameterValue=$AwsEbNotificationEndpoint
 ParameterKey=AwsKey,ParameterValue=$AwsKey \
 ParameterKey=AwsKeyUpload,ParameterValue=$AwsKeyUpload \
 ParameterKey=AwsKeyUploadCms,ParameterValue=$AwsKeyUploadCms \
+ParameterKey=AwsLoadBalancerName,ParameterValue=$AwsLoadBalancerName \
 ParameterKey=AwsSecretKey,ParameterValue=$AwsSecretKey \
 ParameterKey=AwsSecretKeyConsents,ParameterValue=$AwsSecretKeyConsents \
 ParameterKey=AwsSecretKeyUpload,ParameterValue=$AwsSecretKeyUpload \
