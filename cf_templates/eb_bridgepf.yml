@@ -24,6 +24,10 @@
 Description: AWS Elastic Beanstalk Application
 AWSTemplateFormatVersion: 2010-09-09
 Outputs:
+  AppDashboard:
+    Value: !Ref AWSCWDashboard
+    Export:
+      Name: !Sub '${AWS::StackName}-Dashboard'
   AppPublicEndpoint:
     Value: !Join
       - ''
@@ -131,6 +135,9 @@ Parameters:
   AuthProvider:
     Type: String
     Default: param_place_holder
+  AwsAutoScalingGroupName:
+    Type: String
+    Default: param_place_holder
   AwsAutoScalingMaxSize:
     Type: String
     Default: param_place_holder
@@ -162,6 +169,9 @@ Parameters:
     Type: String
     Default: param_place_holder
     NoEcho: true
+  AwsLoadBalancerName:
+    Type: String
+    Default: param_place_holder
   AwsSecretKeyConsents:
     Type: String
     Default: param_place_holder
@@ -1108,3 +1118,93 @@ Resources:
       NumCacheNodes: '1'
       CacheSecurityGroupNames:
         - !Ref AWSECacheSecurityGroup
+  AWSCWDashboard:
+    Type: 'AWS::CloudWatch::Dashboard'
+    Properties:
+      DashboardName: !Join
+        - '-'
+        - - !Ref 'AWS::StackName'
+          - dashboard
+      DashboardBody: !Join
+        - ''
+        - - >-
+            {"widgets": [{ "type":"metric", "x":0, "y":0, "width":12,
+            "height":6, "properties":{"metrics":[[ "AWS/EC2", "CPUUtilization",
+            "AutoScalingGroupName","
+          - !Ref AwsAutoScalingGroupName
+          - '"]],'
+          - >-
+            "view": "timeSeries", "stacked": true, "period":300,
+            "stat":"Average", "region":"us-east-1", "title":"CPUUtilization"}},
+          - >-
+            {"type":"metric", "x":0, "y":0, "width":12, "height":6,
+            "properties":{"metrics":[[ "AWS/EC2", "NetworkOut",
+            "AutoScalingGroupName","
+          - !Ref AwsAutoScalingGroupName
+          - '"]],'
+          - >-
+            "view": "timeSeries", "stacked": true, "period":300,
+            "region":"us-east-1", "title":"NetworkOut"}},
+          - >-
+            {"type":"metric", "x":0, "y":0, "width":12, "height":6,
+            "properties":{"metrics":[[ "AWS/ELB", "HTTPCode_Backend_4XX",
+            "LoadBalancerName","
+          - !Ref AwsLoadBalancerName
+          - '", {"stat": "Sum"}],'
+          - '[ "AWS/ELB", "HTTPCode_Backend_5XX", "LoadBalancerName","'
+          - !Ref AwsLoadBalancerName
+          - '", {"stat": "Sum"}],'
+          - '[ "AWS/ELB", "BackendConnectionErrors", "LoadBalancerName","'
+          - !Ref AwsLoadBalancerName
+          - '", {"stat": "Sum"}]],'
+          - >-
+            "view": "timeSeries", "stacked": true, "period":300, "stat":"Sum",
+            "region":"us-east-1", "title":"BackendErrors"}},
+          - >-
+            {"type":"metric", "x":0, "y":0, "width":12, "height":6,
+            "properties":{"metrics":[[ "AWS/ELB", "Latency",
+            "LoadBalancerName","
+          - !Ref AwsLoadBalancerName
+          - '", {"stat": "Average"}]],'
+          - >-
+            "view": "timeSeries", "stacked": true, "period":300,
+            "stat":"Average", "region":"us-east-1", "title":"Latency"}},
+          - >-
+            {"type":"metric", "x":0, "y":0, "width":12, "height":6,
+            "properties":{"metrics":[[ "AWS/ELB",
+            "EstimatedALBActiveConnectionCount", "LoadBalancerName","
+          - !Ref AwsLoadBalancerName
+          - '", {"stat": "Sum"}]],'
+          - >-
+            "view": "timeSeries", "stacked": true, "period":300, "stat":"Sum",
+            "region":"us-east-1", "title":"Connections"}},
+          - >-
+            {"type":"metric", "x":0, "y":0, "width":12, "height":6,
+            "properties":{"metrics":[[ "AWS/ELB", "RequestCount",
+            "LoadBalancerName","
+          - !Ref AwsLoadBalancerName
+          - '", {"stat": "Sum"}]],'
+          - >-
+            "view": "timeSeries", "stacked": true, "period":300, "stat":"Sum",
+            "region":"us-east-1", "title":"Requests"}},
+          - >-
+            {"type":"metric", "x":0, "y":0, "width":12, "height":6,
+            "properties":{"metrics":[[ "AWS/ELB", "HealthyHostCount",
+            "LoadBalancerName","
+          - !Ref AwsLoadBalancerName
+          - '", {"stat": "Average"}]],'
+          - >-
+            "view": "timeSeries", "stacked": true, "period":300,
+            "stat":"Average", "region":"us-east-1", "title":"InstanceHealth"}},
+          - >-
+            {"type":"metric", "x":0, "y":0, "width":12, "height":6,
+            "properties":{"metrics":[[ "AWS/ELB", "HTTPCode_ELB_4XX",
+            "LoadBalancerName","
+          - !Ref AwsLoadBalancerName
+          - '", {"stat": "Sum"}],['
+          - '"AWS/ELB", "HTTPCode_ELB_5XX", "LoadBalancerName","'
+          - !Ref AwsLoadBalancerName
+          - '", {"stat": "Sum"}]],'
+          - >-
+            "view": "timeSeries", "stacked": true, "period":300, "stat":"Sum",
+            "region":"us-east-1", "title":"ClientErrors"}}]}
