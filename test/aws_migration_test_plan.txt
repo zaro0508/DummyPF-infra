@@ -1,32 +1,37 @@
 This is the set of items we plan to verify before switching BridgePF from heroku to AWS.
 
-1. Run BridgePF integration tests against aws bridgepf-prod environment and verify results are as expected.
+1. Run BridgePF integration tests (all tests) against aws bridgepf-prod environment and verify results are as expected.
 Tests: https://github.com/Sage-Bionetworks/BridgeIntegrationTests
 Expected result: all tests should pass
 
 2. Run tests to verify that aws alarms are triggering and sending notifications to bridgeops@sagebase.org.
-Running the BridgePF integration tests will probably verify a few of the alarms as well.
+Running the BridgePF integration tests will probably verify a few of the Error/Warn alarms.  We also have
+specific tests to trigger 4XX alarms.
+
 Tests: https://github.com/Sage-Bionetworks/BridgePF-infra/tree/develop/test/alarms
 Expected result: notifications is sent to bridgeops@sagebase.org
 
-3. Run a load test against BridgePF that will trigger aws autoscaling to scale up and down EC2 instances.
+3. Run a load test against bridgepf-prod environment.  According to our Heroku New Relic, our peak traffic is 200 per
+minute. Given that our bottleneck has historically been DynamoDB, we will verify that bridgepf-prod can handle
+comparable load, ideally 2x load.
 
-Will test the default autoscale trigger that is setup by EB:
+In heroku bridgepf-prod, the most called APIs are /v3/upload (and /v3/upload/*/complete), followed by calls to the
+web root (from AWS and New Relic ping, I assume), which are larger than the rest by an order of magnitude.
+The next highest five are getScheduledActivities, getSurvey, getParticipant, signIn, and
+getScheduledActivitiesByDateRange.
 
-Threshold:The condition in which the alarm will go to the ALARM state.NetworkOut > 6,000,000 for 5 minutes
-Actions:The actions that will occur when the alarm changes state.
-In ALARM:
-  For group awseb-e-693tmvruhq-stack-AWSEBAutoScalingGroup-ZUQRSM8OL33O use policy
-  awseb-e-693tmvruhq-stack-AWSEBAutoScalingScaleUpPolicy-10KCDPLCFOMVK (Add 1 instance)
-
-
-Test: Create a new tests to generate network load, 6000K requests within 5 minutes
-Expected result: AWS spins up a new EC2 instance
-
-Test: stop load test
-Expected result: AWS removes an EC2 instance
+Test: Create a new tests that simulates the above api calls at 2x peak traffic load.
+Expected result: AWS bridgepf-prod can handle the load without performance degradation.
 
 
 4. Configure new relic to send alerts to bridgeops@sagebase.org and verify that alerts are being sent out.
 Test: create a simple alert on new relic and trigger it.
 Expected result: notification is sent to bridgeops@sagebase.org
+
+
+5. Setup aws logging and verify that it is archived, rotated and the data is accessible from sumo logic account.
+
+
+6. Setup dashboards with the following metrics: request count, error count, error rate, latency, CPU utilization
+and memory usage.
+
