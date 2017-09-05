@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # login with consented user
-curl -i -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' -c cookie_mytestuser.txt -d '{ "study": "api", "email": "mytestuser@sagebase.org", "password": "password", "type": "Study" }' 'https://webservices-staging.sagebridge.org/v3/auth/signIn'
+curl -i -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' -c cookie_mytestuser.txt -d '{ "study": "api", "email": "mytestuser@sagebase.org", "password": "mypassword", "type": "Study" }' 'https://webservices-staging.sagebridge.org/v3/auth/signIn'
 echo ""
 # withdraw consent from study
 curl -i -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' -b cookie_mytestuser.txt -d '{"reason": "testing", "type": "Study"}' 'https://webservices-staging.sagebridge.org/v3/consents/withdraw'
