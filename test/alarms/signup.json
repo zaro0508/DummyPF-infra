@@ -15,7 +15,7 @@
    "languages": ["en"], 
    "study": "api", 
    "email": "mytestuser@sagebase.org", 
-   "password": "password", 
+   "password": "mypassword", 
    "consent": false,
    "type": "Study"
  }
