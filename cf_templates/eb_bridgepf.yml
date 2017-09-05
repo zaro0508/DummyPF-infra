@@ -399,7 +399,7 @@ Resources:
           Value: 'true'
         - Namespace: 'aws:elasticbeanstalk:cloudwatch:logs'
           OptionName: RetentionInDays
-          Value: '7'
+          Value: '90'
         - Namespace: 'aws:elasticbeanstalk:command'
           OptionName: DeploymentPolicy
           Value: 'RollingWithAdditionalBatch'
