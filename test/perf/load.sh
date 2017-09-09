@@ -2,7 +2,7 @@
 #set -x
 
 # sign in
-curl -i -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' -c cookie_mytestuser.txt -d '{ "study": "api", "email": "mytestuser@sagebase.org", "password": "H@ave2289", "type": "Study" }' 'https://webservices-staging.sagebridge.org/v3/auth/signIn'
+curl -i -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' -c cookie_mytestuser.txt -d '{ "study": "api", "email": "mytestuser@sagebase.org", "password": "mypassword", "type": "Study" }' 'https://webservices-staging.sagebridge.org/v3/auth/signIn'
 echo ""
 
 for i in `seq 1 500`;
