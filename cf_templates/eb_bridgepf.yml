@@ -1056,6 +1056,19 @@ Resources:
       Period: 3600
       Statistic: Sum
       Threshold: 30
+  AWSCWCpuUtilizationAlarm:
+    Type: "AWS::CloudWatch::Alarm"
+    Properties:
+      ActionsEnabled: true
+      AlarmActions:
+        - !Ref AWSSNSTopic
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      EvaluationPeriods: 1
+      MetricName: CPUUtilization
+      Namespace: AWS/EC2
+      Period: 900
+      Statistic: Average
+      Threshold: 80
   AWSLBSecurityGroup:
     Type: 'AWS::EC2::SecurityGroup'
     Properties:
