@@ -1,0 +1,26 @@
+# environment variables for Sage-Bionetworks/BridgePF-infra
+export AppDeployBucket_develop=org-sagebridge-bridgepf-deployment-bridgepf-develop
+export AppDeployBucket_prod=org-sagebridge-bridgepf-deployment-bridgepf-prod
+export AppDeployBucket_uat=org-sagebridge-bridgepf-deployment-bridgepf-uat
+export AwsAutoScalingGroupName_develop=awseb-e-2mpnfmyncv-stack-AWSEBAutoScalingGroup-1A7IBXCDT309B
+export AwsAutoScalingGroupName_prod=awseb-e-693tmvruhq-stack-AWSEBAutoScalingGroup-ZUQRSM8OL33O
+export AwsAutoScalingGroupName_uat=awseb-e-h3rbm6byci-stack-AWSEBAutoScalingGroup-HQ0KDVQJPW9E
+export AwsAutoScalingMaxSize_develop=3
+export AwsAutoScalingMaxSize_prod=6
+export AwsAutoScalingMaxSize_uat=3
+export AwsAutoScalingMinSize_develop=1
+export AwsAutoScalingMinSize_prod=3
+export AwsAutoScalingMinSize_uat=1
+export AwsDefaultVpcId=vpc-9c70bbf9
+export AwsLoadBalancerName_develop=awseb-e-2-AWSEBLoa-1W8N412DA6G28
+export AwsLoadBalancerName_prod=awseb-e-6-AWSEBLoa-15W6EU8CCBK5W
+export AwsLoadBalancerName_uat=awseb-e-h-AWSEBLoa-AY706DQW6GKJ
+export AwsSnsNotificationEndpoint_develop=bridgepf-develop@sagebase.org
+export AwsSnsNotificationEndpoint_prod=bridgeops@sagebase.org
+export AwsSnsNotificationEndpoint_uat=bridgepf-uat@sagebase.org
+export BridgeEnv_develop=dev
+export BridgeEnv_prod=prod
+export BridgeEnv_uat=uat
+export SysopsEmail_develop=Bridge\ IT\ \<bridge-testing+sysops@sagebase.org\>
+export SysopsEmail_prod=Bridge\ IT\ \<bridgeit@sagebase.org\>
+export SysopsEmail_uat=Bridge\ IT\ \<bridge-testing+sysops@sagebase.org\>
