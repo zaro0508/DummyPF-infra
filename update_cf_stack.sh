@@ -11,6 +11,7 @@ eval export "AwsLoadBalancerName=\$AwsLoadBalancerName_$TRAVIS_BRANCH"
 eval export "AwsSecretKeyConsents=\$AwsSecretKeyConsents_$TRAVIS_BRANCH"
 eval export "AwsSecretKeyUpload=\$AwsSecretKeyUpload_$TRAVIS_BRANCH"
 eval export "AwsSecretKeyUploadCms=\$AwsSecretKeyUploadCms_$TRAVIS_BRANCH"
+eval export "AwsSnsNotificationEndpoint=\$AwsSnsNotificationEndpoint_$TRAVIS_BRANCH"
 eval export "BridgeEnv=\$BridgeEnv_$TRAVIS_BRANCH"
 eval export "BridgeHealthcodeRedisKey=\$BridgeHealthcodeRedisKey_$TRAVIS_BRANCH"
 eval export "ElastiCacheUrl=\$ElastiCacheUrl_$TRAVIS_BRANCH"
@@ -41,7 +42,6 @@ ParameterKey=AwsAutoScalingMaxSize,ParameterValue=$AwsAutoScalingMaxSize \
 ParameterKey=AwsAutoScalingMinSize,ParameterValue=$AwsAutoScalingMinSize \
 ParameterKey=AwsDefaultVpcId,ParameterValue=$AwsDefaultVpcId \
 ParameterKey=AwsEbHealthReportingSystem,ParameterValue=enhanced \
-ParameterKey=AwsEbNotificationEndpoint,ParameterValue=$AwsEbNotificationEndpoint \
 ParameterKey=AwsKey,ParameterValue=$AwsKey \
 ParameterKey=AwsKeyUpload,ParameterValue=$AwsKeyUpload \
 ParameterKey=AwsKeyUploadCms,ParameterValue=$AwsKeyUploadCms \
@@ -50,6 +50,7 @@ ParameterKey=AwsSecretKey,ParameterValue=$AwsSecretKey \
 ParameterKey=AwsSecretKeyConsents,ParameterValue=$AwsSecretKeyConsents \
 ParameterKey=AwsSecretKeyUpload,ParameterValue=$AwsSecretKeyUpload \
 ParameterKey=AwsSecretKeyUploadCms,ParameterValue=$AwsSecretKeyUploadCms \
+ParameterKey=AwsSnsNotificationEndpoint,ParameterValue=$AwsSnsNotificationEndpoint \
 ParameterKey=BridgeEnv,ParameterValue=$BridgeEnv \
 ParameterKey=BridgeHealthcodeRedisKey,ParameterValue=$BridgeHealthcodeRedisKey \
 ParameterKey=BridgeUser,ParameterValue=heroku \

@@ -151,9 +151,9 @@ Parameters:
   AwsEbHealthReportingSystem:
     Type: String
     Default: param_place_holder
-  AwsEbNotificationEndpoint:
+  AwsSnsNotificationEndpoint:
     Type: String
-    Description: Email address for AWS EB notifications
+    Description: Email address for AWS SNS notifications
     Default: param_place_holder
     NoEcho: true
   AwsKey:
@@ -725,7 +725,7 @@ Resources:
     Properties:
       Subscription:
         -
-          Endpoint: !Ref AwsEbNotificationEndpoint
+          Endpoint: !Ref AwsSnsNotificationEndpoint
           Protocol: "email"
   AWSLogsLogGroup:
     Type: "AWS::Logs::LogGroup"
