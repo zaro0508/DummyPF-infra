@@ -24,7 +24,7 @@ install:
   - openssl aes-256-cbc -K $encrypted_ff3a2f371f92_key -iv $encrypted_ff3a2f371f92_iv -in crypt-key.enc -out crypt-key -d
   - /tmp/git-crypt-master/git-crypt unlock ./crypt-key
   - rm -rf crypt-key
-  - source aws_env_vars
+  - source env_vars && source env_vars.secret
   - /tmp/git-crypt-master/git-crypt lock
 # install aws cli
   - pip install --upgrade awscli
