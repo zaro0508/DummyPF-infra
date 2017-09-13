@@ -12,9 +12,7 @@ Result: Manually verified that all alarms that trigger on error codes, Errors an
 
 Post merge of https://github.com/Sage-Bionetworks/BridgePF/pull/1552
 Test: Ran test to trigger 4xx errors
-Result: Manually verified that 4xx errors are ignored by elastic beanstalk enhanced health monitors.  Also verified
-that 4XX notifications from Cloudwatch continue to fire as expected.  Only tested on aws bridgepf-develop since 1552 has
-not made it to aws bridgepf-prod yet.
+Result: Manually verified that 4xx errors are ignored by elastic beanstalk enhanced health monitors.  Also verified that 4XX notifications from Cloudwatch continue to fire as expected.
 
 3.
 Test: https://github.com/Sage-Bionetworks/BridgePF-infra/blob/develop/test/perf/load.sh
