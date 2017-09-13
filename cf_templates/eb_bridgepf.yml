@@ -402,7 +402,7 @@ Resources:
           Value: '90'
         - Namespace: 'aws:elasticbeanstalk:command'
           OptionName: DeploymentPolicy
-          Value: 'RollingWithAdditionalBatch'
+          Value: 'Immutable'
         - Namespace: 'aws:elasticbeanstalk:environment'
           OptionName: ServiceRole
           Value: !Ref AWSIAMServiceRole
