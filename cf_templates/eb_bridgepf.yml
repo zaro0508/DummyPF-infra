@@ -415,9 +415,6 @@ Resources:
         - Namespace: 'aws:elasticbeanstalk:healthreporting:system'
           OptionName: SystemType
           Value: !Ref AwsEbHealthReportingSystem
-        - Namespace: 'aws:elasticbeanstalk:sns:topics'
-          OptionName: Notification Endpoint
-          Value: !Ref AwsSnsNotificationEndpoint
         - Namespace: 'aws:elasticbeanstalk:hostmanager'
           OptionName: LogPublicationControl
           Value: true
