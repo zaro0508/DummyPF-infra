@@ -320,6 +320,12 @@ Parameters:
   JavaOpts:
     Type: String
     Default: param_place_holder
+  NewRelicApmAgent:
+    Type: String
+    Default: param_place_holder
+  NewRelicApmConfig:
+    Type: String
+    Default: param_place_holder
   NewRelicAppName:
     Type: String
     Default: param_place_holder
@@ -328,6 +334,9 @@ Parameters:
     Default: param_place_holder
     NoEcho: true
   NewRelicLog:
+    Type: String
+    Default: param_place_holder
+  NewRelicServerConfig:
     Type: String
     Default: param_place_holder
   RedisCloudUrl:
@@ -504,6 +513,12 @@ Resources:
           OptionName: JAVA_OPTS
           Value: !Ref JavaOpts
         - Namespace: 'aws:elasticbeanstalk:application:environment'
+          OptionName: NEW_RELIC_APM_AGENT
+          Value: !Ref NewRelicApmAgent
+        - Namespace: 'aws:elasticbeanstalk:application:environment'
+          OptionName: NEW_RELIC_APM_CONFIG
+          Value: !Ref NewRelicApmConfig
+        - Namespace: 'aws:elasticbeanstalk:application:environment'
           OptionName: NEW_RELIC_APP_NAME
           Value: !Ref NewRelicAppName
         - Namespace: 'aws:elasticbeanstalk:application:environment'
@@ -512,6 +527,9 @@ Resources:
         - Namespace: 'aws:elasticbeanstalk:application:environment'
           OptionName: NEW_RELIC_LOG
           Value: !Ref NewRelicLog
+        - Namespace: 'aws:elasticbeanstalk:application:environment'
+          OptionName: NEW_RELIC_SERVER_CONFIG
+          Value: !Ref NewRelicServerConfig
         - Namespace: 'aws:elasticbeanstalk:application:environment'
           OptionName: REDISCLOUD_URL
           Value: !Ref RedisCloudUrl

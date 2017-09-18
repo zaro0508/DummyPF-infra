@@ -65,10 +65,13 @@ ParameterKey=HibernateConnectionUrl,ParameterValue=$HibernateConnectionUrl \
 ParameterKey=HibernateConnectionUsername,ParameterValue=$HibernateConnectionUsername \
 ParameterKey=HibernateConnectionUsessl,ParameterValue=true \
 ParameterKey=HostPostfix,ParameterValue=-$DNS_HOSTNAME.$DNS_DOMAIN \
-ParameterKey=JavaOpts,ParameterValue='-Dnewrelic.config.file=/var/app/current/newrelic/newrelic.yml -javaagent:/var/app/current/lib/com.newrelic.agent.java.newrelic-agent-3.32.0.jar' \
+ParameterKey=JavaOpts,ParameterValue="-Dnewrelic.config.file=$NewRelicApmConfig\ -javaagent:$NewRelicApmAgent" \
+ParameterKey=NewRelicApmAgent,ParameterValue=$NewRelicApmAgent \
+ParameterKey=NewRelicApmConfig,ParameterValue=$NewRelicApmConfig \
 ParameterKey=NewRelicAppName,ParameterValue=$DNS_HOSTNAME \
 ParameterKey=NewRelicLicenseKey,ParameterValue=$NewRelicLicenseKey \
 ParameterKey=NewRelicLog,ParameterValue=stdout \
+ParameterKey=NewRelicServerConfig,ParameterValue=$NewRelicServerConfig \
 ParameterKey=RedisCloudUrl,ParameterValue=$RedisCloudUrl \
 ParameterKey=SnsKey,ParameterValue=$SnsKey \
 ParameterKey=SnsSecretKey,ParameterValue=$SnsSecretKey \
