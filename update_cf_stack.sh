@@ -65,7 +65,7 @@ ParameterKey=HibernateConnectionUrl,ParameterValue=$HibernateConnectionUrl \
 ParameterKey=HibernateConnectionUsername,ParameterValue=$HibernateConnectionUsername \
 ParameterKey=HibernateConnectionUsessl,ParameterValue=true \
 ParameterKey=HostPostfix,ParameterValue=-$DNS_HOSTNAME.$DNS_DOMAIN \
-ParameterKey=JavaOpts,ParameterValue="-Dnewrelic.config.file=$NewRelicApmConfig\ -javaagent:$NewRelicApmAgent" \
+ParameterKey=JavaOpts,ParameterValue=-Dnewrelic.config.file=$NewRelicApmConfig\ -javaagent:$NewRelicApmAgent \
 ParameterKey=NewRelicApmAgent,ParameterValue=$NewRelicApmAgent \
 ParameterKey=NewRelicApmConfig,ParameterValue=$NewRelicApmConfig \
 ParameterKey=NewRelicAppName,ParameterValue=$DNS_HOSTNAME \
