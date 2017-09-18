@@ -1,0 +1,49 @@
+These are results for aws_migration_test_plan.txt[1]
+
+All tests were run between 9/4/2017 and 9/8/2017
+
+1.
+Tests: https://github.com/Sage-Bionetworks/BridgeIntegrationTests
+Result: Ran all tests against AWS bridgepf-prod and all tests passed.
+
+2.
+Tests: https://github.com/Sage-Bionetworks/BridgePF-infra/tree/develop/test/alarms
+Result: Manually verified that all alarms that trigger on error codes, Errors and Warnings work as expected.
+
+Post merge of https://github.com/Sage-Bionetworks/BridgePF/pull/1552
+Test: Ran test to trigger 4xx errors
+Result: Manually verified that 4xx errors are ignored by elastic beanstalk enhanced health monitors.  Also verified that 4XX notifications from Cloudwatch continue to fire as expected.
+
+3.
+Test: https://github.com/Sage-Bionetworks/BridgePF-infra/blob/develop/test/perf/load.sh
+Test specs: ~600 request/min, ~20K requests over 30 mins.
+
+Result: average latency ~45ms, average cpu utilization ~4%, 100% 2XX response, 0% errors, 12MB Max Network In, 11MB Max Network Out
+        APDEX=1.0, used memory < 200 MB
+
+4.
+Pre merge of https://github.com/Sage-Bionetworks/BridgePF/pull/1545
+Test: Ran test to trigger 4xx errors
+Result: Manually verified that notifications were sent to bridgeops@sagebase.org
+
+Post merge of https://github.com/Sage-Bionetworks/BridgePF/pull/1545
+Test: Ran test to trigger 4xx errors
+Result: Manually verified that 4xx errors are ignored by new relic. Also verified that new relic alerts from degraded apdex
+ and service down continues to fire as expected.
+
+
+5.
+logs archived and rotated:
+	https://s3.console.aws.amazon.com/s3/buckets/elasticbeanstalk-us-east-1-649232250620/resources/environments/logs/publish/e-693tmvruhq/
+
+logs are accessible from sumo login: _source=BridgePF-prod-AWS
+Verified with queries for status codes, errors and warnings.
+
+6.
+cloudwatch dashboards added with PR: https://github.com/Sage-Bionetworks/BridgePF-infra/pull/22
+
+Additional dashboards for error rate, and throughput and jvm memory usage are in new relic.
+
+
+References:
+[1] https://github.com/Sage-Bionetworks/BridgePF-infra/blob/develop/test/aws_migration_test_plan.txt
