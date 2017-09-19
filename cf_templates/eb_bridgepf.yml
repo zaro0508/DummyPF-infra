@@ -320,9 +320,6 @@ Parameters:
   JavaOpts:
     Type: String
     Default: param_place_holder
-  NewRelicApmAgent:
-    Type: String
-    Default: param_place_holder
   NewRelicAppName:
     Type: String
     Default: param_place_holder
@@ -506,9 +503,6 @@ Resources:
         - Namespace: 'aws:elasticbeanstalk:application:environment'
           OptionName: JAVA_OPTS
           Value: !Ref JavaOpts
-        - Namespace: 'aws:elasticbeanstalk:application:environment'
-          OptionName: NEW_RELIC_APM_AGENT
-          Value: !Ref NewRelicApmAgent
         - Namespace: 'aws:elasticbeanstalk:application:environment'
           OptionName: NEW_RELIC_APP_NAME
           Value: !Ref NewRelicAppName

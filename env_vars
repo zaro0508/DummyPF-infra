@@ -21,7 +21,6 @@ export AwsSnsNotificationEndpoint_uat=bridgepf-uat@sagebase.org
 export BridgeEnv_develop=dev
 export BridgeEnv_prod=prod
 export BridgeEnv_uat=uat
-export NewRelicApmAgent=/usr/local/lib/newrelic/com.newrelic.agent.java.newrelic-agent.jar
 export SysopsEmail_develop=Bridge\ IT\ \<bridge-testing+sysops@sagebase.org\>
 export SysopsEmail_prod=Bridge\ IT\ \<bridgeit@sagebase.org\>
 export SysopsEmail_uat=Bridge\ IT\ \<bridge-testing+sysops@sagebase.org\>
