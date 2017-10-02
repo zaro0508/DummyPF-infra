@@ -57,3 +57,5 @@ have your own GPG key[6] and you must request access by a maintainer of this pro
 [5] https://github.com/AGWA/git-crypt
 
 [6] https://help.github.com/articles/generating-a-new-gpg-key
+
+- October 2, 2017
