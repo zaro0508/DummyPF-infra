@@ -387,7 +387,7 @@ Resources:
           Value: true
         - Namespace: 'aws:autoscaling:updatepolicy:rollingupdate'
           OptionName: RollingUpdateType
-          Value: 'Health'
+          Value: 'Immutable'
         - Namespace: 'aws:elasticbeanstalk:application'
           OptionName: Application Healthcheck URL
           Value: !Ref AppHealthcheckUrl
