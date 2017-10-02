@@ -21,6 +21,6 @@ export AwsSnsNotificationEndpoint_uat=bridgepf-uat@sagebase.org
 export BridgeEnv_develop=dev
 export BridgeEnv_prod=prod
 export BridgeEnv_uat=uat
-export SysopsEmail_develop=Bridge\ IT\ \<bridge-testing+sysops@sagebase.org\>
+export SysopsEmail_develop=BridgeDev\ IT\ \<bridge-testing+sysops@sagebase.org\>
 export SysopsEmail_prod=Bridge\ IT\ \<bridgeit@sagebase.org\>
 export SysopsEmail_uat=Bridge\ IT\ \<bridge-testing+sysops@sagebase.org\>
