@@ -327,9 +327,6 @@ Parameters:
     Type: String
     Default: param_place_holder
     NoEcho: true
-  NewRelicLog:
-    Type: String
-    Default: param_place_holder
   RedisCloudUrl:
     Type: String
     Default: param_place_holder
@@ -509,9 +506,6 @@ Resources:
         - Namespace: 'aws:elasticbeanstalk:application:environment'
           OptionName: NEW_RELIC_LICENSE_KEY
           Value: !Ref NewRelicLicenseKey
-        - Namespace: 'aws:elasticbeanstalk:application:environment'
-          OptionName: NEW_RELIC_LOG
-          Value: !Ref NewRelicLog
         - Namespace: 'aws:elasticbeanstalk:application:environment'
           OptionName: REDISCLOUD_URL
           Value: !Ref RedisCloudUrl

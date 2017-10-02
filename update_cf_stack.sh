@@ -68,7 +68,6 @@ ParameterKey=HostPostfix,ParameterValue=-$DNS_HOSTNAME.$DNS_DOMAIN \
 ParameterKey=JavaOpts,ParameterValue='-Dnewrelic.config.file=/var/app/current/newrelic/newrelic.yml -javaagent:/usr/local/lib/newrelic/com.newrelic.agent.java.newrelic-agent.jar' \
 ParameterKey=NewRelicAppName,ParameterValue=$DNS_HOSTNAME \
 ParameterKey=NewRelicLicenseKey,ParameterValue=$NewRelicLicenseKey \
-ParameterKey=NewRelicLog,ParameterValue=stdout \
 ParameterKey=RedisCloudUrl,ParameterValue=$RedisCloudUrl \
 ParameterKey=SnsKey,ParameterValue=$SnsKey \
 ParameterKey=SnsSecretKey,ParameterValue=$SnsSecretKey \
