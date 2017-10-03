@@ -1063,6 +1063,19 @@ Resources:
       Period: 900
       Statistic: Average
       Threshold: 80
+  AWSCWEnvironmentHealthAlarm:
+    Type: "AWS::CloudWatch::Alarm"
+    Properties:
+      ActionsEnabled: true
+      AlarmActions:
+        - !Ref AWSSNSTopic
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      EvaluationPeriods: 1
+      MetricName: EnvironmentHealth
+      Namespace: AWS/ElasticBeanstalk
+      Period: 900
+      Statistic: Maximum
+      Threshold: 25
   AWSLBSecurityGroup:
     Type: 'AWS::EC2::SecurityGroup'
     Properties:
@@ -1200,6 +1213,15 @@ Resources:
           - >-
             "view": "timeSeries", "stacked": true, "period":300,
             "stat":"Average", "region":"us-east-1", "title":"InstanceHealth"}},
+          - >-
+            {"type":"metric", "x":0, "y":0, "width":12, "height":6,
+            "properties":{"metrics":[[ "AWS/ElasticBeanstalk", "EnvironmentHealth",
+            "EnvironmentName","
+          - !Ref AWS::StackName
+          - '", {"stat": "Maximum"}]],'
+          - >-
+            "view": "timeSeries", "stacked": true, "period":300,
+            "stat":"Average", "region":"us-east-1", "title":"EnvironmentHealth"}},
           - >-
             {"type":"metric", "x":0, "y":0, "width":12, "height":6,
             "properties":{"metrics":[[ "AWS/ELB", "HTTPCode_ELB_4XX",
