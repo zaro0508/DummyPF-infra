@@ -159,6 +159,9 @@ Parameters:
   AwsKey:
     Type: String
     Default: param_place_holder
+  AwsKeyConsents:
+    Type: String
+    Default: param_place_holder
   AwsKeyUpload:
     Type: String
     Default: param_place_holder
@@ -449,6 +452,9 @@ Resources:
         - Namespace: 'aws:elasticbeanstalk:application:environment'
           OptionName: AWS_KEY
           Value: !Ref AwsKey
+        - Namespace: 'aws:elasticbeanstalk:application:environment'
+          OptionName: AWS_KEY_CONSENTS
+          Value: !Ref AwsKeyConsents
         - Namespace: 'aws:elasticbeanstalk:application:environment'
           OptionName: AWS_KEY_UPLOAD
           Value: !Ref AwsKeyUpload
