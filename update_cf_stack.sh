@@ -6,6 +6,7 @@ eval export "AwsAutoScalingGroupName=\$AwsAutoScalingGroupName_$TRAVIS_BRANCH"
 eval export "AwsAutoScalingMaxSize=\$AwsAutoScalingMaxSize_$TRAVIS_BRANCH"
 eval export "AwsAutoScalingMinSize=\$AwsAutoScalingMinSize_$TRAVIS_BRANCH"
 eval export "AwsKeyUpload=\$AwsKeyUpload_$TRAVIS_BRANCH"
+eval export "AwsKeyConsents=\$AwsKeyConsents_$TRAVIS_BRANCH"
 eval export "AwsKeyUploadCms=\$AwsKeyUploadCms_$TRAVIS_BRANCH"
 eval export "AwsLoadBalancerName=\$AwsLoadBalancerName_$TRAVIS_BRANCH"
 eval export "AwsSecretKeyConsents=\$AwsSecretKeyConsents_$TRAVIS_BRANCH"
@@ -43,6 +44,7 @@ ParameterKey=AwsAutoScalingMinSize,ParameterValue=$AwsAutoScalingMinSize \
 ParameterKey=AwsDefaultVpcId,ParameterValue=$AwsDefaultVpcId \
 ParameterKey=AwsEbHealthReportingSystem,ParameterValue=enhanced \
 ParameterKey=AwsKey,ParameterValue=$AwsKey \
+ParameterKey=AwsKeyConsents,ParameterValue=$AwsKeyConsents \
 ParameterKey=AwsKeyUpload,ParameterValue=$AwsKeyUpload \
 ParameterKey=AwsKeyUploadCms,ParameterValue=$AwsKeyUploadCms \
 ParameterKey=AwsLoadBalancerName,ParameterValue=$AwsLoadBalancerName \
