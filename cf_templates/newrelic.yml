@@ -2,14 +2,24 @@
 #The resources in this template only need to be created once.
 #
 #Usage:
-#  aws --profile bridge.admin --region us-east-1 \                                                                                                               develop ◼
+#  aws --profile bridge.admin --region us-east-1 \
 #  cloudformation create-stack \
 #  --stack-name newrelic \
 #  --on-failure DELETE \
 #  --capabilities CAPABILITY_NAMED_IAM \
-#  --template-body file://cf_templates/newrelic.yml
+#  --template-body file://cf_templates/newrelic.yml \
+#  --parameters \
+#  ParameterKey=NewRelicAccountId,ParameterValue=123456789012 \
+#  ParameterKey=NewRelicExternalId,ParameterValue=1234567
 Description: Setup infra resources for New Relic integrations
 AWSTemplateFormatVersion: 2010-09-09
+Parameters:
+  NewRelicAccountId:
+    Type: String
+    NoEcho: true
+  NewRelicExternalId:
+    Type: String
+    NoEcho: true
 Resources:
   AWSIAMNewRelicBudgetPolicy:
     Type: "AWS::IAM::Policy"
@@ -34,12 +44,16 @@ Resources:
           - Effect: Allow
             Principal:
               AWS:
-                - arn:aws:iam::754728514883:root
+                - !Join
+                  - ''
+                  - - 'arn:aws:iam::'
+                    - !Ref NewRelicAccountId
+                    - ':root'
             Action:
               - 'sts:AssumeRole'
             Condition:
               StringEquals:
-                sts:ExternalId: 1690646
+                sts:ExternalId: !Ref NewRelicExternalId
       Path: /
       ManagedPolicyArns:
         - 'arn:aws:iam::aws:policy/ReadOnlyAccess'
