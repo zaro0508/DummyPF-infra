@@ -71,6 +71,34 @@ Outputs:
           - RedisEndpoint.Port
     Export:
       Name: !Sub '${AWS::StackName}-ElastiCacheUrl'
+  AWSIAMBridgepfServiceUserAccessKeyId:
+    Value: !Ref AWSIAMBridgepfServiceUserAccessKey
+    Export:
+      Name: !Sub '${AWS::StackName}-BridgepfServiceUserAccessKey'
+  AWSIAMBridgepfServiceUserSecretAccessKeyId:
+    Value: !GetAtt AWSIAMBridgepfServiceUserAccessKey.SecretAccessKey
+    Export:
+      Name: !Sub '${AWS::StackName}-BridgepfServiceUserSecretAccessKeyId'
+  AttachmentBucket:
+    Value: !Ref AttachmentBucket
+    Export:
+      Name: !Sub '${AWS::StackName}-AttachmentBucket'
+  ConsentsBucket:
+    Value: !Ref ConsentsBucket
+    Export:
+      Name: !Sub '${AWS::StackName}-ConsentsBucket'
+  UploadBucket:
+    Value: !Ref UploadBucket
+    Export:
+      Name: !Sub '${AWS::StackName}-UploadBucket'
+  UploadCmsCertBucket:
+    Value: !Ref UploadCmsCertBucket
+    Export:
+      Name: !Sub '${AWS::StackName}-UploadCmsCertBucket'
+  UploadCmsPrivBucket:
+    Value: !Ref UploadCmsPrivBucket
+    Export:
+      Name: !Sub '${AWS::StackName}-UploadCmsPrivBucket'
 Mappings:
   AWSLoadbalancerAccount:
     us-east-1:
@@ -328,6 +356,21 @@ Parameters:
   WebservicesUrl:
     Type: String
     Default: param_place_holder
+  AttachmentBucket:
+    Type: String
+    Default: param_place_holder
+  ConsentsBucket:
+    Type: String
+    Default: param_place_holder
+  UploadBucket:
+    Type: String
+    Default: param_place_holder
+  UploadCmsCertBucket:
+    Type: String
+    Default: param_place_holder
+  UploadCmsPrivBucket:
+    Type: String
+    Default: param_place_holder
 Resources:
   AWSEBConfigurationTemplate:
     Type: 'AWS::ElasticBeanstalk::ConfigurationTemplate'
@@ -454,6 +497,12 @@ Resources:
         - Namespace: 'aws:elasticbeanstalk:application:environment'
           OptionName: BRIDGE_USER
           Value: !Ref BridgeUser
+        - Namespace: 'aws:elasticbeanstalk:application:environment'
+          OptionName: BRIDGEPF_SERVICE_USER_KEY
+          Value: !Ref AWSIAMBridgepfServiceUserAccessKey
+        - Namespace: 'aws:elasticbeanstalk:application:environment'
+          OptionName: BRIDGEPF_SERVICE_USER_SECRET_KEY
+          Value: !GetAtt AWSIAMBridgepfServiceUserAccessKey.SecretAccessKey
         - Namespace: 'aws:elasticbeanstalk:application:environment'
           OptionName: EMAIL_UNSUBSCRIBE_TOKEN
           Value: !Ref EmailUnsubscribeToken
@@ -1124,3 +1173,84 @@ Resources:
           - >-
             "view": "timeSeries", "stacked": true, "period":300, "stat":"Sum",
             "region":"us-east-1", "title":"ClientErrors"}}]}
+  IAMBridgepfS3ManagedPolicy:
+    Type: "AWS::IAM::ManagedPolicy"
+    Properties:
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Sid: ListAccess
+            Action:
+              - 's3:ListBucket'
+              - 's3:GetBucketLocation'
+            Effect: Allow
+            Resource:
+              - !Join
+                - ''
+                - - 'arn:aws:s3:::'
+                  - !Ref UploadBucket
+              - !Join
+                - ''
+                - - 'arn:aws:s3:::'
+                  - !Ref AttachmentBucket
+              - !Join
+                - ''
+                - - 'arn:aws:s3:::'
+                  - !Ref UploadCmsCertBucket
+              - !Join
+                - ''
+                - - 'arn:aws:s3:::'
+                  - !Ref UploadCmsPrivBucket
+              - !Join
+                - ''
+                - - 'arn:aws:s3:::'
+                  - !Ref ConsentsBucket
+          - Sid: ModAccess
+            Action:
+              - 's3:PutObject'
+              - 's3:PutObjectAcl'
+              - 's3:GetObject'
+              - 's3:GetObjectAcl'
+              - 's3:DeleteObject'
+            Effect: Allow
+            Resource:
+              - !Join
+                - ''
+                - - 'arn:aws:s3:::'
+                  - !Ref UploadBucket
+                  - /*
+              - !Join
+                - ''
+                - - 'arn:aws:s3:::'
+                  - !Ref AttachmentBucket
+                  - /*
+              - !Join
+                - ''
+                - - 'arn:aws:s3:::'
+                  - !Ref UploadCmsCertBucket
+                  - /*
+              - !Join
+                - ''
+                - - 'arn:aws:s3:::'
+                  - !Ref UploadCmsPrivBucket
+                  - /*
+              - !Join
+                - ''
+                - - 'arn:aws:s3:::'
+                  - !Ref ConsentsBucket
+                  - /*
+  # App Service User
+  AWSIAMBridgepfServiceUserAccessKey:
+    Type: 'AWS::IAM::AccessKey'
+    Properties:
+      UserName: !Ref AWSIAMBridgepfServiceUser
+  AWSIAMBridgepfServiceUser:
+    Type: 'AWS::IAM::User'
+    Properties:
+      Groups:
+        - !Ref AWSIAMBridgepfServiceUserGroup
+  AWSIAMBridgepfServiceUserGroup:
+    Type: 'AWS::IAM::Group'
+    Properties:
+      ManagedPolicyArns:
+        - !Ref IAMBridgepfS3ManagedPolicy
