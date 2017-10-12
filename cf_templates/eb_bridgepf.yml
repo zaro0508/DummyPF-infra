@@ -71,34 +71,6 @@ Outputs:
           - RedisEndpoint.Port
     Export:
       Name: !Sub '${AWS::StackName}-ElastiCacheUrl'
-  AWSIAMUserAccessKeyId:
-    Value: !Ref AWSIAMUserAccessKey
-    Export:
-      Name: !Sub '${AWS::StackName}-UserAccessKeyId'
-  AWSIAMUserSecretAccessKeyId:
-    Value: !GetAtt AWSIAMUserAccessKey.SecretAccessKey
-    Export:
-      Name: !Sub '${AWS::StackName}-SecretAccessKeyId'
-  AWSS3AttachmentBucket:
-    Value: !Ref AWSS3AttachmentBucket
-    Export:
-      Name: !Sub '${AWS::StackName}-AttachmentBucket'
-  AWSS3ConsentsBucket:
-    Value: !Ref AWSS3ConsentsBucket
-    Export:
-      Name: !Sub '${AWS::StackName}-ConsentsBucket'
-  AWSS3UploadBucket:
-    Value: !Ref AWSS3UploadBucket
-    Export:
-      Name: !Sub '${AWS::StackName}-UploadBucket'
-  AWSS3UploadCmsCertBucket:
-    Value: !Ref AWSS3UploadCmsCertBucket
-    Export:
-      Name: !Sub '${AWS::StackName}-UploadCmsCertBucket'
-  AWSS3UploadCmsPrivBucket:
-    Value: !Ref AWSS3UploadCmsPrivBucket
-    Export:
-      Name: !Sub '${AWS::StackName}-UploadCmsPrivBucket'
 Mappings:
   AWSLoadbalancerAccount:
     us-east-1:
@@ -551,116 +523,10 @@ Resources:
       Tier:
         Name: WebServer
         Type: Standard
-
   AWSS3AppDeployBucket:
     Type: 'AWS::S3::Bucket'
     Properties:
       BucketName: !Ref AppDeployBucket
-  AWSS3UploadBucket:
-    Type: 'AWS::S3::Bucket'
-  AWSS3AttachmentBucket:
-    Type: 'AWS::S3::Bucket'
-  AWSS3UploadCmsCertBucket:
-    Type: 'AWS::S3::Bucket'
-  AWSS3UploadCmsPrivBucket:
-    Type: 'AWS::S3::Bucket'
-  AWSS3ConsentsBucket:
-    Type: 'AWS::S3::Bucket'
-  AWSS3BucketPolicy:
-    Type: 'AWS::IAM::Policy'
-    Properties:
-      PolicyName: !Join
-        - '-'
-        - - !Ref AWSEBApplication
-          - bucket-policy
-      Groups:
-        - !Ref AWSIAMGroup
-      PolicyDocument:
-        Id: Give access to user
-        Statement:
-          - Sid: ListAccess
-            Action:
-              - 's3:ListBucket'
-              - 's3:GetBucketLocation'
-            Effect: Allow
-            Resource:
-              - !Join
-                - ''
-                - - 'arn:aws:s3:::'
-                  - !Ref AWSS3AppDeployBucket
-              - !Join
-                - ''
-                - - 'arn:aws:s3:::'
-                  - !Ref AWSS3UploadBucket
-              - !Join
-                - ''
-                - - 'arn:aws:s3:::'
-                  - !Ref AWSS3AttachmentBucket
-              - !Join
-                - ''
-                - - 'arn:aws:s3:::'
-                  - !Ref AWSS3UploadCmsCertBucket
-              - !Join
-                - ''
-                - - 'arn:aws:s3:::'
-                  - !Ref AWSS3UploadCmsPrivBucket
-              - !Join
-                - ''
-                - - 'arn:aws:s3:::'
-                  - !Ref AWSS3ConsentsBucket
-          - Sid: ModAccess
-            Action:
-              - 's3:PutObject'
-              - 's3:PutObjectAcl'
-              - 's3:GetObject'
-              - 's3:GetObjectAcl'
-              - 's3:DeleteObject'
-            Effect: Allow
-            Resource:
-              - !Join
-                - ''
-                - - 'arn:aws:s3:::'
-                  - !Ref AWSS3AppDeployBucket
-                  - /*
-              - !Join
-                - ''
-                - - 'arn:aws:s3:::'
-                  - !Ref AWSS3UploadBucket
-                  - /*
-              - !Join
-                - ''
-                - - 'arn:aws:s3:::'
-                  - !Ref AWSS3AttachmentBucket
-                  - /*
-              - !Join
-                - ''
-                - - 'arn:aws:s3:::'
-                  - !Ref AWSS3UploadCmsCertBucket
-                  - /*
-              - !Join
-                - ''
-                - - 'arn:aws:s3:::'
-                  - !Ref AWSS3UploadCmsPrivBucket
-                  - /*
-              - !Join
-                - ''
-                - - 'arn:aws:s3:::'
-                  - !Ref AWSS3ConsentsBucket
-                  - /*
-  AWSIAMUserAccessKey:
-    Type: 'AWS::IAM::AccessKey'
-    Properties:
-      UserName: !Ref AWSIAMUser
-  AWSIAMUser:
-    Type: 'AWS::IAM::User'
-    Properties:
-      Groups:
-        - !Ref AWSIAMGroup
-  AWSIAMGroup:
-    Type: 'AWS::IAM::Group'
-    Properties:
-      ManagedPolicyArns:
-        - arn:aws:iam::aws:policy/AWSDeviceFarmFullAccess
   AWSR53RecordSet:
     Type: 'AWS::Route53::RecordSet'
     Properties:
