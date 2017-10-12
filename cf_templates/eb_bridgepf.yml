@@ -1093,7 +1093,9 @@ Resources:
           - '", {"stat": "Maximum"}]],'
           - >-
             "view": "timeSeries", "stacked": true, "period":300,
-            "stat":"Average", "region":"us-east-1", "title":"EnvironmentHealth"}},
+            "stat":"Maximum", "region":"us-east-1", "title":"EnvironmentHealth",
+            "annotations": { "horizontal": [{ "label": "Severe", "value": 25 },
+            { "label": "Degraded", "value": 20 }, { "label": "Warning", "value": 15 }]}}},
           - >-
             {"type":"metric", "x":0, "y":0, "width":12, "height":6,
             "properties":{"metrics":[[ "AWS/ELB", "HTTPCode_ELB_4XX",
