@@ -897,7 +897,7 @@ Resources:
         - - /aws/elasticbeanstalk
           - !Ref 'AWS::StackName'
           - var/log/web-1.log
-      FilterPattern: '{(( $.status = 412 ) && ( $.uri != "*/signIn*" )) && (( $.status = 412 ) && ( $.uri != "*/verifyEmail*" ))}'
+      FilterPattern: '{( $.status = 412 ) && ( $.uri != "*/signIn*" ) && ( $.uri != "*/verifyEmail*" )}'
       MetricTransformations:
         -
           MetricValue: "1"
