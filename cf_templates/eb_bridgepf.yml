@@ -1081,10 +1081,10 @@ Resources:
             "properties":{"metrics":[[ "AWS/ELB", "HealthyHostCount",
             "LoadBalancerName","
           - !Ref AwsLoadBalancerName
-          - '", {"stat": "Average"}]],'
+          - '", {"stat": "Maximum"}]],'
           - >-
             "view": "timeSeries", "stacked": true, "period":300,
-            "stat":"Average", "region":"us-east-1", "title":"InstanceHealth"}},
+            "stat":"Maximum", "region":"us-east-1", "title":"HealthyHostCount"}},
           - >-
             {"type":"metric", "x":0, "y":0, "width":12, "height":6,
             "properties":{"metrics":[[ "AWS/ElasticBeanstalk", "EnvironmentHealth",
