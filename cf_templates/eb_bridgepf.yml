@@ -546,6 +546,15 @@ Resources:
         - !GetAtt
           - AWSEBEnvironment
           - EndpointURL
+  AWSR53HealthCheck:
+    Type: "AWS::Route53::HealthCheck"
+    DependsOn: AWSR53RecordSet
+    Properties:
+      HealthCheckConfig:
+        FullyQualifiedDomainName: !GetAtt AWSEBEnvironment.EndpointURL
+        Port: "443"
+        Type: "HTTPS"
+        ResourcePath: "/?study=api"
   AWSIAMServiceRole:
     Type: 'AWS::IAM::Role'
     Properties:
