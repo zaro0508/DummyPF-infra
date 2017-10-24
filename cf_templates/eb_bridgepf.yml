@@ -555,6 +555,13 @@ Resources:
         Port: "443"
         Type: "HTTPS"
         ResourcePath: "/?study=api"
+      HealthCheckTags:
+        -
+          Key: "Name"
+          Value: !Join
+            - '-'
+            - - !Ref 'AWS::StackName'
+              - AWSR53HealthCheck
   AWSIAMServiceRole:
     Type: 'AWS::IAM::Role'
     Properties:
