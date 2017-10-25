@@ -1256,6 +1256,41 @@ Resources:
                 - - 'arn:aws:s3:::'
                   - !Ref ConsentsBucket
                   - /*
+  IAMBridgepfECManagedPolicy:
+    Type: 'AWS::IAM::ManagedPolicy'
+    Description: Provide full access to ElastiCache except for delete
+    Properties:
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+          - Effect: Deny
+            Action:
+              - elasticache:DeleteCacheCluster
+              - elasticache:DeleteCacheParameterGroup
+              - elasticache:DeleteCacheSecurityGroup
+              - elasticache:DeleteCacheSubnetGroup
+              - elasticache:DeleteReplicationGroup
+              - elasticache:DeleteSnapshot
+            Resource: "*"
+          - Effect: Allow
+            Action:
+              - elasticache:*
+            Resource: "*"
+  IAMBridgepfSQSManagedPolicy:
+    Type: 'AWS::IAM::ManagedPolicy'
+    Description: Provide full access to SQA except for create
+    Properties:
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+          - Effect: Deny
+            Action:
+              - sqs:CreateQueue
+            Resource: "*"
+          - Effect: Allow
+            Action:
+              - sqs:*
+            Resource: "*"
   # App Service User
   AWSIAMBridgepfServiceUserAccessKey:
     Type: 'AWS::IAM::AccessKey'
@@ -1271,3 +1306,9 @@ Resources:
     Properties:
       ManagedPolicyArns:
         - !Ref IAMBridgepfS3ManagedPolicy
+        - arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess
+        - arn:aws:iam::aws:policy/AmazonSNSFullAccess
+        - arn:aws:iam::aws:policy/AmazonSESFullAccess
+        - arn:aws:iam::aws:policy/AmazonRDSFullAccess
+        - !Ref IAMBridgepfECManagedPolicy
+        - !Ref IAMBridgepfSQSManagedPolicy
