@@ -1013,6 +1013,23 @@ Resources:
       Period: 900
       Statistic: Maximum
       Threshold: 25
+  AWSCWHealthCheckStatusAlarm:
+    Type: "AWS::CloudWatch::Alarm"
+    Properties:
+      ActionsEnabled: true
+      AlarmActions:
+        - !Ref AWSSNSTopic
+      ComparisonOperator: LessThanThreshold
+      EvaluationPeriods: 1
+      MetricName: HealthCheckStatus
+      Namespace: AWS/Route53
+      Dimensions:
+        -
+          "Name": "HealthCheckId"
+          "Value": !Ref AWSR53HealthCheck
+      Period: 300
+      Statistic: Average
+      Threshold: 1
   AWSLBSecurityGroup:
     Type: 'AWS::EC2::SecurityGroup'
     Properties:
