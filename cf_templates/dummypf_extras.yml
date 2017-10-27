@@ -1,0 +1,39 @@
+# This is a template for creating extra resources required by the app
+#   aws --profile aws.admin.user --region us-east-1 cloudformation \
+#     create-stack --stack-name foo-extras --capabilities CAPABILITY_NAMED_IAM \
+#     --on-failure DELETE --template-body file://cf_templates/foo_extras.yml \
+#     --parameters ParameterKey=AwsDefaultVpcId,ParameterValue=vpc-12345678
+Description: Testing
+AWSTemplateFormatVersion: 2010-09-09
+Parameters:
+  AwsDefaultVpcId:
+    Description: The AWS account's default VPC id
+    Type: String
+    Default: param_place_holder
+Resources:
+  AWSR53DummyPFHostedZone:
+    Type: "AWS::Route53::HostedZone"
+    Properties:
+      HostedZoneConfig:
+        Comment: "Hosted zone for sagebridge.org"
+      Name: "sagebridge.org"
+      VPCs:
+        -
+          VPCId: !Ref AwsDefaultVpcId
+          VPCRegion: "us-east-1"
+      HostedZoneTags:
+        -
+          Key: "SampleKey1"
+          Value: "SampleValue1"
+  AWSS3AppDeployBucket:
+    Type: 'AWS::S3::Bucket'
+  AWSS3UploadBucket:
+    Type: 'AWS::S3::Bucket'
+  AWSS3AttachmentBucket:
+    Type: 'AWS::S3::Bucket'
+  AWSS3UploadCmsCertBucket:
+    Type: 'AWS::S3::Bucket'
+  AWSS3UploadCmsPrivBucket:
+    Type: 'AWS::S3::Bucket'
+  AWSS3ConsentsBucket:
+    Type: 'AWS::S3::Bucket'
