@@ -8,16 +8,16 @@
 # initial creation:
 #   aws --profile aws.admin.user --region us-east-1 cloudformation \
 #     create-stack --stack-name foo-develop --capabilities CAPABILITY_NAMED_IAM \
-#     --on-failure DELETE --template-body file://cf_templates/cf_bridgepf.yml \
-#     --parameters ParameterKey=AppDeployBucket,ParameterValue=org-sagebridge-bridgepf-deployment-foo-develop \
+#     --on-failure DELETE --template-body file://cf_templates/cf_dummypf.yml \
+#     --parameters ParameterKey=AppDeployBucket,ParameterValue=org-sagebridge-dummypf-deployment-foo-develop \
 #     --parameters ParameterKey=EC2InstanceType,ParameterValue=t2.micro \
 #     ...[all params neeeded for app]
 #
 # updates:
 #   aws --profile aws.bootstrap.user --region us-east-1 cloudformation \
 #     update-stack --stack-name foo-develop --capabilities CAPABILITY_NAMED_IAM \
-#     --template-body file://cf_templates/cf_bridgepf.yml \
-#     --parameters ParameterKey=AppDeployBucket,ParameterValue=org-sagebridge-bridgepf-deployment-foo-develop \
+#     --template-body file://cf_templates/cf_dummypf.yml \
+#     --parameters ParameterKey=AppDeployBucket,ParameterValue=org-sagebridge-dummypf-deployment-foo-develop \
 #     --parameters ParameterKey=EC2InstanceType,ParameterValue=t2.micro \
 #     ...[all params neeeded for app]
 #
