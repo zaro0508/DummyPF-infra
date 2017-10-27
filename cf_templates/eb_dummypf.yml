@@ -62,13 +62,9 @@ Outputs:
     Value: !Join
       - ''
       - - 'redis://'
-        - !GetAtt
-          - AWSECCacheCluster
-          - RedisEndpoint.Address
+        - !GetAtt AWSECCacheCluster.RedisEndpoint.Address
         - ':'
-        - !GetAtt
-          - AWSECCacheCluster
-          - RedisEndpoint.Port
+        - !GetAtt AWSECCacheCluster.RedisEndpoint.Port
     Export:
       Name: !Sub '${AWS::StackName}-ElastiCacheUrl'
   AWSIAMDummypfServiceUserAccessKeyId:
@@ -301,9 +297,6 @@ Parameters:
       - cache.r3.2xlarge
       - cache.r3.4xlarge
       - cache.r3.8xlarge
-  ElastiCacheUrl:
-    Type: String
-    Default: param_place_holder
   HibernateConnectionPassword:
     Type: String
     Default: param_place_holder
@@ -330,9 +323,6 @@ Parameters:
     Type: String
     Default: param_place_holder
     NoEcho: true
-  RedisCloudUrl:
-    Type: String
-    Default: param_place_holder
   SnsKey:
     Type: String
     Default: param_place_holder
@@ -508,7 +498,12 @@ Resources:
           Value: !Ref EmailUnsubscribeToken
         - Namespace: 'aws:elasticbeanstalk:application:environment'
           OptionName: ELASTICACHE_URL
-          Value: !Ref ElastiCacheUrl
+          Value: !Join
+            - ''
+            - - 'redis://'
+              - !GetAtt AWSECCacheCluster.RedisEndpoint.Address
+              - ':'
+              - !GetAtt AWSECCacheCluster.RedisEndpoint.Port
         - Namespace: 'aws:elasticbeanstalk:application:environment'
           OptionName: HIBERNATE_CONNECTION_PASSWORD
           Value: !Ref HibernateConnectionPassword
@@ -535,7 +530,12 @@ Resources:
           Value: !Ref NewRelicLicenseKey
         - Namespace: 'aws:elasticbeanstalk:application:environment'
           OptionName: REDISCLOUD_URL
-          Value: !Ref RedisCloudUrl
+          Value: !Join
+            - ''
+            - - 'redis://'
+              - !GetAtt AWSECCacheCluster.RedisEndpoint.Address
+              - ':'
+              - !GetAtt AWSECCacheCluster.RedisEndpoint.Port
         - Namespace: 'aws:elasticbeanstalk:application:environment'
           OptionName: SNS_KEY
           Value: !Ref SnsKey
