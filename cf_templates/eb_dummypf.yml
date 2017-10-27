@@ -71,14 +71,14 @@ Outputs:
           - RedisEndpoint.Port
     Export:
       Name: !Sub '${AWS::StackName}-ElastiCacheUrl'
-  AWSIAMBridgepfServiceUserAccessKeyId:
-    Value: !Ref AWSIAMBridgepfServiceUserAccessKey
+  AWSIAMDummypfServiceUserAccessKeyId:
+    Value: !Ref AWSIAMDummypfServiceUserAccessKey
     Export:
-      Name: !Sub '${AWS::StackName}-BridgepfServiceUserAccessKey'
-  AWSIAMBridgepfServiceUserSecretAccessKeyId:
-    Value: !GetAtt AWSIAMBridgepfServiceUserAccessKey.SecretAccessKey
+      Name: !Sub '${AWS::StackName}-DummypfServiceUserAccessKey'
+  AWSIAMDummypfServiceUserSecretAccessKeyId:
+    Value: !GetAtt AWSIAMDummypfServiceUserAccessKey.SecretAccessKey
     Export:
-      Name: !Sub '${AWS::StackName}-BridgepfServiceUserSecretAccessKeyId'
+      Name: !Sub '${AWS::StackName}-DummypfServiceUserSecretAccessKeyId'
   AttachmentBucket:
     Value: !Ref AttachmentBucket
     Export:
@@ -498,11 +498,11 @@ Resources:
           OptionName: BRIDGE_USER
           Value: !Ref BridgeUser
         - Namespace: 'aws:elasticbeanstalk:application:environment'
-          OptionName: BRIDGEPF_SERVICE_USER_KEY
-          Value: !Ref AWSIAMBridgepfServiceUserAccessKey
+          OptionName: DUMMYPF_SERVICE_USER_KEY
+          Value: !Ref AWSIAMDummypfServiceUserAccessKey
         - Namespace: 'aws:elasticbeanstalk:application:environment'
-          OptionName: BRIDGEPF_SERVICE_USER_SECRET_KEY
-          Value: !GetAtt AWSIAMBridgepfServiceUserAccessKey.SecretAccessKey
+          OptionName: DUMMYPF_SERVICE_USER_SECRET_KEY
+          Value: !GetAtt AWSIAMDummypfServiceUserAccessKey.SecretAccessKey
         - Namespace: 'aws:elasticbeanstalk:application:environment'
           OptionName: EMAIL_UNSUBSCRIBE_TOKEN
           Value: !Ref EmailUnsubscribeToken
@@ -1190,7 +1190,7 @@ Resources:
           - >-
             "view": "timeSeries", "stacked": true, "period":300, "stat":"Sum",
             "region":"us-east-1", "title":"ClientErrors"}}]}
-  IAMBridgepfS3ManagedPolicy:
+  IAMDummypfS3ManagedPolicy:
     Type: "AWS::IAM::ManagedPolicy"
     Properties:
       PolicyDocument:
@@ -1256,7 +1256,7 @@ Resources:
                 - - 'arn:aws:s3:::'
                   - !Ref ConsentsBucket
                   - /*
-  IAMBridgepfECManagedPolicy:
+  IAMDummypfECManagedPolicy:
     Type: 'AWS::IAM::ManagedPolicy'
     Description: Provide full access to ElastiCache except for delete
     Properties:
@@ -1276,7 +1276,7 @@ Resources:
             Action:
               - elasticache:*
             Resource: "*"
-  IAMBridgepfSQSManagedPolicy:
+  IAMDummypfSQSManagedPolicy:
     Type: 'AWS::IAM::ManagedPolicy'
     Description: Provide full access to SQA except for create
     Properties:
@@ -1292,23 +1292,23 @@ Resources:
               - sqs:*
             Resource: "*"
   # App Service User
-  AWSIAMBridgepfServiceUserAccessKey:
+  AWSIAMDummypfServiceUserAccessKey:
     Type: 'AWS::IAM::AccessKey'
     Properties:
-      UserName: !Ref AWSIAMBridgepfServiceUser
-  AWSIAMBridgepfServiceUser:
+      UserName: !Ref AWSIAMDummypfServiceUser
+  AWSIAMDummypfServiceUser:
     Type: 'AWS::IAM::User'
     Properties:
       Groups:
-        - !Ref AWSIAMBridgepfServiceUserGroup
-  AWSIAMBridgepfServiceUserGroup:
+        - !Ref AWSIAMDummypfServiceUserGroup
+  AWSIAMDummypfServiceUserGroup:
     Type: 'AWS::IAM::Group'
     Properties:
       ManagedPolicyArns:
-        - !Ref IAMBridgepfS3ManagedPolicy
+        - !Ref IAMDummypfS3ManagedPolicy
         - arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess
         - arn:aws:iam::aws:policy/AmazonSNSFullAccess
         - arn:aws:iam::aws:policy/AmazonSESFullAccess
         - arn:aws:iam::aws:policy/AmazonRDSFullAccess
-        - !Ref IAMBridgepfECManagedPolicy
-        - !Ref IAMBridgepfSQSManagedPolicy
+        - !Ref IAMDummypfECManagedPolicy
+        - !Ref IAMDummypfSQSManagedPolicy

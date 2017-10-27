@@ -1,6 +1,6 @@
 # environment variables for Sage-Bionetworks/DummyPF-infra
 export AppDeployBucket_develop=org-sagebridge-dummypf-deployment-dummypf-develop
-export AttachmentBucket_develop=org-sagebridge-attachment-develop
+export AttachmentBucket_develop=org-sagebridge-dummypf-attachment-develop
 export AwsAutoScalingGroupName_develop=awseb-e-2mpnfmyncv-stack-AWSEBAutoScalingGroup-1A7IBXCDT309B
 export AwsAutoScalingMaxSize_develop=3
 export AwsAutoScalingMinSize_develop=1
@@ -8,8 +8,8 @@ export AwsDefaultVpcId=vpc-9c70bbf9
 export AwsLoadBalancerName_develop=awseb-e-2-AWSEBLoa-1W8N412DA6G28
 export AwsSnsNotificationEndpoint_develop=dummypf-develop@sagebase.org
 export BridgeEnv_develop=dev
-export ConsentsBucket_develop=org-sagebridge-consents-dev
+export ConsentsBucket_develop=org-sagebridge-dummypf-consents-dev
 export SysopsEmail_develop=Bridge\ IT\ \<bridge-testing+sysops@sagebase.org\>
-export UploadBucket_develop=org-sagebridge-upload-develop
-export UploadCmsCertBucket_develop=org-sagebridge-upload-cms-cert-develop
-export UploadCmsPrivBucket_develop=org-sagebridge-upload-cms-priv-develop
+export UploadBucket_develop=org-sagebridge-dummypf-upload-develop
+export UploadCmsCertBucket_develop=org-sagebridge-dummypf-upload-cms-cert-develop
+export UploadCmsPrivBucket_develop=org-sagebridge-dummypf-upload-cms-priv-develop
