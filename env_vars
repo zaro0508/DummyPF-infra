@@ -1,11 +1,11 @@
 # environment variables for Sage-Bionetworks/DummyPF-infra
 export AppDeployBucket_develop=dummypf-extras-awss3appdeploybucket-15pt5y25fbx7z
 export AttachmentBucket_develop=dummypf-extras-awss3attachmentbucket-vbfd1eighdd3
-export AwsAutoScalingGroupName_develop=awseb-e-2mpnfmyncv-stack-AWSEBAutoScalingGroup-1A7IBXCDT309B
+export AwsAutoScalingGroupName_develop=awseb-e-hdjkm47dt3-stack-AWSEBAutoScalingGroup-15ITFN4KTSIVD
 export AwsAutoScalingMaxSize_develop=3
 export AwsAutoScalingMinSize_develop=1
 export AwsDefaultVpcId=vpc-f389e98a
-export AwsLoadBalancerName_develop=awseb-e-2-AWSEBLoa-1W8N412DA6G28
+export AwsLoadBalancerName_develop=awseb-e-h-AWSEBLoa-HWUUTZEQ3Q3E
 export AwsSnsNotificationEndpoint_develop=dummypf-develop@sagebase.org
 export BridgeEnv_develop=dev
 export ConsentsBucket_develop=dummypf-extras-awss3consentsbucket-unzd25ovt2n1
