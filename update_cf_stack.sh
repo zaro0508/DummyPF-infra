@@ -17,12 +17,10 @@ eval export "AwsSnsNotificationEndpoint=\$AwsSnsNotificationEndpoint_$TRAVIS_BRA
 eval export "BridgeEnv=\$BridgeEnv_$TRAVIS_BRANCH"
 eval export "BridgeHealthcodeRedisKey=\$BridgeHealthcodeRedisKey_$TRAVIS_BRANCH"
 eval export "ConsentsBucket=\$ConsentsBucket_$TRAVIS_BRANCH"
-eval export "ElastiCacheUrl=\$ElastiCacheUrl_$TRAVIS_BRANCH"
 eval export "EmailUnsubscribeToken=\$EmailUnsubscribeToken_$TRAVIS_BRANCH"
 eval export "HibernateConnectionPassword=\$HibernateConnectionPassword_$TRAVIS_BRANCH"
 eval export "HibernateConnectionUrl=\$HibernateConnectionUrl_$TRAVIS_BRANCH"
 eval export "HibernateConnectionUsername=\$HibernateConnectionUsername_$TRAVIS_BRANCH"
-eval export "RedisCloudUrl=\$RedisCloudUrl_$TRAVIS_BRANCH"
 eval export "SnsKey=\$SnsKey_$TRAVIS_BRANCH"
 eval export "SnsSecretKey=\$SnsSecretKey_$TRAVIS_BRANCH"
 eval export "SSLCertArn=\$SSLCertArn_$TRAVIS_BRANCH"
@@ -66,7 +64,6 @@ ParameterKey=ConsentsBucket,ParameterValue=$ConsentsBucket \
 ParameterKey=DNSHostname,ParameterValue=$DNS_HOSTNAME \
 ParameterKey=DNSDomain,ParameterValue=$DNS_DOMAIN \
 ParameterKey=EC2InstanceType,ParameterValue=t2.small \
-ParameterKey=ElastiCacheUrl,ParameterValue=$ElastiCacheUrl \
 ParameterKey=ElastiCacheInstanceType,ParameterValue=cache.t2.micro \
 ParameterKey=EmailUnsubscribeToken,ParameterValue=$EmailUnsubscribeToken \
 ParameterKey=HibernateConnectionPassword,ParameterValue=$HibernateConnectionPassword \
@@ -77,7 +74,6 @@ ParameterKey=HostPostfix,ParameterValue=-$DNS_HOSTNAME.$DNS_DOMAIN \
 ParameterKey=JavaOpts,ParameterValue='-Dnewrelic.config.file=/var/app/current/newrelic/newrelic.yml -javaagent:/usr/local/lib/newrelic/com.newrelic.agent.java.newrelic-agent.jar' \
 ParameterKey=NewRelicAppName,ParameterValue=$DNS_HOSTNAME \
 ParameterKey=NewRelicLicenseKey,ParameterValue=$NewRelicLicenseKey \
-ParameterKey=RedisCloudUrl,ParameterValue=$RedisCloudUrl \
 ParameterKey=SnsKey,ParameterValue=$SnsKey \
 ParameterKey=SnsSecretKey,ParameterValue=$SnsSecretKey \
 ParameterKey=SSLCertArn,ParameterValue=$SSLCertArn \
