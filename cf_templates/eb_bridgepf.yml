@@ -62,13 +62,9 @@ Outputs:
     Value: !Join
       - ''
       - - 'redis://'
-        - !GetAtt
-          - AWSECCacheCluster
-          - RedisEndpoint.Address
+        - !GetAtt AWSECCacheCluster.RedisEndpoint.Address
         - ':'
-        - !GetAtt
-          - AWSECCacheCluster
-          - RedisEndpoint.Port
+        - !GetAtt AWSECCacheCluster.RedisEndpoint.Port
     Export:
       Name: !Sub '${AWS::StackName}-ElastiCacheUrl'
   AWSIAMBridgepfServiceUserAccessKeyId:
