@@ -449,6 +449,12 @@ Resources:
           OptionName: APP_DEPLOY_BUCKET
           Value: !Ref AppDeployBucket
         - Namespace: 'aws:elasticbeanstalk:application:environment'
+          OptionName: !Join
+            - ''
+            - - !Ref BridgeEnv
+              - _ATTACHMENT_BUCKET
+          Value: !Ref AttachmentBucket
+        - Namespace: 'aws:elasticbeanstalk:application:environment'
           OptionName: AUTH_CREATE_MYSQL_ACCOUNTS
           Value: !Ref AuthCreateMysqlAccounts
         - Namespace: 'aws:elasticbeanstalk:application:environment'
@@ -493,6 +499,12 @@ Resources:
         - Namespace: 'aws:elasticbeanstalk:application:environment'
           OptionName: BRIDGEPF_SERVICE_USER_SECRET_KEY
           Value: !GetAtt AWSIAMBridgepfServiceUserAccessKey.SecretAccessKey
+        - Namespace: 'aws:elasticbeanstalk:application:environment'
+          OptionName: !Join
+            - ''
+            - - !Ref BridgeEnv
+              - _CONSENTS_BUCKET
+          Value: !Ref ConsentsBucket
         - Namespace: 'aws:elasticbeanstalk:application:environment'
           OptionName: EMAIL_UNSUBSCRIBE_TOKEN
           Value: !Ref EmailUnsubscribeToken
@@ -552,14 +564,32 @@ Resources:
           OptionName: !Join
             - ''
             - - !Ref BridgeEnv
-              - _WEBSERVICES_URL
-          Value: !Ref WebServicesUrl
+              - _UPLOAD_BUCKET
+          Value: !Ref UploadBucket
         - Namespace: 'aws:elasticbeanstalk:application:environment'
           OptionName: !Join
             - ''
             - - !Ref BridgeEnv
               - _HOST_POSTFIX
           Value: !Ref HostPostfix
+        - Namespace: 'aws:elasticbeanstalk:application:environment'
+          OptionName: !Join
+            - ''
+            - - !Ref BridgeEnv
+              - _UPLOAD_CMS_CERT_BUCKET
+          Value: !Ref UploadCmsCertBucket
+        - Namespace: 'aws:elasticbeanstalk:application:environment'
+          OptionName: !Join
+            - ''
+            - - !Ref BridgeEnv
+              - _UPLOAD_CMS_PRIV_BUCKET
+          Value: !Ref UploadCmsPrivBucket
+        - Namespace: 'aws:elasticbeanstalk:application:environment'
+          OptionName: !Join
+            - ''
+            - - !Ref BridgeEnv
+              - _WEBSERVICES_URL
+          Value: !Ref WebServicesUrl
   AWSEBApplication:
     Type: 'AWS::ElasticBeanstalk::Application'
     Properties:
