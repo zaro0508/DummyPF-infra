@@ -70,7 +70,6 @@ ParameterKey=HibernateConnectionPassword,ParameterValue=$HibernateConnectionPass
 ParameterKey=HibernateConnectionUrl,ParameterValue=$HibernateConnectionUrl \
 ParameterKey=HibernateConnectionUsername,ParameterValue=$HibernateConnectionUsername \
 ParameterKey=HibernateConnectionUsessl,ParameterValue=true \
-ParameterKey=HostPostfix,ParameterValue=-$DNS_HOSTNAME.$DNS_DOMAIN \
 ParameterKey=JavaOpts,ParameterValue='-Dnewrelic.config.file=/var/app/current/newrelic/newrelic.yml -javaagent:/usr/local/lib/newrelic/com.newrelic.agent.java.newrelic-agent.jar' \
 ParameterKey=NewRelicAppName,ParameterValue=$DNS_HOSTNAME \
 ParameterKey=NewRelicLicenseKey,ParameterValue=$NewRelicLicenseKey \

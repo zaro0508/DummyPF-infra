@@ -310,9 +310,6 @@ Parameters:
   HibernateConnectionUsessl:
     Type: String
     Default: param_place_holder
-  HostPostfix:
-    Type: String
-    Default: param_place_holder
   JavaOpts:
     Type: String
     Default: param_place_holder
@@ -516,9 +513,6 @@ Resources:
         - Namespace: 'aws:elasticbeanstalk:application:environment'
           OptionName: HIBERNATE_CONNECTION_USESSL
           Value: !Ref HibernateConnectionUsessl
-        - Namespace: 'aws:elasticbeanstalk:application:environment'
-          OptionName: HOST_POSTFIX
-          Value: !Ref HostPostfix
         - Namespace: 'aws:elasticbeanstalk:application:environment'
           OptionName: JAVA_OPTS
           Value: !Ref JavaOpts
