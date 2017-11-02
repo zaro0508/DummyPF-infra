@@ -15,6 +15,7 @@ eval export "EmailUnsubscribeToken=\$EmailUnsubscribeToken_$TRAVIS_BRANCH"
 eval export "HibernateConnectionPassword=\$HibernateConnectionPassword_$TRAVIS_BRANCH"
 eval export "HibernateConnectionUrl=\$HibernateConnectionUrl_$TRAVIS_BRANCH"
 eval export "HibernateConnectionUsername=\$HibernateConnectionUsername_$TRAVIS_BRANCH"
+eval export "HostPostfix=\$HostPostfix_$TRAVIS_BRANCH"
 eval export "RedisCloudUrl=\$RedisCloudUrl_$TRAVIS_BRANCH"
 eval export "SSLCertArn=\$SSLCertArn_$TRAVIS_BRANCH"
 eval export "SynapseApiKey=\$SynapseApiKey_$TRAVIS_BRANCH"
@@ -23,13 +24,13 @@ eval export "SysopsEmail=\$SysopsEmail_$TRAVIS_BRANCH"
 eval export "UploadBucket=\$UploadBucket_$TRAVIS_BRANCH"
 eval export "UploadCmsCertBucket=\$UploadCmsCertBucket_$TRAVIS_BRANCH"
 eval export "UploadCmsPrivBucket=\$UploadCmsPrivBucket_$TRAVIS_BRANCH"
-eval export "WebServicesUrl=\$WebServicesUrl_$TRAVIS_BRANCH"
+eval export "WebservicesUrl=\$WebservicesUrl_$TRAVIS_BRANCH"
 
 # deploy with evaluated vars
-aws cloudformation update-stack \
+aws --profile cloudformation update-stack \
 --stack-name $STACK_NAME \
 --capabilities CAPABILITY_NAMED_IAM \
---template-body file://cf_templates/eb_bridgepf.yml \
+--template-body file://cf_templates/eb_dummypf.yml \
 --parameters \
 ParameterKey=AppDeployBucket,ParameterValue=$AppDeployBucket \
 ParameterKey=AppHealthcheckUrl,ParameterValue='HTTP:80/?study=api' \
@@ -68,4 +69,4 @@ ParameterKey=SysopsEmail,ParameterValue="$SysopsEmail" \
 ParameterKey=UploadBucket,ParameterValue=$UploadBucket \
 ParameterKey=UploadCmsCertBucket,ParameterValue=$UploadCmsCertBucket \
 ParameterKey=UploadCmsPrivBucket,ParameterValue=$UploadCmsPrivBucket \
-ParameterKey=WebServicesUrl,ParameterValue=$WebServicesUrl
+ParameterKey=WebservicesUrl,ParameterValue=$WebservicesUrl

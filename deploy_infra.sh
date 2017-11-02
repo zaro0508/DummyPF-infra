@@ -2,7 +2,7 @@
 
 # validate cf templates (local)
 echo "Validating cloudformation templates..."
-aws cloudformation validate-template --template-body file://cf_templates/eb_bridgepf.yml
+aws cloudformation validate-template --template-body file://cf_templates/eb_dummypf.yml
 
 # Handle message that shouldn't be an error, https://github.com/hashicorp/terraform/issues/5653
 echo "Deploy cloudformation templates..."

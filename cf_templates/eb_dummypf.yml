@@ -8,16 +8,16 @@
 # initial creation:
 #   aws --profile aws.admin.user --region us-east-1 cloudformation \
 #     create-stack --stack-name foo-develop --capabilities CAPABILITY_NAMED_IAM \
-#     --on-failure DELETE --template-body file://cf_templates/cf_bridgepf.yml \
-#     --parameters ParameterKey=AppDeployBucket,ParameterValue=org-sagebridge-bridgepf-deployment-foo-develop \
+#     --on-failure DELETE --template-body file://cf_templates/cf_dummypf.yml \
+#     --parameters ParameterKey=AppDeployBucket,ParameterValue=org-sagebridge-dummypf-deployment-foo-develop \
 #     --parameters ParameterKey=EC2InstanceType,ParameterValue=t2.micro \
 #     ...[all params neeeded for app]
 #
 # updates:
 #   aws --profile aws.bootstrap.user --region us-east-1 cloudformation \
 #     update-stack --stack-name foo-develop --capabilities CAPABILITY_NAMED_IAM \
-#     --template-body file://cf_templates/cf_bridgepf.yml \
-#     --parameters ParameterKey=AppDeployBucket,ParameterValue=org-sagebridge-bridgepf-deployment-foo-develop \
+#     --template-body file://cf_templates/cf_dummypf.yml \
+#     --parameters ParameterKey=AppDeployBucket,ParameterValue=org-sagebridge-dummypf-deployment-foo-develop \
 #     --parameters ParameterKey=EC2InstanceType,ParameterValue=t2.micro \
 #     ...[all params neeeded for app]
 #
@@ -67,14 +67,14 @@ Outputs:
         - !GetAtt AWSECCacheCluster.RedisEndpoint.Port
     Export:
       Name: !Sub '${AWS::StackName}-ElastiCacheUrl'
-  AWSIAMBridgepfServiceUserAccessKeyId:
-    Value: !Ref AWSIAMBridgepfServiceUserAccessKey
+  AWSIAMDummypfServiceUserAccessKeyId:
+    Value: !Ref AWSIAMDummypfServiceUserAccessKey
     Export:
-      Name: !Sub '${AWS::StackName}-BridgepfServiceUserAccessKey'
-  AWSIAMBridgepfServiceUserSecretAccessKeyId:
-    Value: !GetAtt AWSIAMBridgepfServiceUserAccessKey.SecretAccessKey
+      Name: !Sub '${AWS::StackName}-DummypfServiceUserAccessKey'
+  AWSIAMDummypfServiceUserSecretAccessKeyId:
+    Value: !GetAtt AWSIAMDummypfServiceUserAccessKey.SecretAccessKey
     Export:
-      Name: !Sub '${AWS::StackName}-BridgepfServiceUserSecretAccessKeyId'
+      Name: !Sub '${AWS::StackName}-DummypfServiceUserSecretAccessKeyId'
   AttachmentBucket:
     Value: !Ref AttachmentBucket
     Export:
@@ -95,6 +95,16 @@ Outputs:
     Value: !Ref UploadCmsPrivBucket
     Export:
       Name: !Sub '${AWS::StackName}-UploadCmsPrivBucket'
+  AWSRDSDummypfDbUrl:
+    Value: !Join
+      - ''
+      - - jdbc:mysql://
+        - !GetAtt AWSRDSDummypfDb.Endpoint.Address
+        - ':'
+        - !GetAtt AWSRDSDummypfDb.Endpoint.Port
+        - /BridgeDB
+    Export:
+      Name: !Sub '${AWS::StackName}-DummypfDbUrl'
 Mappings:
   AWSLoadbalancerAccount:
     us-east-1:
@@ -308,7 +318,7 @@ Parameters:
   SysopsEmail:
     Type: String
     Default: param_place_holder
-  WebServicesUrl:
+  WebservicesUrl:
     Type: String
     Default: param_place_holder
   AttachmentBucket:
@@ -326,7 +336,7 @@ Parameters:
   UploadCmsPrivBucket:
     Type: String
     Default: param_place_holder
-  HostPostFix:
+  HostPostfix:
     Type: String
     Default: param_place_holder
 Resources:
@@ -357,7 +367,8 @@ Resources:
               - AWSEC2SecurityGroup
         - Namespace: 'aws:autoscaling:updatepolicy:rollingupdate'
           OptionName: RollingUpdateEnabled
-          Value: true
+          # Value: true
+          Value: false
         - Namespace: 'aws:autoscaling:updatepolicy:rollingupdate'
           OptionName: RollingUpdateType
           Value: 'Immutable'
@@ -375,7 +386,8 @@ Resources:
           Value: '90'
         - Namespace: 'aws:elasticbeanstalk:command'
           OptionName: DeploymentPolicy
-          Value: 'Immutable'
+          # Value: 'Immutable'
+          Value: 'AllAtOnce'
         - Namespace: 'aws:elasticbeanstalk:environment'
           OptionName: ServiceRole
           Value: !Ref AWSIAMServiceRole
@@ -430,28 +442,28 @@ Resources:
           Value: !Ref AuthProvider
         - Namespace: 'aws:elasticbeanstalk:application:environment'
           OptionName: AWS_KEY
-          Value: !Ref AWSIAMBridgepfServiceUserAccessKey
+          Value: !Ref AWSIAMDummypfServiceUserAccessKey
         - Namespace: 'aws:elasticbeanstalk:application:environment'
           OptionName: AWS_KEY_CONSENTS
-          Value: !Ref AWSIAMBridgepfServiceUserAccessKey
+          Value: !Ref AWSIAMDummypfServiceUserAccessKey
         - Namespace: 'aws:elasticbeanstalk:application:environment'
           OptionName: AWS_KEY_UPLOAD
-          Value: !Ref AWSIAMBridgepfServiceUserAccessKey
+          Value: !Ref AWSIAMDummypfServiceUserAccessKey
         - Namespace: 'aws:elasticbeanstalk:application:environment'
           OptionName: AWS_KEY_UPLOAD_CMS
-          Value: !Ref AWSIAMBridgepfServiceUserAccessKey
+          Value: !Ref AWSIAMDummypfServiceUserAccessKey
         - Namespace: 'aws:elasticbeanstalk:application:environment'
           OptionName: AWS_SECRET_KEY
-          Value: !GetAtt AWSIAMBridgepfServiceUserAccessKey.SecretAccessKey
+          Value: !GetAtt AWSIAMDummypfServiceUserAccessKey.SecretAccessKey
         - Namespace: 'aws:elasticbeanstalk:application:environment'
           OptionName: AWS_SECRET_KEY_CONSENTS
-          Value: !GetAtt AWSIAMBridgepfServiceUserAccessKey.SecretAccessKey
+          Value: !GetAtt AWSIAMDummypfServiceUserAccessKey.SecretAccessKey
         - Namespace: 'aws:elasticbeanstalk:application:environment'
           OptionName: AWS_SECRET_KEY_UPLOAD
-          Value: !GetAtt AWSIAMBridgepfServiceUserAccessKey.SecretAccessKey
+          Value: !GetAtt AWSIAMDummypfServiceUserAccessKey.SecretAccessKey
         - Namespace: 'aws:elasticbeanstalk:application:environment'
           OptionName: AWS_SECRET_KEY_UPLOAD_CMS
-          Value: !GetAtt AWSIAMBridgepfServiceUserAccessKey.SecretAccessKey
+          Value: !GetAtt AWSIAMDummypfServiceUserAccessKey.SecretAccessKey
         - Namespace: 'aws:elasticbeanstalk:application:environment'
           OptionName: BRIDGE_ENV
           Value: !Ref BridgeEnv
@@ -509,10 +521,10 @@ Resources:
               - !GetAtt AWSECCacheCluster.RedisEndpoint.Port
         - Namespace: 'aws:elasticbeanstalk:application:environment'
           OptionName: SNS_KEY
-          Value: !Ref AWSIAMBridgepfServiceUserAccessKey
+          Value: !Ref AWSIAMDummypfServiceUserAccessKey
         - Namespace: 'aws:elasticbeanstalk:application:environment'
           OptionName: SNS_SECRET_KEY
-          Value: !GetAtt AWSIAMBridgepfServiceUserAccessKey.SecretAccessKey
+          Value: !GetAtt AWSIAMDummypfServiceUserAccessKey.SecretAccessKey
         - Namespace: 'aws:elasticbeanstalk:application:environment'
           OptionName: SYNAPSE_API_KEY
           Value: !Ref SynapseApiKey
@@ -551,7 +563,7 @@ Resources:
             - ''
             - - !Ref BridgeEnv
               - _WEBSERVICES_URL
-          Value: !Ref WebServicesUrl
+          Value: !Ref WebservicesUrl
   AWSEBApplication:
     Type: 'AWS::ElasticBeanstalk::Application'
     Properties:
@@ -1188,7 +1200,7 @@ Resources:
           - >-
             "view": "timeSeries", "stacked": true, "period":300, "stat":"Sum",
             "region":"us-east-1", "title":"ClientErrors"}}]}
-  IAMBridgepfS3ManagedPolicy:
+  IAMDummypfS3ManagedPolicy:
     Type: "AWS::IAM::ManagedPolicy"
     Properties:
       PolicyDocument:
@@ -1264,7 +1276,7 @@ Resources:
                 - - 'arn:aws:s3:::'
                   - docs
                   - !Ref HostPostfix
-  IAMBridgepfECManagedPolicy:
+  IAMDummypfECManagedPolicy:
     Type: 'AWS::IAM::ManagedPolicy'
     Description: Provide full access to ElastiCache except for delete
     Properties:
@@ -1284,7 +1296,7 @@ Resources:
             Action:
               - elasticache:*
             Resource: "*"
-  IAMBridgepfSQSManagedPolicy:
+  IAMDummypfSQSManagedPolicy:
     Type: 'AWS::IAM::ManagedPolicy'
     Description: Provide full access to SQA except for create
     Properties:
@@ -1300,23 +1312,61 @@ Resources:
               - sqs:*
             Resource: "*"
   # App Service User
-  AWSIAMBridgepfServiceUserAccessKey:
+  AWSIAMDummypfServiceUserAccessKey:
     Type: 'AWS::IAM::AccessKey'
     Properties:
-      UserName: !Ref AWSIAMBridgepfServiceUser
-  AWSIAMBridgepfServiceUser:
+      UserName: !Ref AWSIAMDummypfServiceUser
+  AWSIAMDummypfServiceUser:
     Type: 'AWS::IAM::User'
     Properties:
       Groups:
-        - !Ref AWSIAMBridgepfServiceUserGroup
-  AWSIAMBridgepfServiceUserGroup:
+        - !Ref AWSIAMDummypfServiceUserGroup
+  AWSIAMDummypfServiceUserGroup:
     Type: 'AWS::IAM::Group'
     Properties:
       ManagedPolicyArns:
-        - !Ref IAMBridgepfS3ManagedPolicy
+        - !Ref IAMDummypfS3ManagedPolicy
         - arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess
         - arn:aws:iam::aws:policy/AmazonSNSFullAccess
         - arn:aws:iam::aws:policy/AmazonSESFullAccess
         - arn:aws:iam::aws:policy/AmazonRDSFullAccess
-        - !Ref IAMBridgepfECManagedPolicy
-        - !Ref IAMBridgepfSQSManagedPolicy
+        - !Ref IAMDummypfECManagedPolicy
+        - !Ref IAMDummypfSQSManagedPolicy
+
+
+# RDS (testing instance only)
+  AWSRDSDummypfSecurityGroup:
+    Type: 'AWS::EC2::SecurityGroup'
+    DependsOn: AWSLBSecurityGroup
+    Properties:
+      GroupDescription: !Join
+        - '-'
+        - - !Ref 'AWS::StackName'
+          - AWSRDSDummypfSecurityGroup
+      VpcId: !Ref AwsDefaultVpcId
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: '3306'
+          ToPort: '3306'
+          SourceSecurityGroupId: !Ref AWSEC2SecurityGroup
+
+  AWSRDSDummypfDb:
+    Type: "AWS::RDS::DBInstance"
+    DeletionPolicy: "Snapshot"
+    Properties:
+      AllocatedStorage: "100"
+      DBInstanceClass: "db.t2.micro"
+      Engine: "MySQL"
+      EngineVersion: "5.5"
+      Iops: "1000"
+      MasterUsername: !Ref HibernateConnectionUsername
+      MasterUserPassword: !Ref HibernateConnectionPassword
+      VPCSecurityGroups:
+        - !Ref AWSRDSDummypfSecurityGroup
+      Tags:
+        -
+          Key: "Name"
+          Value: !Join
+            - '-'
+            - - !Ref 'AWS::StackName'
+              - AWSRDSDummypfDb
