@@ -340,7 +340,7 @@ Parameters:
   SysopsEmail:
     Type: String
     Default: param_place_holder
-  WebservicesUrl:
+  WebServicesUrl:
     Type: String
     Default: param_place_holder
   AttachmentBucket:
@@ -356,6 +356,9 @@ Parameters:
     Type: String
     Default: param_place_holder
   UploadCmsPrivBucket:
+    Type: String
+    Default: param_place_holder
+  HostPostFix:
     Type: String
     Default: param_place_holder
 Resources:
@@ -546,8 +549,17 @@ Resources:
           OptionName: SYSOPS_EMAIL
           Value: !Ref SysopsEmail
         - Namespace: 'aws:elasticbeanstalk:application:environment'
-          OptionName: WEBSERVICES_URL
-          Value: !Ref WebservicesUrl
+          OptionName: !Join
+            - ''
+            - - !Ref BridgeEnv
+              - _WEBSERVICES_URL
+          Value: !Ref WebServicesUrl
+        - Namespace: 'aws:elasticbeanstalk:application:environment'
+          OptionName: !Join
+            - ''
+            - - !Ref BridgeEnv
+              - _HOST_POSTFIX
+          Value: !Ref HostPostfix
   AWSEBApplication:
     Type: 'AWS::ElasticBeanstalk::Application'
     Properties:
