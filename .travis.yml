@@ -2,7 +2,11 @@ sudo: false
 language: python
 python: 3.4
 cache: pip
-
+branches:
+  only:
+  - develop
+  - uat
+  - prod
 env:
   global:
     - STACK_NAME=bridgepf-$TRAVIS_BRANCH
@@ -10,24 +14,13 @@ env:
     - DNS_DOMAIN=sagebridge.org
 
 install:
-# install git-crypt
-  - pushd /tmp
-  - wget https://github.com/AGWA/git-crypt/archive/master.zip -O git-crypt.zip
-  - unzip git-crypt.zip
-  - cd git-crypt-master
-  - make
-  - popd
-# get env vars
-  - openssl aes-256-cbc -K $encrypted_ff3a2f371f92_key -iv $encrypted_ff3a2f371f92_iv -in crypt-key.enc -out crypt-key -d
-  - /tmp/git-crypt-master/git-crypt unlock ./crypt-key
-  - rm -rf crypt-key
-  - source env_vars && source env_vars.secret
-  - /tmp/git-crypt-master/git-crypt lock
-# install aws cli
-  - pip install --upgrade awscli
-# configure aws cli
-  - mkdir ~/.aws
-  - echo -e "[default]\nregion=us-east-1" > ~/.aws/config
-  - echo -e "[default]\naws_access_key_id=$AwsKey\naws_secret_access_key=$AwsSecretKey" > ~/.aws/credentials
+- ./setup_git_crypt.sh
+- openssl aes-256-cbc -K $encrypted_ff3a2f371f92_key -iv $encrypted_ff3a2f371f92_iv -in git-crypt.key.enc -out git-crypt.key -d
+- /tmp/git-crypt-master/git-crypt unlock ./git-crypt.key
+- rm -rf git-crypt.key
+- source env_vars && source env_vars.secret
+- source ./normalize_vars.sh
+- /tmp/git-crypt-master/git-crypt lock
+- ./setup_aws_cli.sh
 script:
   - ./deploy_infra.sh

@@ -1,33 +1,18 @@
-# This CF script is for creating an AWS elastic beanstalk application.
-#
-# Usage:
-#   1. Run the boostrap script to setup required resources for the app.
-#   2. Create the app with `aws cloudformation --create-stack` command
-#   3. Update the stack with `aws cloudformation --update-stack` command
-#
-# initial creation:
-#   aws --profile aws.admin.user --region us-east-1 cloudformation \
-#     create-stack --stack-name foo-develop --capabilities CAPABILITY_NAMED_IAM \
-#     --on-failure DELETE --template-body file://cf_templates/cf_dummypf.yml \
-#     --parameters ParameterKey=AppDeployBucket,ParameterValue=org-sagebridge-dummypf-deployment-foo-develop \
-#     --parameters ParameterKey=EC2InstanceType,ParameterValue=t2.micro \
-#     ...[all params neeeded for app]
-#
-# updates:
-#   aws --profile aws.bootstrap.user --region us-east-1 cloudformation \
-#     update-stack --stack-name foo-develop --capabilities CAPABILITY_NAMED_IAM \
-#     --template-body file://cf_templates/cf_dummypf.yml \
-#     --parameters ParameterKey=AppDeployBucket,ParameterValue=org-sagebridge-dummypf-deployment-foo-develop \
-#     --parameters ParameterKey=EC2InstanceType,ParameterValue=t2.micro \
-#     ...[all params neeeded for app]
-#
-Description: AWS Elastic Beanstalk Application
+Description: Resources for BridgePF Application
 AWSTemplateFormatVersion: 2010-09-09
 Outputs:
   AppDashboard:
     Value: !Ref AWSCWDashboard
     Export:
       Name: !Sub '${AWS::StackName}-Dashboard'
+  AWSKmsKey:
+    Value: !Ref AWSKmsKey
+    Export:
+      Name: !Sub '${AWS::StackName}-KmsKey'
+  AWSKmsKeyAlias:
+    Value: !Ref AWSKmsKeyAlias
+    Export:
+      Name: !Sub '${AWS::StackName}-KmsKeyAlias'
   AppPublicEndpoint:
     Value: !Join
       - ''
@@ -74,7 +59,17 @@ Outputs:
   AWSIAMDummypfServiceUserSecretAccessKeyId:
     Value: !GetAtt AWSIAMDummypfServiceUserAccessKey.SecretAccessKey
     Export:
-      Name: !Sub '${AWS::StackName}-DummypfServiceUserSecretAccessKeyId'
+      Name: !Sub '${AWS::StackName}-DummypfServiceUserSecretAccessKey'
+  AWSIAMDummypfLocalServiceUserAccessKey:
+    Condition: CreateDevResources
+    Value: !Ref AWSIAMDummypfLocalServiceUserAccessKey
+    Export:
+      Name: !Sub '${AWS::StackName}-DummypfLocalServiceUserAccessKey'
+  AWSIAMDummypfLocalServiceUserSecretAccessKey:
+    Condition: CreateDevResources
+    Value: !GetAtt AWSIAMDummypfLocalServiceUserAccessKey.SecretAccessKey
+    Export:
+      Name: !Sub '${AWS::StackName}-DummypfLocalServiceUserSecretAccessKey'
   AttachmentBucket:
     Value: !Ref AttachmentBucket
     Export:
@@ -99,34 +94,12 @@ Outputs:
     Value: !Join
       - ''
       - - jdbc:mysql://
-        - !GetAtt AWSRDSDummypfDb.Endpoint.Address
+        - !GetAtt AWSRdsDummypfInstance.Endpoint.Address
         - ':'
-        - !GetAtt AWSRDSDummypfDb.Endpoint.Port
+        - !GetAtt AWSRdsDummypfInstance.Endpoint.Port
         - /BridgeDB
     Export:
       Name: !Sub '${AWS::StackName}-DummypfDbUrl'
-Mappings:
-  AWSLoadbalancerAccount:
-    us-east-1:
-      ARN: '127311923021'
-    us-west-2:
-      ARN: '797873946194'
-    us-west-1:
-      ARN: 027434742980
-    eu-west-1:
-      ARN: '156460612806'
-    eu-central-1:
-      ARN: 054676820928
-    ap-southeast-1:
-      ARN: '114774131450'
-    ap-northeast-1:
-      ARN: '582318560864'
-    ap-southeast-2:
-      ARN: '783225319266'
-    ap-northeast-2:
-      ARN: '600734575887'
-    sa-east-1:
-      ARN: '507241528517'
 Parameters:
   AppDeployBucket:
     Type: String
@@ -134,12 +107,6 @@ Parameters:
   AppHealthcheckUrl:
     Type: String
     Description: The AWS EB health check path
-    Default: param_place_holder
-  AuthCreateMysqlAccounts:
-    Type: String
-    Default: param_place_holder
-  AuthProvider:
-    Type: String
     Default: param_place_holder
   AwsAutoScalingGroupName:
     Type: String
@@ -162,12 +129,45 @@ Parameters:
     Description: Email address for AWS SNS notifications
     Default: param_place_holder
     NoEcho: true
+  AwsKey:
+    Type: String
+    Default: param_place_holder
+  AwsKeyConsents:
+    Type: String
+    Default: param_place_holder
+  AwsKeyUpload:
+    Type: String
+    Default: param_place_holder
+  AwsKeyUploadCms:
+    Type: String
+    Default: param_place_holder
+  AwsSecretKey:
+    Type: String
+    Default: param_place_holder
+    NoEcho: true
   AwsLoadBalancerName:
     Type: String
     Default: param_place_holder
-  BridgeEnv:
+  AwsSecretKeyConsents:
     Type: String
     Default: param_place_holder
+    NoEcho: true
+  AwsSecretKeyUpload:
+    Type: String
+    Default: param_place_holder
+    NoEcho: true
+  AwsSecretKeyUploadCms:
+    Type: String
+    Default: param_place_holder
+    NoEcho: true
+  BridgeEnv:
+    Type: String
+    Default: dev
+    AllowedValues:
+      - prod
+      - uat
+      - dev
+    ConstraintDescription: must specify dev, uat or prod.
   BridgeHealthcodeRedisKey:
     Type: String
     Default: param_place_holder
@@ -292,6 +292,9 @@ Parameters:
   HibernateConnectionUsessl:
     Type: String
     Default: param_place_holder
+  HostPostfix:
+    Type: String
+    Default: param_place_holder
   JavaOpts:
     Type: String
     Default: param_place_holder
@@ -302,8 +305,12 @@ Parameters:
     Type: String
     Default: param_place_holder
     NoEcho: true
-  RedisCloudUrl:
+  SnsKey:
     Type: String
+    Default: param_place_holder
+  SnsSecretKey:
+    Type: String
+    NoEcho: true
     Default: param_place_holder
   SSLCertArn:
     Description: SSL certificate for load balancer
@@ -336,9 +343,8 @@ Parameters:
   UploadCmsPrivBucket:
     Type: String
     Default: param_place_holder
-  HostPostfix:
-    Type: String
-    Default: param_place_holder
+Conditions:
+  CreateDevResources: !Equals [ !Ref BridgeEnv, dev ]
 Resources:
   AWSEBConfigurationTemplate:
     Type: 'AWS::ElasticBeanstalk::ConfigurationTemplate'
@@ -429,41 +435,29 @@ Resources:
           OptionName: APP_DEPLOY_BUCKET
           Value: !Ref AppDeployBucket
         - Namespace: 'aws:elasticbeanstalk:application:environment'
-          OptionName: !Join
-            - ''
-            - - !Ref BridgeEnv
-              - _ATTACHMENT_BUCKET
-          Value: !Ref AttachmentBucket
-        - Namespace: 'aws:elasticbeanstalk:application:environment'
-          OptionName: AUTH_CREATE_MYSQL_ACCOUNTS
-          Value: !Ref AuthCreateMysqlAccounts
-        - Namespace: 'aws:elasticbeanstalk:application:environment'
-          OptionName: AUTH_PROVIDER
-          Value: !Ref AuthProvider
-        - Namespace: 'aws:elasticbeanstalk:application:environment'
           OptionName: AWS_KEY
-          Value: !Ref AWSIAMDummypfServiceUserAccessKey
+          Value: !Ref AwsKey
         - Namespace: 'aws:elasticbeanstalk:application:environment'
           OptionName: AWS_KEY_CONSENTS
-          Value: !Ref AWSIAMDummypfServiceUserAccessKey
+          Value: !Ref AwsKeyConsents
         - Namespace: 'aws:elasticbeanstalk:application:environment'
           OptionName: AWS_KEY_UPLOAD
-          Value: !Ref AWSIAMDummypfServiceUserAccessKey
+          Value: !Ref AwsKeyUpload
         - Namespace: 'aws:elasticbeanstalk:application:environment'
           OptionName: AWS_KEY_UPLOAD_CMS
-          Value: !Ref AWSIAMDummypfServiceUserAccessKey
+          Value: !Ref AwsKeyUploadCms
         - Namespace: 'aws:elasticbeanstalk:application:environment'
           OptionName: AWS_SECRET_KEY
-          Value: !GetAtt AWSIAMDummypfServiceUserAccessKey.SecretAccessKey
+          Value: !Ref AwsSecretKey
         - Namespace: 'aws:elasticbeanstalk:application:environment'
           OptionName: AWS_SECRET_KEY_CONSENTS
-          Value: !GetAtt AWSIAMDummypfServiceUserAccessKey.SecretAccessKey
+          Value: !Ref AwsSecretKeyConsents
         - Namespace: 'aws:elasticbeanstalk:application:environment'
           OptionName: AWS_SECRET_KEY_UPLOAD
-          Value: !GetAtt AWSIAMDummypfServiceUserAccessKey.SecretAccessKey
+          Value: !Ref AwsSecretKeyUpload
         - Namespace: 'aws:elasticbeanstalk:application:environment'
           OptionName: AWS_SECRET_KEY_UPLOAD_CMS
-          Value: !GetAtt AWSIAMDummypfServiceUserAccessKey.SecretAccessKey
+          Value: !Ref AwsSecretKeyUploadCms
         - Namespace: 'aws:elasticbeanstalk:application:environment'
           OptionName: BRIDGE_ENV
           Value: !Ref BridgeEnv
@@ -474,11 +468,11 @@ Resources:
           OptionName: BRIDGE_USER
           Value: !Ref BridgeUser
         - Namespace: 'aws:elasticbeanstalk:application:environment'
-          OptionName: !Join
-            - ''
-            - - !Ref BridgeEnv
-              - _CONSENTS_BUCKET
-          Value: !Ref ConsentsBucket
+          OptionName: BRIDGEPF_SERVICE_USER_KEY
+          Value: !Ref AWSIAMDummypfServiceUserAccessKey
+        - Namespace: 'aws:elasticbeanstalk:application:environment'
+          OptionName: BRIDGEPF_SERVICE_USER_SECRET_KEY
+          Value: !GetAtt AWSIAMDummypfServiceUserAccessKey.SecretAccessKey
         - Namespace: 'aws:elasticbeanstalk:application:environment'
           OptionName: EMAIL_UNSUBSCRIBE_TOKEN
           Value: !Ref EmailUnsubscribeToken
@@ -503,6 +497,9 @@ Resources:
           OptionName: HIBERNATE_CONNECTION_USESSL
           Value: !Ref HibernateConnectionUsessl
         - Namespace: 'aws:elasticbeanstalk:application:environment'
+          OptionName: HOST_POSTFIX
+          Value: !Ref HostPostfix
+        - Namespace: 'aws:elasticbeanstalk:application:environment'
           OptionName: JAVA_OPTS
           Value: !Ref JavaOpts
         - Namespace: 'aws:elasticbeanstalk:application:environment'
@@ -512,19 +509,11 @@ Resources:
           OptionName: NEW_RELIC_LICENSE_KEY
           Value: !Ref NewRelicLicenseKey
         - Namespace: 'aws:elasticbeanstalk:application:environment'
-          OptionName: REDISCLOUD_URL
-          Value: !Join
-            - ''
-            - - 'redis://'
-              - !GetAtt AWSECCacheCluster.RedisEndpoint.Address
-              - ':'
-              - !GetAtt AWSECCacheCluster.RedisEndpoint.Port
-        - Namespace: 'aws:elasticbeanstalk:application:environment'
           OptionName: SNS_KEY
-          Value: !Ref AWSIAMDummypfServiceUserAccessKey
+          Value: !Ref SnsKey
         - Namespace: 'aws:elasticbeanstalk:application:environment'
           OptionName: SNS_SECRET_KEY
-          Value: !GetAtt AWSIAMDummypfServiceUserAccessKey.SecretAccessKey
+          Value: !Ref SnsSecretKey
         - Namespace: 'aws:elasticbeanstalk:application:environment'
           OptionName: SYNAPSE_API_KEY
           Value: !Ref SynapseApiKey
@@ -535,35 +524,29 @@ Resources:
           OptionName: SYSOPS_EMAIL
           Value: !Ref SysopsEmail
         - Namespace: 'aws:elasticbeanstalk:application:environment'
-          OptionName: !Join
-            - ''
-            - - !Ref BridgeEnv
-              - _UPLOAD_BUCKET
+          OptionName: WEBSERVICES_URL
+          Value: !Ref WebservicesUrl
+        - Namespace: 'aws:elasticbeanstalk:application:environment'
+          OptionName: ATTACHMENT_BUCKET
+          Value: !Ref AttachmentBucket
+        - Namespace: 'aws:elasticbeanstalk:application:environment'
+          OptionName: CONSENTS_BUCKET
+          Value: !Ref ConsentsBucket
+        - Namespace: 'aws:elasticbeanstalk:application:environment'
+          OptionName: UPLOAD_BUCKET
           Value: !Ref UploadBucket
         - Namespace: 'aws:elasticbeanstalk:application:environment'
-          OptionName: !Join
-            - ''
-            - - !Ref BridgeEnv
-              - _HOST_POSTFIX
-          Value: !Ref HostPostfix
-        - Namespace: 'aws:elasticbeanstalk:application:environment'
-          OptionName: !Join
-            - ''
-            - - !Ref BridgeEnv
-              - _UPLOAD_CMS_CERT_BUCKET
+          OptionName: UPLOAD_CMS_CERT_BUCKET
           Value: !Ref UploadCmsCertBucket
         - Namespace: 'aws:elasticbeanstalk:application:environment'
-          OptionName: !Join
-            - ''
-            - - !Ref BridgeEnv
-              - _UPLOAD_CMS_PRIV_BUCKET
+          OptionName: UPLOAD_CMS_PRIV_BUCKET
           Value: !Ref UploadCmsPrivBucket
-        - Namespace: 'aws:elasticbeanstalk:application:environment'
-          OptionName: !Join
-            - ''
-            - - !Ref BridgeEnv
-              - _WEBSERVICES_URL
-          Value: !Ref WebservicesUrl
+#        - Namespace: 'aws:elasticbeanstalk:application:environment'
+#          OptionName: UDD_SQS_QUEUE_URL
+#          Value: !Ref AWSSQSWorkerPlatformRequest
+#        - Namespace: 'aws:elasticbeanstalk:application:environment'
+#          OptionName: EXPORTER_REQUEST_SQS_QUEUE_URL
+#          Value: !Ref AWSSQSExporterRequest
   AWSEBApplication:
     Type: 'AWS::ElasticBeanstalk::Application'
     Properties:
@@ -655,6 +638,14 @@ Resources:
       Path: /
       ManagedPolicyArns:
         - 'arn:aws:iam::aws:policy/AWSElasticBeanstalkWebTier'
+        - 'arn:aws:iam::aws:policy/AmazonS3FullAccess'
+        - !Ref IAMDummypfS3ManagedPolicy
+        - 'arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess'
+        - 'arn:aws:iam::aws:policy/AmazonSNSFullAccess'
+        - 'arn:aws:iam::aws:policy/AmazonSESFullAccess'
+        - 'arn:aws:iam::aws:policy/AmazonRDSFullAccess'
+        - !Ref IAMDummypfECManagedPolicy
+        - !Ref IAMDummypfSQSManagedPolicy
   AWSIAMInstanceProfile:
     Type: 'AWS::IAM::InstanceProfile'
     Properties:
@@ -728,6 +719,7 @@ Resources:
       Period: 3600
       Statistic: Sum
       Threshold: 10
+      TreatMissingData: notBreaching
   AWSCWWebErrorMetricFilter:
     Type: "AWS::Logs::MetricFilter"
     DependsOn: AWSLogsLogGroupWebError
@@ -758,6 +750,7 @@ Resources:
       Period: 3600
       Statistic: Sum
       Threshold: 1
+      TreatMissingData: notBreaching
   AWSCWLostMessageMetricFilter:
     Type: "AWS::Logs::MetricFilter"
     DependsOn: AWSLogsLogGroup
@@ -792,6 +785,7 @@ Resources:
       Period: 3600
       Statistic: Sum
       Threshold: 1
+      TreatMissingData: notBreaching
   AWSCWRequestWarningMetricFilter:
     Type: "AWS::Logs::MetricFilter"
     DependsOn: AWSLogsLogGroup
@@ -827,6 +821,7 @@ Resources:
       Period: 3600
       Statistic: Sum
       Threshold: 100
+      TreatMissingData: notBreaching
   AWSCWThroughputExceptionMetricFilter:
     Type: "AWS::Logs::MetricFilter"
     DependsOn: AWSLogsLogGroup
@@ -861,6 +856,7 @@ Resources:
       Period: 3600
       Statistic: Sum
       Threshold: 1
+      TreatMissingData: notBreaching
   AWSCW400MetricFilter:
     Type: "AWS::Logs::MetricFilter"
     DependsOn: AWSLogsLogGroup
@@ -895,6 +891,7 @@ Resources:
       Period: 3600
       Statistic: Sum
       Threshold: 30
+      TreatMissingData: notBreaching
   AWSCW403MetricFilter:
     Type: "AWS::Logs::MetricFilter"
     DependsOn: AWSLogsLogGroup
@@ -929,6 +926,7 @@ Resources:
       Period: 3600
       Statistic: Sum
       Threshold: 10
+      TreatMissingData: notBreaching
   AWSCW409MetricFilter:
     Type: "AWS::Logs::MetricFilter"
     DependsOn: AWSLogsLogGroup
@@ -962,7 +960,8 @@ Resources:
       Namespace: LogMetrics/409s
       Period: 3600
       Statistic: Sum
-      Threshold: 10
+      Threshold: 15
+      TreatMissingData: notBreaching
   AWSCW412MetricFilter:
     Type: "AWS::Logs::MetricFilter"
     DependsOn: AWSLogsLogGroup
@@ -997,6 +996,7 @@ Resources:
       Period: 3600
       Statistic: Sum
       Threshold: 30
+      TreatMissingData: notBreaching
   AWSCWCpuUtilizationAlarm:
     Type: "AWS::CloudWatch::Alarm"
     Properties:
@@ -1235,7 +1235,7 @@ Resources:
               - !Join
                 - ''
                 - - 'arn:aws:s3:::'
-                  - docs
+                  - 'docs'
                   - !Ref HostPostfix
           - Sid: ModAccess
             Action:
@@ -1274,8 +1274,42 @@ Resources:
               - !Join
                 - ''
                 - - 'arn:aws:s3:::'
-                  - docs
+                  - 'docs'
                   - !Ref HostPostfix
+                  - /*
+  # special policy for developer testing
+  IAMDummypfLocalS3ManagedPolicy:
+    Type: "AWS::IAM::ManagedPolicy"
+    Condition: CreateDevResources
+    Properties:
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Sid: ListAccess
+            Action:
+              - 's3:ListBucket'
+              - 's3:GetBucketLocation'
+            Effect: Allow
+            Resource:
+              - 'arn:aws:s3:::dummypf-extras-awss3uploadlocalbucket-eryheia4ykut'
+              - 'arn:aws:s3:::dummypf-extras-awss3attachmentlocalbucket-1w89bj81k7mvt'
+              - 'arn:aws:s3:::dummypf-extras-awss3uploadcmscertlocalbucket-90dexixbotmq'
+              - 'arn:aws:s3:::dummypf-extras-awss3uploadcmsprivlocalbucket-1usm1mfjk0ojz'
+              - 'arn:aws:s3:::dummypf-extras-awss3consentslocalbucket-j3ciqmxp4pid'
+          - Sid: ModAccess
+            Action:
+              - 's3:PutObject'
+              - 's3:PutObjectAcl'
+              - 's3:GetObject'
+              - 's3:GetObjectAcl'
+              - 's3:DeleteObject'
+            Effect: Allow
+            Resource:
+              - 'arn:aws:s3:::dummypf-extras-awss3uploadlocalbucket-eryheia4ykut/*'
+              - 'arn:aws:s3:::dummypf-extras-awss3attachmentlocalbucket-1w89bj81k7mvt/*'
+              - 'arn:aws:s3:::dummypf-extras-awss3uploadcmscertlocalbucket-90dexixbotmq/*'
+              - 'arn:aws:s3:::dummypf-extras-awss3uploadcmsprivlocalbucket-1usm1mfjk0ojz/*'
+              - 'arn:aws:s3:::dummypf-extras-awss3consentslocalbucket-j3ciqmxp4pid/*'
   IAMDummypfECManagedPolicy:
     Type: 'AWS::IAM::ManagedPolicy'
     Description: Provide full access to ElastiCache except for delete
@@ -1311,7 +1345,11 @@ Resources:
             Action:
               - sqs:*
             Resource: "*"
-  # App Service User
+  # !! IMPORTANT !! - AWS API will refuse to remove users that have attached resources.
+  # Therefore you must do the following before deleting them from this file:
+  # 1. Detach or remove the following user resources: login profile, attached
+  #    MFA device, access-keys, ssh-keys, and policies.
+  # 2. Detach the user from all groups.
   AWSIAMDummypfServiceUserAccessKey:
     Type: 'AWS::IAM::AccessKey'
     Properties:
@@ -1325,6 +1363,7 @@ Resources:
     Type: 'AWS::IAM::Group'
     Properties:
       ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonS3FullAccess
         - !Ref IAMDummypfS3ManagedPolicy
         - arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess
         - arn:aws:iam::aws:policy/AmazonSNSFullAccess
@@ -1332,7 +1371,90 @@ Resources:
         - arn:aws:iam::aws:policy/AmazonRDSFullAccess
         - !Ref IAMDummypfECManagedPolicy
         - !Ref IAMDummypfSQSManagedPolicy
-
+  # special service user for developer testing
+  AWSIAMDummypfLocalServiceUserAccessKey:
+    Type: 'AWS::IAM::AccessKey'
+    Condition: CreateDevResources
+    Properties:
+      UserName: !Ref AWSIAMDummypfLocalServiceUser
+  AWSIAMDummypfLocalServiceUser:
+    Type: 'AWS::IAM::User'
+    Condition: CreateDevResources
+    Properties:
+      Groups:
+        - !Ref AWSIAMDummypfServiceUserGroup
+        - !Ref AWSIAMDummypfLocalServiceUserGroup
+  AWSIAMDummypfLocalServiceUserGroup:
+    Type: 'AWS::IAM::Group'
+    Condition: CreateDevResources
+    Properties:
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonS3FullAccess
+        - !Ref IAMDummypfLocalS3ManagedPolicy
+  # KMS Keys
+  AWSKmsKey:
+    Type: "AWS::KMS::Key"
+    Properties:
+      Description: !Join
+        - '-'
+        - - !Ref AWS::StackName
+          - "KmsKey"
+      KeyPolicy:
+        Version: "2012-10-17"
+        Statement:
+          -
+            Sid: "Allow administration of the key"
+            Effect: "Allow"
+            Principal:
+              AWS:
+                - !Join
+                  - ''
+                  - - 'arn:aws:iam::'
+                    - !Ref AWS::AccountId
+                    - ':user/'
+                    - !ImportValue bootstrap-TravisUser
+            Action:
+              - "kms:Create*"
+              - "kms:Describe*"
+              - "kms:Enable*"
+              - "kms:List*"
+              - "kms:Put*"
+              - "kms:Update*"
+              - "kms:Revoke*"
+              - "kms:Disable*"
+              - "kms:Get*"
+              - "kms:Delete*"
+              - "kms:ScheduleKeyDeletion"
+              - "kms:CancelKeyDeletion"
+            Resource: "*"
+          -
+            Sid: "Allow use of the key"
+            Effect: "Allow"
+            Principal:
+              AWS:
+                - !Join
+                  - ''
+                  - - 'arn:aws:iam::'
+                    - !Ref AWS::AccountId
+                    - ':user/'
+                    - !ImportValue bootstrap-TravisUser
+                - !GetAtt AWSIAMDummypfServiceUser.Arn
+            Action:
+              - "kms:Encrypt"
+              - "kms:Decrypt"
+              - "kms:ReEncrypt*"
+              - "kms:GenerateDataKey*"
+              - "kms:DescribeKey"
+            Resource: "*"
+  AWSKmsKeyAlias:
+    Type: AWS::KMS::Alias
+    Properties:
+      AliasName: !Join
+        - ''
+        - - 'alias/'
+          - !Ref AWS::StackName
+          - '/KmsKey'
+      TargetKeyId: !Ref AWSKmsKey
 
 # RDS (testing instance only)
   AWSRDSDummypfSecurityGroup:
@@ -1350,23 +1472,24 @@ Resources:
           ToPort: '3306'
           SourceSecurityGroupId: !Ref AWSEC2SecurityGroup
 
-  AWSRDSDummypfDb:
+  AWSRdsDummypfInstance:
     Type: "AWS::RDS::DBInstance"
     DeletionPolicy: "Snapshot"
     Properties:
-      AllocatedStorage: "100"
       DBInstanceClass: "db.t2.micro"
       Engine: "MySQL"
-      EngineVersion: "5.5"
+      EngineVersion: "5.6"
+      AllocatedStorage: "100"
       Iops: "1000"
       MasterUsername: !Ref HibernateConnectionUsername
       MasterUserPassword: !Ref HibernateConnectionPassword
       VPCSecurityGroups:
         - !Ref AWSRDSDummypfSecurityGroup
+      DBSnapshotIdentifier: !Sub 'arn:aws:rds:${AWS::Region}:${AWS::AccountId}:snapshot:bridgedb-mysql-56'
       Tags:
         -
           Key: "Name"
           Value: !Join
             - '-'
             - - !Ref 'AWS::StackName'
-              - AWSRDSDummypfDb
+              - AWSRdsDummypfInstance

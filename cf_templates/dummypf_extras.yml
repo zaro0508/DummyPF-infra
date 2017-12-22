@@ -1,31 +1,36 @@
 # This is a template for creating extra resources required by the app
 #   aws --profile aws.admin.user --region us-east-1 cloudformation \
 #     create-stack --stack-name foo-extras --capabilities CAPABILITY_NAMED_IAM \
-#     --on-failure DELETE --template-body file://cf_templates/foo_extras.yml \
-#     --parameters ParameterKey=AwsDefaultVpcId,ParameterValue=vpc-12345678
+#     --on-failure DELETE --template-body file://cf_templates/foo_extras.yml
 Description: Automate resources that were manually setup on BridgePF-infra
 AWSTemplateFormatVersion: 2010-09-09
-Parameters:
-  AwsDefaultVpcId:
-    Description: The AWS account's default VPC id
-    Type: String
-    Default: param_place_holder
+Outputs:
+  AWSR53DevelopSagebridgeOrgHostedZone:
+    Value: !Ref AWSR53DevelopSagebridgeOrgHostedZone
+    Export:
+      Name: !Sub '${AWS::StackName}-HostedZone'
+  AWSS3HostPostfixBucket:
+    Value: !Ref AWSR53DevelopSagebridgeOrgHostedZone
+    Export:
+      Name: !Sub '${AWS::StackName}-HostPostfixBucket'
+#Parameters:
+#  AwsDefaultVpcId:
+#    Description: The AWS account's default VPC id
+#    Type: String
+#    Default: param_place_holder
 #Parameters:
 #  HostPostfix:
 #    Description: The AWS account's default VPC id
 #    Type: String
 #    Default: param_place_holder
 Resources:
-  AWSR53DummyPFHostedZone:
+
+  AWSR53DevelopSagebridgeOrgHostedZone:
     Type: "AWS::Route53::HostedZone"
     Properties:
       HostedZoneConfig:
-        Comment: "Hosted zone for sagebridge.org"
-      Name: "sagebridge.org"
-      VPCs:
-        -
-          VPCId: !Ref AwsDefaultVpcId
-          VPCRegion: us-east-1
+        Comment: "Public hosted zone for develop.sagebridge.org"
+      Name: "develop.sagebridge.org"
   AWSS3UploadBucket:
     Type: 'AWS::S3::Bucket'
   AWSS3AttachmentBucket:
@@ -36,13 +41,74 @@ Resources:
     Type: 'AWS::S3::Bucket'
   AWSS3ConsentsBucket:
     Type: 'AWS::S3::Bucket'
+  # from HostPostfix env var
   AWSS3HostPostfixBucket:
     Type: 'AWS::S3::Bucket'
     Properties:
       BucketName: !Join
         - ''
         - - docs
-          - -dummypf-develop.sagebridge.org
+          - -dummypf-develop.develop.sagebridge.org
+
+  AWSS3UploadLocalBucket:
+    Type: 'AWS::S3::Bucket'
+  AWSS3AttachmentLocalBucket:
+    Type: 'AWS::S3::Bucket'
+  AWSS3UploadCmsCertLocalBucket:
+    Type: 'AWS::S3::Bucket'
+  AWSS3UploadCmsPrivLocalBucket:
+    Type: 'AWS::S3::Bucket'
+  AWSS3ConsentsLocalBucket:
+    Type: 'AWS::S3::Bucket'
+
+
+# SQS Queues
+#  AWSSQSWorkerPlatformRequestDl:
+#    Type: "AWS::SQS::Queue"
+#    Properties:
+#      VisibilityTimeout: 30
+#      DelaySeconds: 0
+#      FifoQueue: false
+#      MaximumMessageSize: 12024
+#      MessageRetentionPeriod: 1209600
+#      ReceiveMessageWaitTimeSeconds: 20
+#  AWSSQSWorkerPlatformRequest:
+#    Type: "AWS::SQS::Queue"
+#    Properties:
+#      VisibilityTimeout: 7200
+#      DelaySeconds: 0
+#      FifoQueue: false
+#      MaximumMessageSize: 12024
+#      MessageRetentionPeriod: 1209600
+#      ReceiveMessageWaitTimeSeconds: 20
+#      RedrivePolicy:
+#        deadLetterTargetArn: !GetAtt AWSSQSWorkerPlatformRequestDl.Arn
+#        maxReceiveCount: 5
+#  AWSSQSExporterRequestDl:
+#    Type: "AWS::SQS::Queue"
+#    Properties:
+#      VisibilityTimeout: 30
+#      DelaySeconds: 0
+#      FifoQueue: false
+#      MaximumMessageSize: 12024
+#      MessageRetentionPeriod: 1209600
+#      ReceiveMessageWaitTimeSeconds: 20
+#  AWSSQSExporterRequest:
+#    Type: "AWS::SQS::Queue"
+#    Properties:
+#      VisibilityTimeout: 7200
+#      DelaySeconds: 0
+#      FifoQueue: false
+#      MaximumMessageSize: 12024
+#      MessageRetentionPeriod: 1209600
+#      ReceiveMessageWaitTimeSeconds: 20
+#      RedrivePolicy:
+#        deadLetterTargetArn: !GetAtt AWSSQSExporterRequestDl.Arn
+#        maxReceiveCount: 5
+
+
+#  AWSS3TempBucket:
+#    Type: 'AWS::S3::Bucket'
 
 
 #  AWSS3HostPostfixBucket:
@@ -52,3 +118,61 @@ Resources:
 #        - ''
 #        - - docs
 #          - !Ref HostPostfix
+
+
+#  AWSRDSDummypfDb:
+#    Type: "AWS::RDS::DBInstance"
+#    DeletionPolicy: "Snapshot"
+#    Properties:
+#      DBInstanceClass: "db.t2.micro"
+#      Engine: "MySQL"
+#      EngineVersion: "5.5"
+##      Iops: "1000"
+#      MasterUsername: !Ref HibernateConnectionUsername
+#      MasterUserPassword: !Ref HibernateConnectionPassword
+#      VPCSecurityGroups:
+#        - !Ref AWSRDSDummypfSecurityGroup
+#      DBSnapshotIdentifier: arn:aws:rds:us-east-1:420786776710:snapshot:bridgepf
+#      Tags:
+#        -
+#          Key: "Name"
+#          Value: !Join
+#            - '-'
+#            - - !Ref 'AWS::StackName'
+#              - AWSRDSDummypfDb
+
+
+# Not working setup
+#  AWSRDSDbCluster:
+#    Type: AWS::RDS::DBCluster
+#    Properties:
+#      MasterUsername: !Ref HibernateConnectionUsername
+#      MasterUserPassword: !Ref HibernateConnectionPassword
+#      Engine: aurora
+#      VPCSecurityGroupIds:
+#        - !Ref AWSRDSDummypfSecurityGroup
+#      Tags:
+#        -
+#          Key: "Name"
+#          Value: !Join
+#            - '-'
+#            - - !Ref 'AWS::StackName'
+#              - AWSRDSDbCluster
+
+#  AWSRDSDummypfDb:
+#    Type: "AWS::RDS::DBInstance"
+#    DeletionPolicy: "Snapshot"
+#    Properties:
+#      Engine: aurora
+#      DBClusterIdentifier: !Ref AWSRDSDbCluster
+#      DBInstanceClass: db.t2.small
+#      DBSnapshotIdentifier: arn:aws:rds:us-east-1:420786776710:snapshot:bridgepf
+#      Tags:
+#        -
+#          Key: "Name"
+#          Value: !Join
+#            - '-'
+#            - - !Ref 'AWS::StackName'
+#              - AWSRDSDummypfDb
+
+
